@@ -113,6 +113,7 @@ body {
 footer {
     background-color: #343a40;
     overflow: hidden;
+    margin-top: auto;
 }
 
 footer a {
