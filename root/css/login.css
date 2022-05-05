@@ -20,10 +20,11 @@
     font-size: 17px;
 }
 
-.active {
+.logo {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 0.5rem;
     width: 10%;
 }
 
@@ -36,7 +37,6 @@ body {
     background-size: contain;
     background-blend-mode: lighten;
     font-family: "Poppins", sans-serif;
-    overflow: hidden;
 }
 
 .container {
@@ -118,4 +118,19 @@ footer a {
     text-align: center;
     float: left;
     color: white;
+}
+
+
+@media only screen and (max-width: 768px) {
+    nav {
+        display: grid;
+    }
+    
+    .d-sm-none {
+        display: none;
+    }
+    
+    .logo {
+        width: 60%;
+    }
 }
