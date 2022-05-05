@@ -37,6 +37,9 @@ body {
     background-size: contain;
     background-blend-mode: lighten;
     font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
