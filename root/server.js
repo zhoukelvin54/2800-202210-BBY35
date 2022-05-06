@@ -2,7 +2,28 @@ const express = require("express");
 const session = require("express-session");
 const filesys = require("fs");
 const jsdom = require("jsdom");
+
+// Oh look, unsecured data that will be moved to an .env at some point in future
+// and no; we probably won't use this exact data again.
+const dbConnection = {
+    host: "localhost",
+    user: "nodeapp",
+    password: "",
+    database: "db_petpals",
+    port: 3306
+};
 const mysql2 = require("mysql2");
+const connection = mysql2.createConnection(dbConnection);
+connection.connect((err) => {
+    if (err) {
+        console.error("error connecting: " + err.stack);
+        return;
+    }
+
+    console.log("connected successfully");
+})
+
+
 const http = require("http");
 const https = require("https");
 // tiny-editor requires that there be a document object from HTML; 
@@ -12,6 +33,16 @@ const sanitize = require("sanitize-html");
 const multer = require("multer");
 
 const app = express();
+
+// initializing sessions
+let sessionObj = {
+    secret: "Hey, another password that will be obscured eventually. Neat!",
+    name: "petpalsID",
+    resave: false,
+    saveUninitialized: true
+};
+
+app.use(session(sessionObj));
 
 // initializing directory paths
 app.use("/common", express.static("./root/common"));
