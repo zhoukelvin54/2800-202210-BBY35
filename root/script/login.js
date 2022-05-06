@@ -91,7 +91,7 @@ document.getElementById("submit").addEventListener("click", function(e) {
     let formData = { username: document.getElementById("username").value,
                      password: document.getElementById("password").value,
                      firstname: document.getElementById("firstname").value,
-                     lastname: document.getElementById("lasrname").value,
+                     lastname: document.getElementById("lastname").value,
                      email: document.getElementById("email").value};
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
@@ -108,7 +108,7 @@ document.getElementById("submit").addEventListener("click", function(e) {
             // 200 means everthing worked
             if (xhr.status === 200) {
 
-              
+              console.log("success");
 
             } else {
 

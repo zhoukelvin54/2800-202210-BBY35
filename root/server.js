@@ -11,7 +11,13 @@ const https = require("https");
 const sanitize = require("sanitize-html");
 const multer = require("multer");
 
-app.use("/", express.static("./login.html"));
+const app = express();
+const fs = require("fs");
+const mysql = require('mysql2');
+
+app.use("/script", express.static("./root/script"));
+app.use("/css", express.static("./root/css"));
+app.use("/img", express.static("./root/img"));
 
 app.get('/', function (req, res) {
 
@@ -21,9 +27,10 @@ app.get('/', function (req, res) {
       host: 'localhost',
       user: 'root',
       password: '',
-      database: 'dh_petpal',
+      database: 'db_petpals',
       multipleStatements: true
     });
+
 
     const createDBAndTables = `CREATE DATABASE IF NOT EXISTS db_petpals;
         use db_petpals;
@@ -36,7 +43,7 @@ app.get('/', function (req, res) {
             password varchar(20) NOT NULL,
             is_admin tinyint NOT NULL DEFAULT '0',
             is_caretaker tinyint NOT NULL DEFAULT '0',
-            PRIMARY KEY (id);`;
+            PRIMARY KEY (id));`;
 
     connection.connect();
     connection.query(createDBAndTables, function (error, results, fields) {
@@ -48,7 +55,7 @@ app.get('/', function (req, res) {
     });
     connection.end();
 
-    let doc = fs.readFileSync('./login.html', "utf8");
+    let doc = fs.readFileSync('./root/login.html', "utf8");
     res.send(doc);
 });
 
@@ -65,7 +72,7 @@ app.post('/add-account', function (req, res) {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'db_petpal'
+    database: 'db_petpals'
   });
   connection.connect();
   // TO PREVENT SQL INJECTION, DO THIS:
