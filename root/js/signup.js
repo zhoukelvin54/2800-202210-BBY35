@@ -1,4 +1,4 @@
-ready(function () {
+
 function swapForm() {
     console.log("clicked");
     if (document.getElementById("swap").value == "New User?") {
@@ -78,4 +78,3 @@ function swapForm() {
 
 };
 
-})

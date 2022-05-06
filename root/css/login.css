@@ -137,6 +137,11 @@ footer a {
     color: white;
 }
 
+#errorMsg {
+    color: red;
+    padding-bottom: 1rem;
+}
+
 
 @media only screen and (max-width: 768px) {
     nav {
