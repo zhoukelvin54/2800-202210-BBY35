@@ -56,7 +56,7 @@ ready(function () {
         }
     };
 
-    document.getElementById("login").addEventListener('submit', login);
+    document.getElementById("login-form").addEventListener('submit', login);
 });
 
 function ready(cb) {
