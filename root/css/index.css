@@ -8,6 +8,7 @@
     background-color: #343a40;
     overflow: hidden;
     text-transform: capitalize;
+    width: 100%;
 }
 
 .navbar a {
@@ -18,6 +19,22 @@
     padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
+}
+
+#logout {
+    float:right;
+    padding: 15px;
+    background-color: #696c72;
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    transition: background-color 0.2s;
+}
+
+#logout:hover {
+    background-color: #3f4041;
+    transition: background-color 0.2s;
 }
 
 .logo {

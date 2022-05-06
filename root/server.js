@@ -133,6 +133,21 @@ app.post("/login", jsonParser, (req, res) => {
   }
 });
 
+app.get("/logout", function (req, res) {
+
+    if (req.session) {
+        req.session.destroy(function (error) {
+            if (error) {
+                res.status(400).send("Unable to log out")
+            } else {
+                // session deleted, redirect to home
+                res.redirect("/");
+            }
+        });
+    }
+});
+
+
 console.log("Starting Server...");
 
 const port = 8001;
