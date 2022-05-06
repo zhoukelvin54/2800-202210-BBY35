@@ -26,6 +26,12 @@ app.get("/home", (req, res) => {
     res.send(doc);
 })
 
+// this only serves the login page, it doesn't actually interact with the backend
+app.get("/login", (req, res) => {
+    let doc = filesys.readFileSync("./root/login.html", "utf-8");
+    res.send(doc);
+})
+
 console.log("Starting Server...");
 
 const port = 8001;
