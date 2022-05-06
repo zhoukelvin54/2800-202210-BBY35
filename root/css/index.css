@@ -121,4 +121,12 @@ footer a {
         width: 35vw;
         height: 25vh;
     }
+
+    #welcome-img {
+        min-width: 60vw;
+    }
+    
+    #content-img {
+        min-width: 60vw;
+    }
 }
