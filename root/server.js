@@ -11,4 +11,27 @@ const https = require("https");
 const sanitize = require("sanitize-html");
 const multer = require("multer");
 
-console.log("This is when the server would start");
+const app = express();
+
+// initializing directory paths
+app.use("/common", express.static("./root/common"));
+app.use("/css", express.static("./root/css"));
+app.use("/font", express.static("./root/font"));
+app.use("/img", express.static("./root/img"));
+app.use("/js", express.static("./root/js"));
+app.use("/scss", express.static("./root/scss"));
+
+app.get("/home", (req, res) => {
+    let doc = filesys.readFileSync("./root/index.html", "utf-8");
+    res.send(doc);
+})
+
+console.log("Starting Server...");
+
+const port = 8001;
+function onBoot() {
+    console.log("Started on port: " + port);
+}
+
+
+app.listen(port, onBoot);
