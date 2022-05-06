@@ -33,8 +33,9 @@
 }
 
 body {
-    background-image: url(/img/dogs.jpg);
-    background-size: contain;
+    background-image: url(../img/dogs.jpg);
+    background-size: cover;
+    background-position: center;
     background-blend-mode: lighten;
     font-family: "Poppins", sans-serif;
     display: flex;
