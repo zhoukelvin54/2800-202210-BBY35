@@ -1,5 +1,7 @@
 const express = require("express");
 const session = require("express-session");
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
 const filesys = require("fs");
 const jsdom = require("jsdom");
 
@@ -70,8 +72,9 @@ app.get("/login", (req, res) => {
     res.send(doc);
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", jsonParser, (req, res) => {
     res.setHeader("content-type", "application/json");
+    console.log(req);
     let username = req.body.username;
     let password = req.body.password;
     if (username && password) {
