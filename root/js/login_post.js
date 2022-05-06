@@ -41,8 +41,8 @@ ready(function () {
                 if (data) {
                     let parsed = JSON.parse(data);
                     console.log(parsed);
-                    if (parsed.status == 'fail') {
-                        document.getElementById("errorMsg");
+                    if (parsed.status == 'failure') {
+                        document.getElementById("errorMsg").innerText = parsed.msg;
                     } else {
                         window.location.replace("/home");
                     }
