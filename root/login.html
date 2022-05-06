@@ -33,7 +33,24 @@
                 <i class="material-icons">key</i>
             </label>
             <input type="password" name="password" placeholder="Password" id="password" required/>
+
+            <!--hidden-->
+            <label for="firstname" class="hidden">
+                <i class="material-icons hidden">drive_file_rename_outline</i>
+            </label>
+            <input type="text" name="firstname" placeholder="First Name" id="firstname" class="hidden" required/>
+            <label for="lastname" class="hidden">
+                <i class="material-icons hidden">drive_file_rename_outline</i>
+            </label>
+            <input type="text" name="lastname" placeholder="Last Name" id="lastname" class="hidden" required/>
+            <label for="email" class="hidden">
+                <i class="material-icons hidden">mail</i>
+            </label>
+            <input type="email" placeholder="Email" id="email" class="hidden" required>
+            <!--hidden-->
+
             <input type="submit" value="Login"/>
+            <input type="submit" value="New User?" onclick="signUpForm()">
         </form>
     </main>
 
@@ -49,6 +66,7 @@
         <a href="#">&copy; 2022 | BBY35 </a>
     </footer>
 
+    <script src="./script/login.js"></script>
 </body>
 
 </html>

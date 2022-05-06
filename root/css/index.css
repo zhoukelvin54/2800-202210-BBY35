@@ -86,11 +86,17 @@ footer a {
         display: grid;
     }
     
+    .navbar a {
+        font-size: 13px;
+        padding: 7px 9px;
+    }
+
     .d-sm-none {
         display: none;
     }
     
     .logo {
-        width: 60%;
+        width: 35vw;
+        height: 25vh;
     }
 }
