@@ -10,3 +10,5 @@ const https = require("https");
 // const tinyeditor = require("tiny-editor"); 
 const sanitize = require("sanitize-html");
 const multer = require("multer");
+
+console.log("This is when the server would start");
