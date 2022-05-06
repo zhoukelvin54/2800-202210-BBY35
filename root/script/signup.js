@@ -1,5 +1,7 @@
+'use strict';
+
 function swapForm() {
-    console.log("clicked");
+    // console.log("clicked");
     if (document.getElementById("swap").value == "New User?") {
         document.getElementById("login").removeEventListener("submit", login);
         document.getElementById("login").id="signup";
@@ -53,17 +55,17 @@ function swapForm() {
             // 200 means everthing worked
             if (xhr.status === 200) {
 
-              console.log("success");
+            //   console.log("success");
 
             } else {
 
               // not a 200, could be anything (404, 500, etc.)
-              console.log(this.status);
+            //   console.log(this.status);
 
             }
 
         } else {
-            console.log("ERROR", this.status);
+            // console.log("ERROR", this.status);
         }
     }
     xhr.open("POST", "/add-account");

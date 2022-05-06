@@ -1,3 +1,5 @@
+'use strict';
+
 // Constants
 const express = require("express");
 const session = require("express-session");
@@ -106,7 +108,7 @@ app.get("/admin", (req, res) => {
 
 app.post("/login", jsonParser, (req, res) => {
   res.setHeader("content-type", "application/json");
-  console.log(req);
+//   console.log(req);
   let username = req.body.username;
   let password = req.body.password;
   if (username && password) {

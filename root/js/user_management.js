@@ -1,7 +1,7 @@
 'use strict';
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("User management script loaded.");
+  // console.log("User management script loaded.");
   let table = document.getElementById("userTable").querySelector("tbody");
 
   let userData = await getUserData()
@@ -30,10 +30,10 @@ async function getUserData() {
       // console.log(data);
       return JSON.parse(data);
     } else {
-      console.log(response.status);
-      console.log(response.statusText);
+      // console.log(response.status);
+      // console.log(response.statusText);
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }
