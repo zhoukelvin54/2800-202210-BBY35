@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>User Management</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./css/user_management.css">
 </head>
 
 <body>
@@ -20,21 +20,24 @@
         <a href="#search">Search</a>
     </nav>
 
-    <!-- login  -->
-    <main class="login">
-        <form>
-            <h1>Login</h1>
-            <label for="username">
-                <!-- font awesome icon -->
-                <i class="material-icons">account_circle</i>
-            </label>
-            <input type="text" name="username" placeholder="Username" id="username" required/>
-            <label for="password">
-                <i class="material-icons">key</i>
-            </label>
-            <input type="password" name="password" placeholder="Password" id="password" required/>
-            <input type="submit" value="Login"/>
-        </form>
+    <!-- User Management Panel  -->
+    <main id="userManagementPanel">
+        <h2>User Management</h2>
+        <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Account Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
     </main>
 
     <!-- footer -->
@@ -49,6 +52,7 @@
         <a href="#">&copy; 2022 | BBY35 </a>
     </footer>
 
+    <script src="js/user_management.js"></script>
 </body>
 
 </html>
