@@ -20,7 +20,7 @@ ready(function () {
         xhr.send(param);
     }
 
-    document.getElementById("login-form").addEventListener('submit', async function (e) {
+    document.getElementById("submit").addEventListener('submit', async function (e) {
         e.preventDefault();
         let usr = document.getElementById("username").value;
         let pass = document.getElementById("password").value;

@@ -19,7 +19,6 @@ const sanitize = require("sanitize-html");
 const multer = require("multer");
 
 const app = express();
-const mysql2 = require('mysql2');
 
 app.use("/common", express.static("./root/common"));
 app.use("/script", express.static("./root/script"));
@@ -29,64 +28,12 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js"));
 app.use("/scss", express.static("./root/scss"));
 
-app.get('/', function (req, res) {
-
-
-    // Let's build the DB if it doesn't exist
-    const connection = mysql2.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'db_petpals',
-      port: '3306',
-      multipleStatements: true
-    });
-
-
-    const createDBAndTables = `CREATE DATABASE IF NOT EXISTS db_petpals;
-        use db_petpals;
-        CREATE TABLE IF NOT EXISTS accounts (
-            id int NOT NULL AUTO_INCREMENT,
-            username varchar(20) NOT NULL,
-            firstname varchar(45) DEFAULT NULL,
-            lastname varchar(45) DEFAULT NULL,
-            email varchar(50) NOT NULL,
-            password varchar(20) NOT NULL,
-            is_admin tinyint NOT NULL DEFAULT '0',
-            is_caretaker tinyint NOT NULL DEFAULT '0',
-            PRIMARY KEY (id));`;
-
-    connection.connect();
-    connection.query(createDBAndTables, function (error, results, fields) {
-      if (error) {
-          console.error(error);
-      }
-      console.log(results);
-      console.log("successful connection to database")
-
-    });
-    connection.end();
-
-    let doc = fs.readFileSync('./root/login.html', "utf8");
-    res.send(doc);
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post('/add-account', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
-  //console.log("Name", req.body.username);
-  //console.log("Email", req.body.email);
-
-  let connection = mysql2.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'db_petpals'
-  });
-  connection.connect();
   // TO PREVENT SQL INJECTION, DO THIS:
   // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
   connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' 
@@ -101,18 +48,12 @@ app.post('/add-account', function (req, res) {
     res.send({ status: "success", msg: "Record added." });
 
   });
-  connection.end();
+ 
 
 });
 
 
-// dev merge
-//
-//
-//
 
-
-/*
 // Oh look, unsecured data that will be moved to an .env at some point in future
 // and no; we probably won't use this exact data again.
 const dbConnection = {
@@ -132,7 +73,7 @@ connection.connect((err) => {
 
     console.log("connected successfully");
 });
-*/
+
 
 // initializing sessions
 let sessionObj = {
@@ -159,7 +100,6 @@ app.get("/home", (req, res) => {
 
 app.get("/login", (req, res) => {
     let doc = fs.readFileSync("./root/login.html", "utf-8");
-    res.send(doc);
 });
 
 app.post("/login", jsonParser, (req, res) => {
