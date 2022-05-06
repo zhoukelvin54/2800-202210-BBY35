@@ -8,7 +8,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const fs = require("fs");
+const filesys = require("fs");
 const jsdom = require("jsdom");
 const http = require("http");
 const https = require("https");
@@ -52,7 +52,6 @@ let sessionObj = {
 app.use(session(sessionObj));
 
 app.use("/common", express.static("./root/common"));
-app.use("/script", express.static("./root/script"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
 app.use("/font", express.static("./root/font"));
@@ -94,13 +93,13 @@ app.get("/home", (req, res) => {
   if (!(req.session.loggedIn)) {
       res.redirect("/login");
   } else {
-      let doc = fs.readFileSync("./root/index.html", "utf-8");
+      let doc = filesys.readFileSync("./root/index.html", "utf-8");
       res.send(doc);
   }
 });
 
 app.get("/login", (req, res) => {
-  let doc = fs.readFileSync("./root/login.html", "utf-8");
+  let doc = filesys.readFileSync("./root/login.html", "utf-8");
   res.send(doc);
 });
 
