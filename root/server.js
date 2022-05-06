@@ -100,7 +100,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/admin", (req, res) => {
-    let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+    let doc = fs.readFileSync("./root/user_management.html", "utf-8");
     res.send(doc);
 });
 
