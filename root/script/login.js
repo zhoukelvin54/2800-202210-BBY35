@@ -1,7 +1,27 @@
 function signUpForm() {
     console.log("clicked");
-    document.querySelectorAll("label").style.display="flex";
-    document.querySelectorAll("input").style.display="flex";
+    
+    
+    if (document.getElementById("swap").value == "New User?") {
+        document.getElementById("swap").value="Already have an account?";
+        document.getElementById("submit").value="Sign Up";
+        document.querySelector("label[for='firstname']").style.display="flex";
+        document.querySelector("input[name='firstname']").style.display="flex";
+        document.querySelector("label[for='lastname']").style.display="flex";
+        document.querySelector("input[name='lastname']").style.display="flex";
+        document.querySelector("label[for='email']").style.display="flex";
+        document.querySelector("input[id='email']").style.display="flex";
+    } else {
+        document.getElementById("swap").value="New User?";
+        document.getElementById("submit").value="Log In";
+        document.querySelector("label[for='firstname']").style.display="none";
+        document.querySelector("input[name='firstname']").style.display="none";
+        document.querySelector("label[for='lastname']").style.display="none";
+        document.querySelector("input[name='lastname']").style.display="none";
+        document.querySelector("label[for='email']").style.display="none";
+        document.querySelector("input[id='email']").style.display="none";
+    }
+
 }
 /*
 function getAccounts() {
