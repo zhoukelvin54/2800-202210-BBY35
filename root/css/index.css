@@ -32,15 +32,20 @@
     display: none;
 }
 
-body {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.5)), url(../img/body.jpg);
+#content-img {
+    background-image: url(../img/body.jpg);
     background-size: cover;
     background-position: center;
     font-family: "Poppins", sans-serif;
-    display: flex;
+    display: none;
     flex-direction: column;
     min-height: 100vh;
+    min-width: 100vh;
+}
+
+#content-text {
+    text-align: center;
+    padding-top: 2vh;
 }
 
 #welcome-img {
@@ -52,9 +57,14 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-width: 100vh;
 }
 
-
+#welcome-text {
+    text-align:center;
+    padding-top: 50vh;
+    color:white;
+}
 
 footer {
     background-color: #343a40;
