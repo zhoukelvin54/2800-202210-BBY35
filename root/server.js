@@ -18,10 +18,10 @@ connection.connect((err) => {
     if (err) {
         console.error("error connecting: " + err.stack);
         return;
-    }
+    };
 
     console.log("connected successfully");
-})
+});
 
 
 const http = require("http");
@@ -52,23 +52,58 @@ app.use("/img", express.static("./root/img"));
 app.use("/js", express.static("./root/js"));
 app.use("/scss", express.static("./root/scss"));
 
-app.get("/home", (req, res) => {
-    let doc = filesys.readFileSync("./root/index.html", "utf-8");
-    res.send(doc);
-})
+app.get("/", (req, res) => {
+    res.redirect("/home");
+});
 
-// this only serves the login page, it doesn't actually interact with the backend
+app.get("/home", (req, res) => {
+    if (!(req.session.loggedIn)) {
+        res.redirect("/login");
+    } else {
+        let doc = filesys.readFileSync("./root/index.html", "utf-8");
+        res.send(doc);
+    }
+});
+
 app.get("/login", (req, res) => {
     let doc = filesys.readFileSync("./root/login.html", "utf-8");
     res.send(doc);
-})
+});
+
+app.post("/login", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let username = req.body.username;
+    let password = req.body.password;
+    if (username && password) {
+        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (err, data, fields) => {
+            if (err) throw err;
+            if (data.length > 0) {
+                req.session.loggedIn = true;
+                req.session.username = data[0].username;
+                req.session.name = data[0].firstname + " " + data[0].lastname;
+                req.session.username = data[0].username;
+                req.session.userid = data[0].id;
+                req.session.admin = data[0].is_admin;
+                req.session.caretaker = data[0].is_caretaker;
+                req.session.save((e) => {
+                    if (e) {
+                        console.log("Error: " +e);
+                    }
+                });
+                res.send({status: "success", msg: "Log In Successful"});
+            } else {
+                res.send({status: "failure", msg: "Log In Unsuccessful"});
+            }
+        });
+    }
+});
 
 console.log("Starting Server...");
 
 const port = 8001;
 function onBoot() {
     console.log("Started on port: " + port);
-}
+};
 
 
 app.listen(port, onBoot);
