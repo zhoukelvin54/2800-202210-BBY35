@@ -1,7 +1,5 @@
-function signUpForm() {
+function swapForm() {
     console.log("clicked");
-    
-    
     if (document.getElementById("swap").value == "New User?") {
         document.getElementById("swap").value="Already have an account?";
         document.getElementById("submit").value="Sign Up";
