@@ -21,6 +21,7 @@ function swapForm() {
     }
 
 }
+
 /*
 function getAccounts() {
 
@@ -82,14 +83,22 @@ function getAccounts() {
     xhr.send();
 }
 getAccounts();
+*/
 
 document.getElementById("submit").addEventListener("click", function(e) {
     e.preventDefault();
 
-    let formData = { name: document.getElementById("name").value,
+    let formData = { username: document.getElementById("username").value,
+                     password: document.getElementById("password").value,
+                     firstname: document.getElementById("firstname").value,
+                     lastname: document.getElementById("lasrname").value,
                      email: document.getElementById("email").value};
-    document.getElementById("name").value = "";
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("firstname").value = "";
+    document.getElementById("lastname").value = "";
     document.getElementById("email").value = "";
+
 
 
     const xhr = new XMLHttpRequest();
@@ -99,8 +108,7 @@ document.getElementById("submit").addEventListener("click", function(e) {
             // 200 means everthing worked
             if (xhr.status === 200) {
 
-              getAccounts();
-              document.getElementById("status").innerHTML = "DB updated.";
+              
 
             } else {
 
@@ -113,10 +121,11 @@ document.getElementById("submit").addEventListener("click", function(e) {
             console.log("ERROR", this.status);
         }
     }
-    xhr.open("POST", "/add-customer");
+    xhr.open("POST", "/add-account");
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send("name=" + formData.name + "&email=" + formData.email);
+    xhr.send("username=" + formData.username + "&password=" + formData.password
+    + "&firstname=" + formData.firstname + "&lastname=" + formData.lastname +
+    "&email=" +formData.email);
 
 }) 
-*/  

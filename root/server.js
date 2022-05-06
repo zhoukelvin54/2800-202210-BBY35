@@ -11,6 +11,8 @@ const https = require("https");
 const sanitize = require("sanitize-html");
 const multer = require("multer");
 
+app.use("/", express.static("./login.html"));
+
 app.get('/', function (req, res) {
 
 
@@ -19,6 +21,7 @@ app.get('/', function (req, res) {
       host: 'localhost',
       user: 'root',
       password: '',
+      database: 'dh_petpal',
       multipleStatements: true
     });
 
@@ -55,8 +58,8 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/add-account', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
-  console.log("Name", req.body.name);
-  console.log("Email", req.body.email);
+  //console.log("Name", req.body.username);
+  //console.log("Email", req.body.email);
 
   let connection = mysql.createConnection({
     host: 'localhost',
@@ -111,6 +114,7 @@ app.post('/delete-all-customers', function (req, res) {
 */
 
 // ANOTHER POST: we are changing stuff on the server!!!
+/*
 app.post('/update-customer', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
@@ -118,10 +122,10 @@ app.post('/update-customer', function (req, res) {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'test'
+    database: 'db_petpals'
   });
   connection.connect();
-console.log("update values", req.body.email, req.body.id)
+console.log("update values", req.body.email, req.body.username)
   connection.query('UPDATE customer SET email = ? WHERE ID = ?',
         [req.body.email, req.body.id],
         function (error, results, fields) {
@@ -135,6 +139,7 @@ console.log("update values", req.body.email, req.body.id)
   connection.end();
 
 });
+*/
 
 let port = 8000;
 app.listen(port, function () {
