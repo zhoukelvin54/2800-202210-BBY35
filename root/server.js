@@ -72,6 +72,11 @@ app.get("/login", (req, res) => {
     res.send(doc);
 });
 
+app.get("/admin", (req, res) => {
+    let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+    res.send(doc);
+});
+
 app.post("/login", jsonParser, (req, res) => {
     res.setHeader("content-type", "application/json");
     console.log(req);
@@ -98,6 +103,26 @@ app.post("/login", jsonParser, (req, res) => {
                 res.send({status: "failure", msg: "Log In Unsuccessful"});
             }
         });
+    }
+});
+
+app.get("/userData", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if(req.session.loggedIn) {
+        connection.query('SELECT is_admin FROM accounts WHERE username = ?', [req.session.username], (err, data, fields) => {
+            if (err) throw err;
+            if (data.length > 0) {
+                if (data[0] = 1) {
+                    connection.query('SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts', (err, data, fields) => {
+                        res.send(data);
+                    });
+                }
+            } else {
+                res.send({status: "failure", msg: "No data from database!"});
+            }
+        });
+    } else {
+        res.send({status: "failure", msg: "User not logged in!"});
     }
 });
 
