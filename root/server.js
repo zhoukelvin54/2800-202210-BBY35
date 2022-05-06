@@ -34,7 +34,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post('/add-account', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-
+  
+  const connection = mysql2.createConnection(dbConnection);
+  connection.connect();
   // TO PREVENT SQL INJECTION, DO THIS:
   // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
   connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' 
@@ -49,7 +51,7 @@ app.post('/add-account', function (req, res) {
     res.send({ status: "success", msg: "Record added." });
 
   });
- 
+  connection.end();
 
 });
 
