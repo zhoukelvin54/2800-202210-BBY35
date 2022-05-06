@@ -20,6 +20,7 @@ const multer = require("multer");
 
 const app = express();
 
+
 app.use("/common", express.static("./root/common"));
 app.use("/script", express.static("./root/script"));
 app.use("/css", express.static("./root/css"));
@@ -100,6 +101,7 @@ app.get("/home", (req, res) => {
 
 app.get("/login", (req, res) => {
     let doc = fs.readFileSync("./root/login.html", "utf-8");
+    res.send(doc);
 });
 
 app.post("/login", jsonParser, (req, res) => {

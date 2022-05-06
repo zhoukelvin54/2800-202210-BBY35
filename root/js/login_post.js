@@ -20,7 +20,7 @@ ready(function () {
         xhr.send(param);
     }
 
-    document.getElementById("login").addEventListener('submit', async function (e) {
+    var login = async function (e) {
         e.preventDefault();
         let usr = document.getElementById("username").value;
         let pass = document.getElementById("password").value;
@@ -54,7 +54,9 @@ ready(function () {
         } catch (error) {
             console.log(error);
         }
-    });
+    };
+
+    document.getElementById("login").addEventListener('submit', login);
 });
 
 function ready(cb) {

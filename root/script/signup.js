@@ -1,19 +1,25 @@
 function swapForm() {
     console.log("clicked");
     if (document.getElementById("swap").value == "New User?") {
-        document.getElementById("swap").value="Already have an account?";
+        document.getElementById("login").removeEventListener("submit", login);
         document.getElementById("login").id="signup";
+        document.getElementById("signup").addEventListener("click", signup) 
         document.getElementById("signup").value="Sign Up";
+        document.getElementById("swap").value="Already have an account?";
         document.querySelector("label[for='firstname']").style.display="flex";
         document.querySelector("input[name='firstname']").style.display="flex";
+        document.querySelector("input[name='firstname']").ariaRequired;
         document.querySelector("label[for='lastname']").style.display="flex";
         document.querySelector("input[name='lastname']").style.display="flex";
         document.querySelector("label[for='email']").style.display="flex";
         document.querySelector("input[id='email']").style.display="flex";
+        
     } else {
-        document.getElementById("swap").value="New User?";
+        document.getElementById("signup").removeEventListener("click", signup);
         document.getElementById("signup").id="login";
+        document.getElementById("login").addEventListener('submit', login);
         document.getElementById("login").value="Log In";
+        document.getElementById("swap").value="New User?";
         document.querySelector("label[for='firstname']").style.display="none";
         document.querySelector("input[name='firstname']").style.display="none";
         document.querySelector("label[for='lastname']").style.display="none";
@@ -24,7 +30,7 @@ function swapForm() {
 
 }
 
-document.getElementById("signup").addEventListener("click", function(e) {
+    var signup = function(e) {
     e.preventDefault();
 
     let formData = { username: document.getElementById("username").value,
@@ -67,4 +73,6 @@ document.getElementById("signup").addEventListener("click", function(e) {
     + "&firstname=" + formData.firstname + "&lastname=" + formData.lastname +
     "&email=" +formData.email);
 
-}) 
+};
+
+
