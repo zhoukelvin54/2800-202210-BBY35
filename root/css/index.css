@@ -108,6 +108,11 @@ footer a {
         padding: 7px 9px;
     }
 
+    #logout {
+        width: 100vw;
+        float: none;
+    }
+    
     .d-sm-none {
         display: none;
     }
