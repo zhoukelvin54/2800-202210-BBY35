@@ -59,8 +59,9 @@ app.use("/scss", express.static("./root/scss"));
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 
-app.post('/add-account', function (req, res) {
+app.post('/add-account', jsonParser, function (req, res) {
     res.setHeader('Content-Type', 'application/json');
+    console.log(req.body);
 
     const connection = mysql2.createConnection(dbConnection);
     connection.connect();
@@ -73,9 +74,11 @@ app.post('/add-account', function (req, res) {
         function (error, results, fields) {
             if (error) {
                 console.log(error);
+                res.send({ status: "failure", msg: "Internal Server Error"});
+            } else {
+                res.send({ status: "success", msg: "Record added." });
             }
             //console.log('Rows returned are: ', results);
-            res.send({ status: "success", msg: "Record added." });
         });
     connection.end();
 
