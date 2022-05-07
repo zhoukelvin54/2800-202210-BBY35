@@ -56,6 +56,30 @@ app.use("/js", express.static("./root/js"));
 app.use("/scss", express.static("./root/scss"));
 
 
+app.post('/add-account', jsonParser, function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    console.log(req.body);
+
+    const connection = mysql2.createConnection(dbConnection);
+    connection.connect();
+    // TO PREVENT SQL INJECTION, DO THIS:
+    // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
+    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
+        + 'values (?, ?, ?, ?, ?, 0, 0)',
+        [req.body.username, req.body.firstname, req.body.lastname,
+        req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+                res.send({ status: "failure", msg: "Internal Server Error"});
+            } else {
+                res.send({ status: "success", msg: "Record added." });
+            }
+            //console.log('Rows returned are: ', results);
+        });
+    connection.end();
+
+});
 
 
 app.get("/", (req, res) => {
