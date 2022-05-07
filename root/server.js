@@ -94,7 +94,10 @@ app.get("/home", (req, res) => {
         res.send(doc);
     } else {
         let doc = fs.readFileSync("./root/index.html", "utf-8");
-        res.send(doc);
+        let pageDOM = new jsdom.JSDOM(doc);
+        let user = req.session.username;
+        pageDOM.window.document.getElementById("username").innerHTML = user;
+        res.send(pageDOM.serialize());
     }
 });
 
