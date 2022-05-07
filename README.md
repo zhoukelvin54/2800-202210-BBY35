@@ -8,3 +8,6 @@
 ## To run:
   1. Start MySQL server on port ```3306```
   2. Run ```npm start``` to boot the server.
+
+### Citations
+  Background Image Source: [Unsplash.com](https://unsplash.com/)
