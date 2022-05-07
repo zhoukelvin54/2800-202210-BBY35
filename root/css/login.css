@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: #343a40;
+    overflow: hidden;
+    text-transform: capitalize;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0.5rem;
+    width: 10%;
+}
+
+.navbar .icon {
+    display: none;
+}
+
+body {
+    background-image: url(../img/dogs.jpg);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: lighten;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login {
+    width: 400px;
+    background-color: #343a40;
+    box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
+    margin: 100px auto;
+}
+
+.login h1 {
+    text-align: center;
+    width: 100%;
+    color: #e4e8ef;
+    font-size: 24px;
+    padding: 20px 0 20px 0;
+    border-bottom: 1px solid #dee0e4;
+    margin-bottom: 2rem;
+}
+
+.login form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.login form label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #696c72;
+    color: #ffffff;
+}
+
+.login form input[type="password"],
+.login form input[type="text"],
+.login form input[type="email"] {
+    width: 310px;
+    height: 50px;
+    border: 1px solid #dee0e4;
+    margin-bottom: 20px;
+    padding: 0 15px;
+}
+
+
+.login form input[name="firstname"],
+.login form label[for="firstname"],
+.login form input[name="lastname"],
+.login form label[for="lastname"],
+.login form input[id="email"],
+.login form label[for="email"] {
+    display:none;
+}
+
+
+
+.login form input[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background-color: #696c72;
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    transition: background-color 0.2s;
+}
+
+.login form input[type="submit"]:hover {
+    background-color: #3f4041;
+    transition: background-color 0.2s;
+}
+
+footer {
+    background-color: #343a40;
+    overflow: hidden;
+    margin-top: auto;
+}
+
+footer a {
+    text-decoration: none;
+    padding: 20px;
+    text-align: center;
+    float: left;
+    color: white;
+}
+
+#errorMsg {
+    color: red;
+    padding-bottom: 1rem;
+}
+
+
+@media only screen and (max-width: 768px) {
+    nav {
+        display: grid;
+
+    }
+    
+    .navbar a {
+        font-size: 13px;
+        padding: 7px 9px;
+    }
+
+    .d-sm-none {
+        display: none;
+    }
+    
+        .logo {
+            width: 35vw;
+            height: 25vh;
+        }
+}

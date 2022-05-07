@@ -1,0 +1,30 @@
+{
+  "name": "petpals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node root/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhoukelvin54/2800-202210-BBY35.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhoukelvin54/2800-202210-BBY35/issues"
+  },
+  "homepage": "https://github.com/zhoukelvin54/2800-202210-BBY35#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "express-session": "^1.17.2",
+    "jsdom": "^19.0.0",
+    "multer": "^1.4.4",
+    "mysql2": "^2.3.3",
+    "sanitize-html": "^2.7.0",
+    "tiny-editor": "^0.3.0"
+  }
+}

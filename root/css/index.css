@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: #343a40;
+    overflow: hidden;
+    text-transform: capitalize;
+    width: 100%;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+#logout {
+    float:right;
+    padding: 15px;
+    background-color: #696c72;
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    transition: background-color 0.2s;
+}
+
+#logout:hover {
+    background-color: #3f4041;
+    transition: background-color 0.2s;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0.5rem;
+    width: 10%;
+}
+
+.navbar .icon {
+    display: none;
+}
+
+#content-img {
+    background-image: url(../img/body.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: "Poppins", sans-serif;
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100vh;
+}
+
+#content-text {
+    text-align: center;
+    padding-top: 2vh;
+}
+
+#welcome-img {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.5)), url(../img/dogs.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: "Poppins", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100vh;
+}
+
+#welcome-text {
+    text-align:center;
+    padding-top: 50vh;
+    color:white;
+}
+
+footer {
+    background-color: #343a40;
+    overflow: hidden;
+    margin-top: auto;
+}
+
+footer a {
+    text-decoration: none;
+    padding: 20px;
+    text-align: center;
+    float: left;
+    color: white;
+}
+
+
+@media only screen and (max-width: 768px) {
+    nav {
+        display: grid;
+    }
+    
+    .navbar a {
+        font-size: 13px;
+        padding: 7px 9px;
+    }
+
+    #logout {
+        width: 100vw;
+        float: none;
+    }
+    
+    .d-sm-none {
+        display: none;
+    }
+    
+    .logo {
+        width: 35vw;
+        height: 25vh;
+    }
+
+    #welcome-img {
+        min-width: 60vw;
+    }
+    
+    #content-img {
+        min-width: 60vw;
+    }
+}
