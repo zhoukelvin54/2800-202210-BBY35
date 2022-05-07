@@ -1,3 +1,5 @@
+'use strict';
+
 // Constants
 const express = require("express");
 const session = require("express-session");
@@ -18,30 +20,30 @@ const app = express();
 // Oh look, unsecured data that will be moved to an .env at some point in future
 // and no; we probably won't use this exact data again.
 const dbConnection = {
-  host: "localhost",
-  user: "nodeapp",
-  password: "",
-  database: "db_petpals",
-  port: 3306
+    host: "localhost",
+    user: "nodeapp",
+    password: "",
+    database: "db_petpals",
+    port: 3306
 };
 const mysql2 = require("mysql2");
 const connection = mysql2.createConnection(dbConnection);
 connection.connect((err) => {
-  if (err) {
-      console.error("error connecting: " + err.stack);
-      return;
-  };
+    if (err) {
+        console.error("error connecting: " + err.stack);
+        return;
+    };
 
-  console.log("connected successfully");
+    console.log("connected successfully");
 });
 
 
 // initializing sessions
 let sessionObj = {
-  secret: "Hey, another password that will be obscured eventually. Neat!",
-  name: "petpalsID",
-  resave: false,
-  saveUninitialized: true
+    secret: "Hey, another password that will be obscured eventually. Neat!",
+    name: "petpalsID",
+    resave: false,
+    saveUninitialized: true
 };
 
 app.use(session(sessionObj));
@@ -53,83 +55,84 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js"));
 app.use("/scss", express.static("./root/scss"));
 
-app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
 
-app.post('/add-account', function (req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  
-  const connection = mysql2.createConnection(dbConnection);
-  connection.connect();
-  // TO PREVENT SQL INJECTION, DO THIS:
-  // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
-  connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' 
-  + 'values (?, ?, ?, ?, ?, 0, 0)',
-        [req.body.username, req.body.firstname, req.body.lastname, 
-          req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
-        function (error, results, fields) {
-    if (error) {
-        console.log(error);
-    }
-    //console.log('Rows returned are: ', results);
-    res.send({ status: "success", msg: "Record added." });
-
-  });
-  connection.end();
-
-});
 
 
 app.get("/", (req, res) => {
-  res.redirect("/home");
+    res.redirect("/home");
 });
 
 app.get("/home", (req, res) => {
-  if (!(req.session.loggedIn)) {
-      res.redirect("/login");
-  } else {
-      let doc = filesys.readFileSync("./root/index.html", "utf-8");
-      res.send(doc);
-  }
+    if (!(req.session.loggedIn)) {
+        res.redirect("/login");
+    } else if (req.session.admin) {
+        let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+        res.send(doc);
+    } else {
+        let doc = filesys.readFileSync("./root/index.html", "utf-8");
+        res.send(doc);
+    }
 });
 
 app.get("/login", (req, res) => {
-  let doc = filesys.readFileSync("./root/login.html", "utf-8");
-  res.send(doc);
+    let doc = filesys.readFileSync("./root/login.html", "utf-8");
+    res.send(doc);
 });
 
 app.get("/admin", (req, res) => {
-    let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+    let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
     res.send(doc);
 });
 
 app.post("/login", jsonParser, (req, res) => {
-  res.setHeader("content-type", "application/json");
-  console.log(req);
-  let username = req.body.username;
-  let password = req.body.password;
-  if (username && password) {
-      connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (err, data, fields) => {
-          if (err) throw err;
-          if (data.length > 0) {
-              req.session.loggedIn = true;
-              req.session.username = data[0].username;
-              req.session.name = data[0].firstname + " " + data[0].lastname;
-              req.session.username = data[0].username;
-              req.session.userid = data[0].id;
-              req.session.admin = data[0].is_admin;
-              req.session.caretaker = data[0].is_caretaker;
-              req.session.save((e) => {
-                  if (e) {
-                      console.log("Error: " +e);
-                  }
-              });
-              res.send({status: "success", msg: "Log In Successful"});
-          } else {
-              res.send({status: "failure", msg: "Log In Unsuccessful"});
-          }
-      });
-  }
+    res.setHeader("content-type", "application/json");
+    //   console.log(req);
+    let username = req.body.username;
+    let password = req.body.password;
+    if (username && password) {
+        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (err, data, fields) => {
+            if (err) throw err;
+            if (data.length > 0) {
+                req.session.loggedIn = true;
+                req.session.username = data[0].username;
+                req.session.name = data[0].firstname + " " + data[0].lastname;
+                req.session.username = data[0].username;
+                req.session.userid = data[0].id;
+                req.session.admin = data[0].is_admin;
+                req.session.caretaker = data[0].is_caretaker;
+                req.session.save((e) => {
+                    if (e) {
+                        console.log("Error: " + e);
+                    }
+                });
+                res.send({ status: "success", msg: "Log In Successful" });
+            } else {
+                res.send({ status: "failure", msg: "Log In Unsuccessful" });
+            }
+        });
+    }
+});
+
+//app.use(express.json());
+app.post('/add-account', jsonParser, function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    const connection = mysql2.createConnection(dbConnection);
+    connection.connect();
+    // TO PREVENT SQL INJECTION, DO THIS:
+    // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
+    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
+        + 'values (?, ?, ?, ?, ?, 0, 0)',
+        [req.body.username, req.body.firstname, req.body.lastname,
+        req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            //console.log('Rows returned are: ', results);
+            res.send({ status: "success", msg: "Record added." });
+        });
+    connection.end();
+
 });
 
 app.get("/logout", function (req, res) {
@@ -148,7 +151,7 @@ app.get("/logout", function (req, res) {
 
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
-    if(req.session.loggedIn) {
+    if (req.session.loggedIn) {
         connection.query('SELECT is_admin FROM accounts WHERE username = ?', [req.session.username], (err, data, fields) => {
             if (err) throw err;
             if (data.length > 0) {
@@ -158,11 +161,11 @@ app.get("/userData", (req, res) => {
                     });
                 }
             } else {
-                res.send({status: "failure", msg: "No data from database!"});
+                res.send({ status: "failure", msg: "No data from database!" });
             }
         });
     } else {
-        res.send({status: "failure", msg: "User not logged in!"});
+        res.send({ status: "failure", msg: "User not logged in!" });
     }
 });
 

@@ -51,6 +51,22 @@ body {
     margin-right: auto;
 }
 
+#logout {
+    float:right;
+    padding: 15px;
+    background-color: #696c72;
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    transition: background-color 0.2s;
+}
+
+#logout:hover {
+    background-color: #3f4041;
+    transition: background-color 0.2s;
+}
+
 main {
     flex-grow: 1;
 }
