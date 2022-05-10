@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function hidehero() {
     document.getElementById("welcome-img").style.display="none";

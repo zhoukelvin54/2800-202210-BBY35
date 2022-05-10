@@ -1,10 +1,14 @@
-'use strict';
+"use strict";
 
+// ============================================================================
+// On page load, create the table for the admin panel.
+// TODO:  -Move serverside
+//        -Move relevant HTML panel to admin's homepage serverside
+// ============================================================================
 document.addEventListener("DOMContentLoaded", async () => {
-  // console.log("User management script loaded.");
   let table = document.getElementById("userTable").querySelector("tbody");
 
-  let userData = await getUserData()
+  let userData = await getUserData();
   userData.forEach(user => {
     let row = document.createElement("tr");
     let tableFields = ["username", "firstname", "lastname", "email", "is_admin", "is_caretaker"];
@@ -19,6 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
+// ============================================================================
+// Fetch and parse into JSON the table for userData
+// ============================================================================
 async function getUserData() {
   try {
     let response = await fetch("/userData", {
@@ -27,13 +34,11 @@ async function getUserData() {
 
     if (response.status == 200) {
       let data = await response.text();
-      // console.log(data);
       return JSON.parse(data);
     } else {
-      // console.log(response.status);
-      // console.log(response.statusText);
+      console.error(response.status, response.statusText);
     }
   } catch (error) {
-    // console.log(error);
+    console.error(error);
   }
 }

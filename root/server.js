@@ -1,4 +1,8 @@
-'use strict';
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 6 */
+/* jshint node: true */
+
+"use strict";
 
 // Constants
 const express = require("express");
@@ -28,13 +32,12 @@ const mysql2 = require("mysql2");
 const connection = mysql2.createConnection(dbConnection);
 connection.connect((err) => {
     if (err) {
-        console.error("error connecting: " + err.stack);
+        console.error("Error connecting to database: " + err.stack);
         return;
-    };
+    }
 
-    console.log("connected successfully");
+    console.log("Database connected successfully.");
 });
-
 
 // initializing sessions
 let sessionObj = {
@@ -44,40 +47,42 @@ let sessionObj = {
     saveUninitialized: true
 };
 
+app.use(bodyParser.json());
 app.use(session(sessionObj));
 
 app.use("/common", express.static("./root/common"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
 app.use("/font", express.static("./root/font"));
-app.use("/js", express.static("./root/js"));
+app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
-
-app.post('/add-account', jsonParser, function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
+app.post("/add-account", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
     console.log(req.body);
 
-    const connection = mysql2.createConnection(dbConnection);
-    connection.connect();
-    
-    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
-        + 'values (?, ?, ?, ?, ?, 0, 0)',
-        [req.body.username, req.body.firstname, req.body.lastname,
-        req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
-        function (error, results, fields) {
+    // TODO Figure out simplified SQL to insert if not exists.
+    connection.query("SELECT username FROM accounts WHERE username = ? UNION ALL SELECT username FROM accounts WHERE email = ?", [req.body.username, req.body.email],
+        (error, results, fields) => {
             if (error) {
-                console.log(error);
-                res.send({ status: "failure", msg: "Internal Server Error"});
+                res.send({ status: "failure", msg: "Internal Server Error" });
+            } else if (results.length > 0) {
+                res.send({ status: "failure", msg: "Username or email already taken!" })
             } else {
-                res.send({ status: "success", msg: "Record added." });
+                connection.query("INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)"
+                    + "values (?, ?, ?, ?, ?, 0, 0)",
+                    [req.body.username, req.body.firstname, req.body.lastname,
+                    req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+                    (error, results, fields) => {
+                        if (error) {
+                            res.send({ status: "failure", msg: "Internal Server Error" });
+                        } else {
+                            res.send({ status: "success", msg: "Record added." });
+                        }
+                    });
             }
-            
         });
-    connection.end();
-
 });
-
 
 app.get("/", (req, res) => {
     res.redirect("/home");
@@ -99,22 +104,25 @@ app.get("/home", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    let doc = filesys.readFileSync("./root/login.html", "utf-8");
-    res.send(doc);
+    if (req.session.loggedIn && req.session.admin) {
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+        res.send(doc);
+    } else if (req.session.loggedIn && !req.session.admin) {
+        let doc = fs.readFileSync("./root/index.html", "utf-8");
+        res.send(doc);
+    } else {
+        let doc = fs.readFileSync("./root/login.html", "utf-8");
+        res.send(doc);
+    }
 });
 
-app.get("/admin", (req, res) => {
-    let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
-    res.send(doc);
-});
-
-app.post("/login", jsonParser, (req, res) => {
+app.post("/login", (req, res) => {
     res.setHeader("content-type", "application/json");
     
     let username = req.body.username;
     let password = req.body.password;
     if (username && password) {
-        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (err, data, fields) => {
+        connection.query("SELECT * FROM accounts WHERE username = ? AND password = ?", [username, password], (err, data, fields) => {
             if (err) throw err;
             if (data.length > 0) {
                 req.session.loggedIn = true;
@@ -137,13 +145,11 @@ app.post("/login", jsonParser, (req, res) => {
     }
 });
 
-
-app.get("/logout", function (req, res) {
-
+app.get("/logout", (req, res) => {
     if (req.session) {
-        req.session.destroy(function (error) {
+        req.session.destroy((error) => {
             if (error) {
-                res.status(400).send("Unable to log out")
+                res.status(400).send("Unable to log out");
             } else {
                 // session deleted, redirect to home
                 res.redirect("/");
@@ -154,18 +160,9 @@ app.get("/logout", function (req, res) {
 
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
-    if (req.session.loggedIn) {
-        connection.query('SELECT is_admin FROM accounts WHERE username = ?', [req.session.username], (err, data, fields) => {
-            if (err) throw err;
-            if (data.length > 0) {
-                if (data[0] = 1) {
-                    connection.query('SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts', (err, data, fields) => {
-                        res.send(data);
-                    });
-                }
-            } else {
-                res.send({ status: "failure", msg: "No data from database!" });
-            }
+    if (req.session.admin) {
+        connection.query("SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts", (err, data, fields) => {
+            res.send(data);
         });
     } else {
         res.send({ status: "failure", msg: "User not logged in!" });
@@ -174,10 +171,9 @@ app.get("/userData", (req, res) => {
 
 console.log("Starting Server...");
 
-const port = 8001;
+const port = 8000;
 function onBoot() {
     console.log("Started on port: " + port);
-};
-
+}
 
 app.listen(port, onBoot);
