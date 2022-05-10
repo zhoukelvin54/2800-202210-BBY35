@@ -59,7 +59,7 @@ app.use("/common", express.static("./root/common"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
 app.use("/font", express.static("./root/font"));
-app.use("/js", express.static("./root/js"));
+app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
 app.post('/add-account', (req, res) => {
@@ -102,13 +102,16 @@ app.get("/home", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-    let doc = fs.readFileSync("./root/login.html", "utf-8");
-    res.send(doc);
-});
-
-app.get("/admin", (req, res) => {
-    let doc = fs.readFileSync("./root/user_management.html", "utf-8");
-    res.send(doc);
+    if (req.session.loggedIn && req.session.admin) {
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+        res.send(doc);
+    } else if (req.session.loggedIn && !req.session.admin) {
+        let doc = fs.readFileSync("./root/index.html", "utf-8");
+        res.send(doc);
+    } else {
+        let doc = fs.readFileSync("./root/login.html", "utf-8");
+        res.send(doc);
+    }
 });
 
 app.post("/login", (req, res) => {
