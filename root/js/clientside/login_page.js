@@ -52,6 +52,7 @@ async function login() {
     }
 }
 
+
 // ============================================================================
 // This function is responsible for logging in and redirecting the user if 
 // logged in.
@@ -66,37 +67,70 @@ async function signup() {
     };
 
     try {
-        let response = await fetch("/add-account", {
+        let response = await fetch("/validate-username", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
-            },
+            }, 
             body: JSON.stringify({
-                "username": formData.username,
-                "password": formData.password,
-                "firstname": formData.firstname,
-                "lastname": formData.lastname,
-                "email": formData.email
+                "username": formData.username
             })
         });
-
         if (response.status == 200) {
             let data = await response.text();
             if (data) {
                 let parsedData = JSON.parse(data);
-
                 if (parsedData.status == "success") {
-                    login();
-                } else {
+                    var duplicated = true;
                     document.getElementById("errorMsg").innerText = parsedData.msg;
+                } else {
+                    var duplicated = false;
                 }
             }
         } else {
             console.error(response.status, response.statusText);
         }
-    } catch (error) {
-        console.error(error);
+
+    }   catch (error) {
+
     }
+
+    if (!duplicated) {
+        try {
+            let response = await fetch("/add-account", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    "username": formData.username,
+                    "password": formData.password,
+                    "firstname": formData.firstname,
+                    "lastname": formData.lastname,
+                    "email": formData.email
+                })
+            });
+    
+            if (response.status == 200) {
+                
+    
+                let data = await response.text();
+                if (data) {
+                    let parsedData = JSON.parse(data);
+                    if (parsedData.status == "success") {
+                        login();
+                    }   else {
+                        document.getElementById("errorMsg").innerText = parsedData.msg;
+                    }
+                }
+            } else {
+                console.error(response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    
 };
 
 // ============================================================================

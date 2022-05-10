@@ -64,19 +64,7 @@ app.use("/scss", express.static("./root/scss"));
 
 app.post('/add-account', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    console.log(req.body);
-
-    connection.query('SELECT username FROM accounts WHERE username = ?', [req.body.username] ,
-    (error, results,fields) => {
-        if (error) {
-            res.send({ status: "", msg: "Internal Server Error"});
-        } else if (username) {
-            return res.send({ status: "failure", msg: "Username already exists!"})
-        } else {
-            res.send({ status: "success", msg: "Username is unique!" });
-        }
-    });
-    
+    console.log(req.body);    
     connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
      + 'values (?, ?, ?, ?, ?, 0, 0)',
         [req.body.username, req.body.firstname, req.body.lastname,
@@ -91,6 +79,20 @@ app.post('/add-account', (req, res) => {
             //console.log('Rows returned are: ', results);
         });    
 });
+
+app.post("/validate-username", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    connection.query('SELECT username FROM accounts WHERE username = ?', [req.body.username] ,
+    (error, results,fields) => {
+        if (error) {
+            //res.send({ status: "", msg: "Internal Server Error"});
+        } else if (req.body.username) {
+            res.send({ status: "success", msg: "Username already exists!"})    
+        } else {
+            //res.send({ status: "success", msg: "Username is unique!" });
+        }
+    });
+})
 
 
 app.get("/", (req, res) => {
