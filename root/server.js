@@ -1,3 +1,7 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 6 */
+/* jshint node: true */
+
 'use strict';
 
 // Constants
@@ -32,7 +36,7 @@ connection.connect((err) => {
     if (err) {
         console.error("error connecting: " + err.stack);
         return;
-    };
+    }
 
     console.log("connected successfully");
 });
@@ -65,8 +69,7 @@ app.post('/add-account', (req, res) => {
     connection.connect();
     // TO PREVENT SQL INJECTION, DO THIS:
     // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
-    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
-        + 'values (?, ?, ?, ?, ?, 0, 0)',
+    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' + 'values (?, ?, ?, ?, ?, 0, 0)',
         [req.body.username, req.body.firstname, req.body.lastname,
         req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
         (error, results, fields) => {
@@ -145,7 +148,7 @@ app.get("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy( (error) => {
             if (error) {
-                res.status(400).send("Unable to log out")
+                res.status(400).send("Unable to log out");
             } else {
                 // session deleted, redirect to home
                 res.redirect("/");
@@ -170,7 +173,7 @@ console.log("Starting Server...");
 const port = 8000;
 function onBoot() {
     console.log("Started on port: " + port);
-};
+}
 
 
 app.listen(port, onBoot);
