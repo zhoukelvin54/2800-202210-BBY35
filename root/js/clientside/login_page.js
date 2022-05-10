@@ -1,11 +1,11 @@
 "use strict";
 
-// Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
-let formState = 0;
-
 ready(function () {
     document.getElementById("login-form").addEventListener("submit", handleForm);
 });
+
+// Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
+let formState = 0;
 
 // ============================================================================
 // This handles what function will be called upon login / signup submission.
@@ -58,12 +58,19 @@ async function login() {
 // ============================================================================
 async function signup() {
     let formData = {
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value,
-        firstname: document.getElementById("firstname").value,
-        lastname: document.getElementById("lastname").value,
-        email: document.getElementById("email").value
+        username: document.getElementById("username").value.trim(),
+        password: document.getElementById("password").value.trim(),
+        firstname: document.getElementById("firstname").value.trim(),
+        lastname: document.getElementById("lastname").value.trim(),
+        email: document.getElementById("email").value.trim()
     };
+
+    for (let prop in formData) {
+        if (formData[prop] == "" || formData[prop] == null) {
+            document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+            return;
+        }
+    }
 
     try {
         let response = await fetch("/add-account", {

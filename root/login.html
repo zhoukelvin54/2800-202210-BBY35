@@ -12,21 +12,11 @@
 </head>
 
 <body>
-    <nav class="navbar" id="navContents">
-        <img src="img/PetPals-logos_white.png" alt="" class="logo">
-        <a href="#home">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#experiences">Experiences</a>
-        <a href="#faqs">FAQs</a>
-        <a href="#search">Search</a>
-    </nav>
-
-    <!-- login  -->
+    <!-- Login Panel  -->
     <main class="login">
         <form id="login-form">
             <h1>Login</h1>
             <label for="username">
-                <!-- font awesome icon -->
                 <i class="material-icons">account_circle</i>
             </label>
             <input type="text" name="username" placeholder="Username" id="username" required/>
@@ -35,20 +25,20 @@
             </label>
             <input type="password" name="password" placeholder="Password" id="password" required/>
 
-            <!--hidden-->
-            <label for="firstname" class="hidden">
-                <i class="material-icons hidden">drive_file_rename_outline</i>
+            <!-- Sign-up details -->
+            <label for="firstname">
+                <i class="material-icons">drive_file_rename_outline</i>
             </label>
-            <input type="text" name="firstname" placeholder="First Name" id="firstname" class="hidden" />
-            <label for="lastname" class="hidden">
-                <i class="material-icons hidden">drive_file_rename_outline</i>
+            <input type="text" name="firstname" placeholder="First Name" id="firstname" />
+            <label for="lastname">
+                <i class="material-icons">drive_file_rename_outline</i>
             </label>
-            <input type="text" name="lastname" placeholder="Last Name" id="lastname" class="hidden" />
-            <label for="email" class="hidden">
-                <i class="material-icons hidden">mail</i>
+            <input type="text" name="lastname" placeholder="Last Name" id="lastname" />
+            <label for="email">
+                <i class="material-icons">mail</i>
             </label>
-            <input type="email" placeholder="Email" id="email" class="hidden">
-            <!--hidden-->
+            <input type="email" placeholder="Email" id="email" required />
+            <!-- End of Sign-up details -->
 
             <div id="errorMsg"></div>
 
@@ -57,19 +47,6 @@
             <input type="button" value="New User?" id="swap" onclick="swapForm()">
         </form>
     </main>
-
-    <!-- footer -->
-    <footer>
-        <div class="d-sm-none">
-            <a href="#">FAQ</a>
-            <a href="#">Contact Us</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Refund Policy</a>
-        </div>
-        <a href="#">&copy; 2022 | BBY35 </a>
-    </footer>
-
 
     <script src="/js/login_page.js"></script>
 </body>
