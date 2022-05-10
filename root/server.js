@@ -8,7 +8,6 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const jsonParser = bodyParser.json();
 const fs = require("fs");
 const jsdom = require("jsdom");
 const http = require("http");
@@ -49,6 +48,7 @@ let sessionObj = {
     saveUninitialized: true
 };
 
+app.use(bodyParser.json());
 app.use(session(sessionObj));
 
 app.use("/common", express.static("./root/common"));
