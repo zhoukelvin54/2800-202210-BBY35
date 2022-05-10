@@ -2,33 +2,33 @@
 
 function swapForm() {
     document.getElementById("signup").addEventListener("click", signup);
-    // console.log("clicked");
+    let signUpElements = ["label[for='firstname']",
+            "input[name='firstname']",
+            "label[for='lastname']",
+            "input[name='lastname']",
+            "label[for='email']",
+            "input[id='email']"];
+    
+    // If the form currently displays the new user button, change it and display sign-up form
     if (document.getElementById("swap").value == "New User?") {
+        document.getElementById("swap").value = "Already have an account?";
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("signup").removeAttribute("hidden");
-        document.getElementById("signup").value = "Sign Up";
-        document.getElementById("swap").value = "Already have an account?";
-        document.querySelector("label[for='firstname']").style.display = "flex";
-        document.querySelector("input[name='firstname']").style.display = "flex";
-        document.querySelector("input[name='firstname']").ariaRequired;
-        document.querySelector("label[for='lastname']").style.display = "flex";
-        document.querySelector("input[name='lastname']").style.display = "flex";
-        document.querySelector("label[for='email']").style.display = "flex";
-        document.querySelector("input[id='email']").style.display = "flex";
+        
+        for (let i = 0; i < signUpElements.length; i++) {
+            document.querySelector(signUpElements[i]).style.display = "flex";
+        }
+
 
     } else {
-        document.getElementById("login").removeAttribute("hidden");
-        document.getElementById("signup").setAttribute("hidden", true);
-        document.getElementById("login").value = "Log In";
         document.getElementById("swap").value = "New User?";
-        document.querySelector("label[for='firstname']").style.display = "none";
-        document.querySelector("input[name='firstname']").style.display = "none";
-        document.querySelector("label[for='lastname']").style.display = "none";
-        document.querySelector("input[name='lastname']").style.display = "none";
-        document.querySelector("label[for='email']").style.display = "none";
-        document.querySelector("input[id='email']").style.display = "none";
+        document.getElementById("signup").setAttribute("hidden", true);
+        document.getElementById("login").removeAttribute("hidden");
+        
+        for (let i = 0; i < signUpElements.length; i++) {
+            document.querySelector(signUpElements[i]).style.display = "none";
+        }
     }
-
 }
 
 var signup = async function (e) {
@@ -41,12 +41,6 @@ var signup = async function (e) {
         lastname: document.getElementById("lastname").value,
         email: document.getElementById("email").value
     };
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("firstname").value = "";
-    document.getElementById("lastname").value = "";
-    document.getElementById("email").value = "";
-
 
     try {
         let response = await fetch("/add-account", {
@@ -66,12 +60,11 @@ var signup = async function (e) {
         if (response.status == 200) {
             let data = await response.text();
             if (data) {
-                let parsed = JSON.parse(data);
-                // console.log(parsed);
-                if (parsed.status == 'failure') {
-                    document.getElementById("errorMsg").innerText = parsed.msg;
+                let parsedData = JSON.parse(data);
+                if (parsedData.status == 'failure') {
+                    document.getElementById("errorMsg").innerText = parsedData.msg;
                 } else {
-                    // console.log("User Added to database");
+                    window.location = "/";
                 }
             }
         } else {
