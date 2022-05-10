@@ -163,6 +163,17 @@ app.get("/userData", (req, res) => {
     }
 });
 
+app.get("/petData", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 0) {
+        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description FROM pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not logged in!" });
+    }
+});
+
 console.log("Starting Server...");
 
 const port = 8000;
