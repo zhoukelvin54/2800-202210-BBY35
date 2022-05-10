@@ -115,6 +115,7 @@ function swapForm() {
     if (formState == 0) {
         formState = 1;
         document.getElementById("swap").value = "Already have an account?";
+        document.querySelector("#login-form > h1").innerText = "Sign up";
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("signup").removeAttribute("hidden");
         
@@ -124,6 +125,7 @@ function swapForm() {
     } else {
         formState = 0;
         document.getElementById("swap").value = "New User?";
+        document.querySelector("#login-form > h1").innerText = "Login";
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
         
