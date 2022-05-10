@@ -156,18 +156,9 @@ app.get("/logout", (req, res) => {
 
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
-    if (req.session.loggedIn) {
-        connection.query('SELECT is_admin FROM accounts WHERE username = ?', [req.session.username], (err, data, fields) => {
-            if (err) throw err;
-            if (data.length > 0) {
-                if (data[0] = 1) {
-                    connection.query('SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts', (err, data, fields) => {
-                        res.send(data);
-                    });
-                }
-            } else {
-                res.send({ status: "failure", msg: "No data from database!" });
-            }
+    if (req.session.admin) {
+        connection.query('SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts', (err, data, fields) => {
+            res.send(data);
         });
     } else {
         res.send({ status: "failure", msg: "User not logged in!" });
