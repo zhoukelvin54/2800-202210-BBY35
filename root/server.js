@@ -64,8 +64,6 @@ app.post('/add-account', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     console.log(req.body);
 
-    const connection = mysql2.createConnection(dbConnection);
-    connection.connect();
     // TO PREVENT SQL INJECTION, DO THIS:
     // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
     connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' + 'values (?, ?, ?, ?, ?, 0, 0)',
@@ -80,8 +78,6 @@ app.post('/add-account', (req, res) => {
             }
             //console.log('Rows returned are: ', results);
         });
-    connection.end();
-
 });
 
 
