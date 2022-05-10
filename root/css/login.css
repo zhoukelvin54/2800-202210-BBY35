@@ -57,7 +57,7 @@ body {
     width: 400px;
     background-color: #343a40;
     box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
-    margin: 100px auto;
+    margin: 0 auto;
 }
 
 .login h1 {
@@ -138,6 +138,13 @@ footer a {
     text-align: center;
     float: left;
     color: white;
+}
+
+#logo {
+    max-width: 40vw;
+    max-height: 30vh;
+    margin: 2rem auto;
+    filter: drop-shadow(5px 5px 5px #222);
 }
 
 #errorMsg {
