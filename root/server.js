@@ -65,9 +65,20 @@ app.use("/scss", express.static("./root/scss"));
 app.post('/add-account', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     console.log(req.body);
-    // TO PREVENT SQL INJECTION, DO THIS:
-    // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
-    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' + 'values (?, ?, ?, ?, ?, 0, 0)',
+
+    connection.query('SELECT username FROM accounts WHERE username = ?', [req.body.username] ,
+    (error, results,fields) => {
+        if (error) {
+            res.send({ status: "", msg: "Internal Server Error"});
+        } else if (username) {
+            return res.send({ status: "failure", msg: "Username already exists!"})
+        } else {
+            res.send({ status: "success", msg: "Username is unique!" });
+        }
+    });
+    
+    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
+     + 'values (?, ?, ?, ?, ?, 0, 0)',
         [req.body.username, req.body.firstname, req.body.lastname,
         req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
         (error, results, fields) => {
@@ -78,7 +89,7 @@ app.post('/add-account', (req, res) => {
                 res.send({ status: "success", msg: "Record added." });
             }
             //console.log('Rows returned are: ', results);
-        });
+        });    
 });
 
 

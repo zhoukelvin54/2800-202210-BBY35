@@ -29,6 +29,19 @@ function swapForm() {
 
 }
 
+async function verify() {
+    try {
+        await fetch("/add-account", {
+            method: "POST",
+            header: {"Content-type": "application/json"},
+            body: JSON.stringify
+
+        })
+    } catch (error) {
+        
+    }
+}
+
 var signup = async function (e) {
     e.preventDefault();
 
