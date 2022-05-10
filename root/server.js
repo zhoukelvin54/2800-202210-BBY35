@@ -20,6 +20,8 @@ const sanitize = require("sanitize-html");
 const multer = require("multer");
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Oh look, unsecured data that will be moved to an .env at some point in future
 // and no; we probably won't use this exact data again.
@@ -50,11 +52,10 @@ let sessionObj = {
     saveUninitialized: true
 };
 
-app.use(jsonParser);
+
 app.use(session(sessionObj));
 
 app.use("/common", express.static("./root/common"));
-app.use("/script", express.static("./root/script"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
 app.use("/font", express.static("./root/font"));
@@ -64,9 +65,6 @@ app.use("/scss", express.static("./root/scss"));
 app.post('/add-account', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     console.log(req.body);
-
-    const connection = mysql2.createConnection(dbConnection);
-    connection.connect();
     // TO PREVENT SQL INJECTION, DO THIS:
     // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
     connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)' + 'values (?, ?, ?, ?, ?, 0, 0)',
@@ -81,8 +79,6 @@ app.post('/add-account', (req, res) => {
             }
             //console.log('Rows returned are: ', results);
         });
-    connection.end();
-
 });
 
 

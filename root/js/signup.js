@@ -10,12 +10,10 @@ function swapForm() {
         document.getElementById("swap").value = "Already have an account?";
         document.querySelector("label[for='firstname']").style.display = "flex";
         document.querySelector("input[name='firstname']").style.display = "flex";
-        document.querySelector("input[name='firstname']").ariaRequired;
         document.querySelector("label[for='lastname']").style.display = "flex";
         document.querySelector("input[name='lastname']").style.display = "flex";
         document.querySelector("label[for='email']").style.display = "flex";
         document.querySelector("input[id='email']").style.display = "flex";
-
     } else {
         document.getElementById("login").removeAttribute("hidden");
         document.getElementById("signup").setAttribute("hidden", true);
