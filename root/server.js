@@ -57,7 +57,7 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js"));
 app.use("/scss", express.static("./root/scss"));
 
-app.post('/add-account', function (req, res) {
+app.post('/add-account', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     console.log(req.body);
 
@@ -69,7 +69,7 @@ app.post('/add-account', function (req, res) {
         + 'values (?, ?, ?, ?, ?, 0, 0)',
         [req.body.username, req.body.firstname, req.body.lastname,
         req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
-        function (error, results, fields) {
+        (error, results, fields) => {
             if (error) {
                 console.log(error);
                 res.send({ status: "failure", msg: "Internal Server Error"});
@@ -141,10 +141,9 @@ app.post("/login", (req, res) => {
     }
 });
 
-app.get("/logout", function (req, res) {
-
+app.get("/logout", (req, res) => {
     if (req.session) {
-        req.session.destroy(function (error) {
+        req.session.destroy( (error) => {
             if (error) {
                 res.status(400).send("Unable to log out")
             } else {
