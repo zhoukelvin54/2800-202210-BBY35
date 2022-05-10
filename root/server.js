@@ -2,7 +2,7 @@
 /* jshint esversion: 6 */
 /* jshint node: true */
 
-'use strict';
+"use strict";
 
 // Constants
 const express = require("express");
@@ -20,8 +20,6 @@ const sanitize = require("sanitize-html");
 const multer = require("multer");
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Oh look, unsecured data that will be moved to an .env at some point in future
 // and no; we probably won't use this exact data again.
@@ -36,13 +34,12 @@ const mysql2 = require("mysql2");
 const connection = mysql2.createConnection(dbConnection);
 connection.connect((err) => {
     if (err) {
-        console.error("error connecting: " + err.stack);
+        console.error("Error connecting to database: " + err.stack);
         return;
     }
 
-    console.log("connected successfully");
+    console.log("Database connected successfully.");
 });
-
 
 // initializing sessions
 let sessionObj = {
@@ -51,7 +48,6 @@ let sessionObj = {
     resave: false,
     saveUninitialized: true
 };
-
 
 app.use(session(sessionObj));
 
@@ -62,38 +58,32 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
-app.post('/add-account', (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    console.log(req.body);    
-    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
-     + 'values (?, ?, ?, ?, ?, 0, 0)',
-        [req.body.username, req.body.firstname, req.body.lastname,
-        req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+app.post("/add-account", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    console.log(req.body);
+
+    // TODO Figure out simplified SQL to insert if not exists.
+    connection.query("SELECT username FROM accounts WHERE username = ? UNION ALL SELECT username FROM accounts WHERE email = ?", [req.body.username, req.body.email],
         (error, results, fields) => {
             if (error) {
-                console.log(error);
-                res.send({ status: "failure", msg: "Internal Server Error"});
+                res.send({ status: "failure", msg: "Internal Server Error" });
+            } else if (results.length > 0) {
+                res.send({ status: "failure", msg: "Username or email already taken!" })
             } else {
-                res.send({ status: "success", msg: "Record added." });
+                connection.query("INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)"
+                    + "values (?, ?, ?, ?, ?, 0, 0)",
+                    [req.body.username, req.body.firstname, req.body.lastname,
+                    req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+                    (error, results, fields) => {
+                        if (error) {
+                            res.send({ status: "failure", msg: "Internal Server Error" });
+                        } else {
+                            res.send({ status: "success", msg: "Record added." });
+                        }
+                    });
             }
-            //console.log('Rows returned are: ', results);
-        });    
+        });
 });
-
-app.post("/validate-username", (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    connection.query('SELECT username FROM accounts WHERE username = ?', [req.body.username] ,
-    (error, results,fields) => {
-        if (error) {
-            //res.send({ status: "", msg: "Internal Server Error"});
-        } else if (req.body.username) {
-            res.send({ status: "success", msg: "Username already exists!"})    
-        } else {
-            //res.send({ status: "success", msg: "Username is unique!" });
-        }
-    });
-})
-
 
 app.get("/", (req, res) => {
     res.redirect("/home");
@@ -133,7 +123,7 @@ app.post("/login", (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     if (username && password) {
-        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], (err, data, fields) => {
+        connection.query("SELECT * FROM accounts WHERE username = ? AND password = ?", [username, password], (err, data, fields) => {
             if (err) throw err;
             if (data.length > 0) {
                 req.session.loggedIn = true;
@@ -158,7 +148,7 @@ app.post("/login", (req, res) => {
 
 app.get("/logout", (req, res) => {
     if (req.session) {
-        req.session.destroy( (error) => {
+        req.session.destroy((error) => {
             if (error) {
                 res.status(400).send("Unable to log out");
             } else {
@@ -172,7 +162,7 @@ app.get("/logout", (req, res) => {
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.admin) {
-        connection.query('SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts', (err, data, fields) => {
+        connection.query("SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts", (err, data, fields) => {
             res.send(data);
         });
     } else {
@@ -186,6 +176,5 @@ const port = 8000;
 function onBoot() {
     console.log("Started on port: " + port);
 }
-
 
 app.listen(port, onBoot);
