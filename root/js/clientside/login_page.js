@@ -1,11 +1,11 @@
 "use strict";
 
-// Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
-let formState = 0;
-
 ready(function () {
     document.getElementById("login-form").addEventListener("submit", handleForm);
 });
+
+// Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
+let formState = 0;
 
 // ============================================================================
 // This handles what function will be called upon login / signup submission.
