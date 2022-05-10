@@ -46,6 +46,7 @@ let sessionObj = {
     saveUninitialized: true
 };
 
+app.use(jsonParser);
 app.use(session(sessionObj));
 
 app.use("/common", express.static("./root/common"));
@@ -56,10 +57,7 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js"));
 app.use("/scss", express.static("./root/scss"));
 
-app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
-
-app.post('/add-account', jsonParser, function (req, res) {
+app.post('/add-account', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     console.log(req.body);
 
@@ -114,7 +112,7 @@ app.get("/admin", (req, res) => {
     res.send(doc);
 });
 
-app.post("/login", jsonParser, (req, res) => {
+app.post("/login", (req, res) => {
     res.setHeader("content-type", "application/json");
     //   console.log(req);
     let username = req.body.username;
