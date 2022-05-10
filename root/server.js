@@ -19,6 +19,16 @@ const https = require("https");
 const sanitize = require("sanitize-html");
 const multer = require("multer");
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./root/img/uploads");
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname.split("/").pop().trim())
+    }
+});
+const upload = multer({ storage: storage });
+
 const app = express();
 
 // Oh look, unsecured data that will be moved to an .env at some point in future
@@ -172,6 +182,18 @@ app.get("/petData", (req, res) => {
     } else {
         res.send({ status: "failure", msg: "User not logged in!" });
     }
+});
+
+// this route is for testing and example purposes only and should be cleaned up once the forms requiring image upload are completed
+app.get("/addPhoto", (req, res) => {
+    let doc = fs.readFileSync("./root/addphoto.html", "utf-8");
+    res.send(doc);
+});
+
+app.post("/addPhoto", upload.single("picture"), (req, res) => {
+    console.log(req.file);
+    res.statusCode = 201;
+    res.send( {url: req.file.filename} );
 });
 
 console.log("Starting Server...");
