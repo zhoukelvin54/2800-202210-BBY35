@@ -118,6 +118,7 @@ function swapForm() {
         document.getElementById("swap").value = "Already have an account?";
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("signup").removeAttribute("hidden");
+        document.getElementById("errorMsg").innerText="";
         
         for (let i = 0; i < signUpElements.length; i++) {
             document.querySelector(signUpElements[i]).style.display = "flex";
@@ -127,7 +128,8 @@ function swapForm() {
         document.getElementById("swap").value = "New User?";
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
-        
+        document.getElementById("errorMsg").innerText="";
+
         for (let i = 0; i < signUpElements.length; i++) {
             document.querySelector(signUpElements[i]).style.display = "none";
         }

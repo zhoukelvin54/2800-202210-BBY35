@@ -107,7 +107,8 @@ body {
 
 
 
-.login form input[type="submit"] {
+.login form input[type="submit"],
+.login form input[type="button"] {
     width: 100%;
     padding: 15px;
     background-color: #696c72;
@@ -118,7 +119,8 @@ body {
     transition: background-color 0.2s;
 }
 
-.login form input[type="submit"]:hover {
+.login form input[type="submit"]:hover,
+.login form input[type="button"]:hover {
     background-color: #3f4041;
     transition: background-color 0.2s;
 }
