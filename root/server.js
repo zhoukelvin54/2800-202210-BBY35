@@ -17,8 +17,6 @@ const multer = require("multer");
 
 const app = express();
 
-// Oh look, unsecured data that will be moved to an .env at some point in future
-// and no; we probably won't use this exact data again.
 const dbConnection = {
     host: "localhost",
     user: "nodeapp",
@@ -62,8 +60,7 @@ app.post('/add-account', jsonParser, function (req, res) {
 
     const connection = mysql2.createConnection(dbConnection);
     connection.connect();
-    // TO PREVENT SQL INJECTION, DO THIS:
-    // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
+    
     connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
         + 'values (?, ?, ?, ?, ?, 0, 0)',
         [req.body.username, req.body.firstname, req.body.lastname,
@@ -75,7 +72,7 @@ app.post('/add-account', jsonParser, function (req, res) {
             } else {
                 res.send({ status: "success", msg: "Record added." });
             }
-            //console.log('Rows returned are: ', results);
+            
         });
     connection.end();
 
@@ -94,7 +91,10 @@ app.get("/home", (req, res) => {
         res.send(doc);
     } else {
         let doc = filesys.readFileSync("./root/index.html", "utf-8");
-        res.send(doc);
+        let pageDOM = new jsdom.JSDOM(doc);
+        let user = req.session.username;
+        pageDOM.window.document.getElementById("username").innerHTML = user;
+        res.send(pageDOM.serialize());
     }
 });
 
@@ -110,7 +110,7 @@ app.get("/admin", (req, res) => {
 
 app.post("/login", jsonParser, (req, res) => {
     res.setHeader("content-type", "application/json");
-    //   console.log(req);
+    
     let username = req.body.username;
     let password = req.body.password;
     if (username && password) {
@@ -137,27 +137,6 @@ app.post("/login", jsonParser, (req, res) => {
     }
 });
 
-//app.use(express.json());
-app.post('/add-account', jsonParser, function (req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    const connection = mysql2.createConnection(dbConnection);
-    connection.connect();
-    // TO PREVENT SQL INJECTION, DO THIS:
-    // (FROM https://www.npmjs.com/package/mysql#escaping-query-values)
-    connection.query('INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)'
-        + 'values (?, ?, ?, ?, ?, 0, 0)',
-        [req.body.username, req.body.firstname, req.body.lastname,
-        req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
-        function (error, results, fields) {
-            if (error) {
-                console.log(error);
-            }
-            //console.log('Rows returned are: ', results);
-            res.send({ status: "success", msg: "Record added." });
-        });
-    connection.end();
-
-});
 
 app.get("/logout", function (req, res) {
 

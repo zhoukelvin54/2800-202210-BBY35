@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Tapestry;
+    src: url(font/Tapestry/SquarePeg-Regular.ttf);
+}
+
 * {
     margin: 0;
     padding: 0;

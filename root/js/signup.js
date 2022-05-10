@@ -20,13 +20,13 @@ var signup = function(e) {
     xhr.onload = function () {
         if (this.readyState == XMLHttpRequest.DONE) {
     
-            // 200 means everthing worked
+          
             if (xhr.status === 200) {
             //   console.log("success");
     
             } else {
     
-                // not a 200, could be anything (404, 500, etc.)
+          
             //   console.log(this.status);
     
             }
