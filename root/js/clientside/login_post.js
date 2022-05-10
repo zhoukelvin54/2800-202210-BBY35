@@ -1,27 +1,6 @@
 'use strict';
 
 ready(function () {
-    // console.log("Loaded script");
-    function ajaxPost(url, cb, data) {
-        let param = typeof data == "string" ? data : Object.keys(data).map(
-            function (elem) { return encodeURIComponent(elem) + "=" + encodeURIComponent(data[elem]); }
-        ).join('&');
-
-        // console.log("POST param: ", param);
-
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                cb(this.responseText);
-            } else {
-                // console.log(this.status);
-            }
-        };
-        xhr.open("POST", url);
-        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-        xhr.send(param);
-    }
-
     var login = async function (e) {
         e.preventDefault();
         let usr = document.getElementById("username").value;
