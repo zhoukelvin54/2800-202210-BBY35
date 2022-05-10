@@ -21,8 +21,13 @@ function handleForm(e) {
 // repsponds that we are logged in.
 // ============================================================================
 async function login() {
-    let user = document.getElementById("username").value;
-    let pass = document.getElementById("password").value;
+    let user = document.getElementById("username").value.trim();
+    let pass = document.getElementById("password").value.trim();
+    if (user == "" || pass == "") {
+        document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+        return;
+    }
+    
     try {
         let response = await fetch("/login", {
             method: "POST",
