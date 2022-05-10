@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Bitter', serif;
 }
 
 .navbar {
@@ -22,7 +24,7 @@
 }
 
 #logout {
-    float:right;
+    float: right;
     padding: 15px;
     background-color: #696c72;
     border: 0;
@@ -66,8 +68,7 @@
 }
 
 #welcome-img {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5),
-    rgba(0, 0, 0, 0.5)), url(../img/dogs.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/dogs.jpg);
     background-size: cover;
     background-position: center;
     font-family: "Poppins", sans-serif;
@@ -78,9 +79,9 @@
 }
 
 #welcome-text {
-    text-align:center;
+    text-align: center;
     padding-top: 50vh;
-    color:white;
+    color: white;
 }
 
 footer {
@@ -97,35 +98,28 @@ footer a {
     color: white;
 }
 
-
 @media only screen and (max-width: 768px) {
     nav {
         display: grid;
     }
-    
     .navbar a {
         font-size: 13px;
         padding: 7px 9px;
     }
-
     #logout {
         width: 100vw;
         float: none;
     }
-    
     .d-sm-none {
         display: none;
     }
-    
     .logo {
         width: 35vw;
         height: 25vh;
     }
-
     #welcome-img {
         min-width: 60vw;
     }
-    
     #content-img {
         min-width: 60vw;
     }
