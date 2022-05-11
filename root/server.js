@@ -35,7 +35,7 @@ const dbConnection = {
     host: "localhost",
     user: "nodeapp",
     password: "",
-    database: "db_petpals",
+    database: "COMP2800",
     port: 3306
 };
 const mysql2 = require("mysql2");
