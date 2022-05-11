@@ -20,10 +20,12 @@ function handleForm(e) {
 // This is responsible for logging in and redirecting the user if server 
 // repsponds that we are logged in.
 // ============================================================================
-async function login() {
-    let user = document.getElementById("username").value.trim();
-    let pass = document.getElementById("password").value.trim();
-    if (user == "" || pass == "") {
+async function login(newAccount) {
+    let username = document.getElementById("username").value.trim();
+    let password = document.getElementById("password").value.trim();
+    newAccount = (!newAccount) ? 0 : 1;
+
+    if (username == "" || password == "") {
         document.getElementById("errorMsg").innerText = "Please fill out all fields.";
         return;
     }
@@ -33,8 +35,9 @@ async function login() {
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({
-                "username": user,
-                "password": pass
+                "username": username,
+                "password": password,
+                "new_account": newAccount
             })
         });
 
@@ -63,6 +66,7 @@ async function login() {
 // logged in.
 // ============================================================================
 async function signup() {
+    let requiredFields = ["username", "password", "email"];
     let formData = {
         username: document.getElementById("username").value.trim(),
         password: document.getElementById("password").value.trim(),
@@ -71,9 +75,10 @@ async function signup() {
         email: document.getElementById("email").value.trim()
     };
 
-    for (let prop in formData) {
+    for (let i = 0; i < requiredFields.length; i++) {
+        let prop = requiredFields[i];
         if (formData[prop] == "" || formData[prop] == null) {
-            document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+            document.getElementById("errorMsg").innerText = "Please fill out all required fields.";
             return;
         }
     }
@@ -98,7 +103,7 @@ async function signup() {
             if (data) {
                 let parsedData = JSON.parse(data);
                 if (parsedData.status == "success") {
-                    login();
+                    login(true);
                 }   else {
                     document.getElementById("errorMsg").innerText = parsedData.msg;
                 }
@@ -129,25 +134,29 @@ function swapForm() {
         formState = 1;
         document.getElementById("swap").value = "Already have an account?";
         document.querySelector("#login-form > h1").innerText = "Sign up";
-        document.getElementById("login").setAttribute("hidden", true);
+
         document.getElementById("signup").removeAttribute("hidden");
-        document.getElementById("errorMsg").innerText="";
+        document.getElementById("login").setAttribute("hidden", true);
+        document.getElementById("email").setAttribute("required", true);
         
         for (let i = 0; i < signUpElements.length; i++) {
-            document.querySelector(signUpElements[i]).style.display = "flex";
+            document.querySelector(signUpElements[i]).classList.remove("hidden");
         }
     } else {
         formState = 0;
         document.getElementById("swap").value = "New User?";
         document.querySelector("#login-form > h1").innerText = "Login";
+
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
-        document.getElementById("errorMsg").innerText="";
+        document.getElementById("email").removeAttribute("required");
 
         for (let i = 0; i < signUpElements.length; i++) {
-            document.querySelector(signUpElements[i]).style.display = "none";
+            document.querySelector(signUpElements[i]).classList.add("hidden");
         }
     }
+
+    document.getElementById("errorMsg").innerText="";
 }
 
 // ============================================================================

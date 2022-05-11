@@ -98,13 +98,8 @@ body {
     padding: 0 15px;
 }
 
-.login form input[name="firstname"],
-.login form label[for="firstname"],
-.login form input[name="lastname"],
-.login form label[for="lastname"],
-.login form input[id="email"],
-.login form label[for="email"] {
-    display: none;
+.hidden {
+    display: none !important;
 }
 
 
