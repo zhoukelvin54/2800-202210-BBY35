@@ -8,7 +8,6 @@
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const jsonParser = bodyParser.json();
 const fs = require("fs");
 const jsdom = require("jsdom");
 const http = require("http");
