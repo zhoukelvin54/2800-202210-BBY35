@@ -45,30 +45,38 @@
 
             <fieldset class="form-panel">
                 <legend>Pet Details</legend>
-                <hr>
+    
                 <div class="inline-form-group">
                     <label for="name">Name:</label>
                     <input type="text">
                 </div>
                 <div class="inline-form-group">
                     <label>Sex:</label>
-                    <label class="radio-label" for="male">Male</label>
-                    <input type="radio" id="male">
-                    <label class="radio-label" for="female">Female</label>
-                    <input type="radio" id="female">
+                    <div class="radio-button">
+                        <label class="radio-label" for="male">Male</label>
+                        <input type="radio" id="male">
+                    </div>
+                    <div class="radio-button">
+                        <label class="radio-label" for="female">Female</label>
+                        <input type="radio" id="female">
+                    </div>
                 </div>
-                <div class="form-group">
+                <div class="inline-form-group">
                     <label>Spayed or Neutered:</label>
-                    <label class="radio-label" for="yes-non-fertile">Yes</label>
-                    <input type="radio" id="yes-non-fertile">
-                    <label class="radio-label" for="no-fertile">No</label>
-                    <input type="radio" id="no-fertile">
+                    <div class="radio-button">
+                        <label class="radio-label" for="yes-non-fertile">Yes</label>
+                        <input type="radio" id="yes-non-fertile">
+                    </div>
+                    <div class="radio-button">
+                        <label class="radio-label" for="no-fertile">No</label>
+                        <input type="radio" id="no-fertile">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="medical-info">Medical Information:</label>
                     <textarea class="text-area" id="medical-info"></textarea>
                 </div>
-                <div class="inline-form-group">
+                <div class="form-group">
                     <label for="pet-description">Description:</label>
                     <textarea class="text-area" id="pet-description"></textarea>
                 </div>

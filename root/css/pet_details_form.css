@@ -20,6 +20,10 @@ body {
     background-blend-mode: lighten;
 }
 
+textarea {
+    resize: none;
+}
+
 #pet-details-form {
     box-sizing: border-box;
     margin: 0 auto;
@@ -46,15 +50,15 @@ box-sizing: border-box;
   
 .form-panel legend {
 /* Float trick to get legends to display differently */
-float: left;
-padding: 1.5rem;
-border-radius: 1.25rem 1.25rem 0 0;
-font-size: 175%;
-width: 100%;
-text-align: center;
-font-weight: bold;
-background-color: #222;
-font-family: "Satisfy", sans-serif;
+    float:left;
+    padding: 1.5rem;
+    border-radius: 1.25rem 1.25rem 0 0;
+    font-size: 175%;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    background-color: #222;
+    font-family: "Satisfy", sans-serif;
 }
 
 .form-group {
@@ -62,37 +66,38 @@ font-family: "Satisfy", sans-serif;
 }
 
 .form-group label {
-margin-bottom: 0.25rem;
+    margin-bottom: 0.25rem;
 }
 
 .inline-form-group {
-flex-direction: row;
+    flex-direction: row;
 }
 
 .inline-form-group label {
-max-width: 70%;
-padding-right: 0.25rem;
+    max-width: 70%;
+    padding-right: 0.25rem;
 }
 
 .form-group, .inline-form-group {
-display: flex;
-align-items: stretch;
-padding: 0.75rem 2rem;
+    display: flex;
+    align-items: stretch;
+    padding: 0.75rem 2rem;
 }
 
 .inline-form-group input, .inline-form-group select {
-height: min-content;
-max-width: 30%;
-margin-left: auto;
-text-align: right;
+    height: min-content;
+    max-width: 30%;
+    margin-left: auto;
+    text-align: right;
 }
 
-.radio-label {
-    padding:0;
-    margin: 0;
+.inline-form-group div {
+    height:min-content;
+    max-width: 80%;
+    margin-left: auto; 
 }
 
-.radio-button {
+inline-form-group div input{
     
 }
 
@@ -100,8 +105,8 @@ text-align: right;
 .form-group select,
 .inline-form-group input,
 .inline-form-group select {
-flex-grow: 1;
-min-height: 1.5rem;
+    flex-grow: 1;
+    min-height: 1.5rem;
 }
 
 @media only screen and (min-width: 769px) {
