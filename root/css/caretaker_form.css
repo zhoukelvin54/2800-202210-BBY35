@@ -1,0 +1,17 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group, .inline-form-group {
+  margin: 0.5rem;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
+}
+
+#user-creation-form {
+  margin-inline: auto;
+  box-sizing: border-box;
+}
