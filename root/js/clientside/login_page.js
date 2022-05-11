@@ -1,11 +1,11 @@
 "use strict";
 
-// Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
-let formState = 0;
-
 ready(function () {
     document.getElementById("login-form").addEventListener("submit", handleForm);
 });
+
+// Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
+let formState = 0;
 
 // ============================================================================
 // This handles what function will be called upon login / signup submission.
@@ -21,8 +21,13 @@ function handleForm(e) {
 // repsponds that we are logged in.
 // ============================================================================
 async function login() {
-    let user = document.getElementById("username").value;
-    let pass = document.getElementById("password").value;
+    let user = document.getElementById("username").value.trim();
+    let pass = document.getElementById("password").value.trim();
+    if (user == "" || pass == "") {
+        document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+        return;
+    }
+    
     try {
         let response = await fetch("/login", {
             method: "POST",
@@ -52,18 +57,26 @@ async function login() {
     }
 }
 
+
 // ============================================================================
 // This function is responsible for logging in and redirecting the user if 
 // logged in.
 // ============================================================================
 async function signup() {
     let formData = {
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value,
-        firstname: document.getElementById("firstname").value,
-        lastname: document.getElementById("lastname").value,
-        email: document.getElementById("email").value
+        username: document.getElementById("username").value.trim(),
+        password: document.getElementById("password").value.trim(),
+        firstname: document.getElementById("firstname").value.trim(),
+        lastname: document.getElementById("lastname").value.trim(),
+        email: document.getElementById("email").value.trim()
     };
+
+    for (let prop in formData) {
+        if (formData[prop] == "" || formData[prop] == null) {
+            document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+            return;
+        }
+    }
 
     try {
         let response = await fetch("/add-account", {
@@ -84,10 +97,9 @@ async function signup() {
             let data = await response.text();
             if (data) {
                 let parsedData = JSON.parse(data);
-
                 if (parsedData.status == "success") {
                     login();
-                } else {
+                }   else {
                     document.getElementById("errorMsg").innerText = parsedData.msg;
                 }
             }
@@ -97,6 +109,7 @@ async function signup() {
     } catch (error) {
         console.error(error);
     }
+    
 };
 
 // ============================================================================
@@ -118,6 +131,7 @@ function swapForm() {
         document.querySelector("#login-form > h1").innerText = "Sign up";
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("signup").removeAttribute("hidden");
+        document.getElementById("errorMsg").innerText="";
         
         for (let i = 0; i < signUpElements.length; i++) {
             document.querySelector(signUpElements[i]).style.display = "flex";
@@ -128,7 +142,8 @@ function swapForm() {
         document.querySelector("#login-form > h1").innerText = "Login";
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
-        
+        document.getElementById("errorMsg").innerText="";
+
         for (let i = 0; i < signUpElements.length; i++) {
             document.querySelector(signUpElements[i]).style.display = "none";
         }
