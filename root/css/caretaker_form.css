@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
+
 body {
   width: 100vw;
   height: 100vh;
@@ -7,9 +9,11 @@ body {
 
 
 #user-creation-form {
-  margin-top: 5vh;
-  margin-left: auto;
   box-sizing: border-box;
+  margin: 0 auto;
+  max-width: min(90vw, 475px);
+  padding-top: 5vh;
+  padding-bottom: 5vh;
 }
 
 #user-creation-form * {
@@ -17,29 +21,28 @@ body {
 }
 
 .form-panel {
+  border: none;
+  border-radius: 1.25rem;
+  color: #DDD;
+  background-color: #555;
   margin: 0 auto;
   margin-bottom: 1rem;
   padding: 0;
   padding-bottom: 1rem;
-  border: none;
-  width: 95vw;
-  border-radius: 1.25rem;
-  background-color: #555;
-  color: #DDD;
-  /* Change to custom fonts */
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Bitter", sans-serif;
 }
 
 .form-panel legend {
   /* Float trick to get legends to display differently */
   float: left;
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 1.25rem 1.25rem 0 0;
-  font-size: 125%;
+  font-size: 175%;
   width: 100%;
   text-align: center;
   font-weight: bold;
   background-color: #222;
+  font-family: "Satisfy", sans-serif;
 }
 
 .form-group {
@@ -69,7 +72,7 @@ body {
   height: min-content;
   max-width: 30%;
   margin-left: auto;
-  text-align: end;
+  text-align: right;
 }
 
 .form-group input,
@@ -77,4 +80,11 @@ body {
 .inline-form-group input,
 .inline-form-group select {
   flex-grow: 1;
+  min-height: 1.5rem;
+}
+
+@media only screen and (min-width: 769px) {
+  .form-panel {
+    font-size: 125%;
+  }
 }
