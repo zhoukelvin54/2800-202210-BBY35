@@ -3,8 +3,29 @@
   flex-direction: column;
 }
 
+.form-panel {
+  margin: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.inline-form-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.form-group input,
+.form-group select,
+.inline-form-group input,
+.inline-form-group select {
+  flex-grow: 1;
+}
+
 .form-group, .inline-form-group {
   margin: 0.5rem;
+}
+
+.form-group, .inline-form-group label {
+  margin-right: 0.75rem;
 }
 
 .form-group label {
@@ -12,6 +33,7 @@
 }
 
 #user-creation-form {
-  margin-inline: auto;
+  margin-top: 5vh;
+  margin-left: auto;
   box-sizing: border-box;
 }
