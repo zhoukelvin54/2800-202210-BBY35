@@ -9,7 +9,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const filesys = require("fs");
+const fs = require("fs");
 const jsdom = require("jsdom");
 const http = require("http");
 const https = require("https");
@@ -72,14 +72,14 @@ app.post("/add-account", (req, res) => {
     console.log(req.body);
 
     // TODO Figure out simplified SQL to insert if not exists.
-    connection.query("SELECT username FROM accounts WHERE username = ? UNION ALL SELECT username FROM accounts WHERE email = ?", [req.body.username, req.body.email],
+    connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
         (error, results, fields) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
             } else if (results.length > 0) {
                 res.send({ status: "failure", msg: "Username or email already taken!" })
             } else {
-                connection.query("INSERT INTO accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)"
+                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)"
                     + "values (?, ?, ?, ?, ?, 0, 0)",
                     [req.body.username, req.body.firstname, req.body.lastname,
                     req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
@@ -102,10 +102,10 @@ app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.admin) {
-        let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
         res.send(doc);
     } else {
-        let doc = filesys.readFileSync("./root/index.html", "utf-8");
+        let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new jsdom.JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
@@ -115,13 +115,13 @@ app.get("/home", (req, res) => {
 
 app.get("/login", (req, res) => {
     if (req.session.loggedIn && req.session.admin) {
-        let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
         res.send(doc);
     } else if (req.session.loggedIn && !req.session.admin) {
-        let doc = filesys.readFileSync("./root/index.html", "utf-8");
+        let doc = fs.readFileSync("./root/index.html", "utf-8");
         res.send(doc);
     } else {
-        let doc = filesys.readFileSync("./root/login.html", "utf-8");
+        let doc = fs.readFileSync("./root/login.html", "utf-8");
         res.send(doc);
     }
 });
@@ -132,7 +132,7 @@ app.post("/login", (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     if (username && password) {
-        connection.query("SELECT * FROM accounts WHERE username = ? AND password = ?", [username, password], (err, data, fields) => {
+        connection.query("SELECT * FROM BBY35_accounts WHERE username = ? AND password = ?", [username, password], (err, data, fields) => {
             if (err) throw err;
             if (data.length > 0) {
                 req.session.loggedIn = true;
@@ -171,7 +171,7 @@ app.get("/logout", (req, res) => {
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.admin) {
-        connection.query("SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM accounts", (err, data, fields) => {
+        connection.query("SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM BBY35_accounts", (err, data, fields) => {
             res.send(data);
         });
     } else {
@@ -182,7 +182,7 @@ app.get("/userData", (req, res) => {
 app.get("/petData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.caretaker == 0) {
-        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description FROM pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
+        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description FROM BBY35_pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
             res.send(data);
         });
     } else {
