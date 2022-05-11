@@ -66,13 +66,15 @@ async function login(newAccount) {
 // logged in.
 // ============================================================================
 async function signup() {
+    let form = document.forms["login-form"];
     let requiredFields = ["username", "password", "email"];
     let formData = {
-        username: document.getElementById("username").value.trim(),
-        password: document.getElementById("password").value.trim(),
-        firstname: document.getElementById("firstname").value.trim(),
-        lastname: document.getElementById("lastname").value.trim(),
-        email: document.getElementById("email").value.trim()
+        username: form["username"].value.trim(),
+        password: form["password"].value.trim(),
+        firstname: form["firstname"].value.trim(),
+        lastname: form["lastname"].value.trim(),
+        email: form["email"].value.trim(),
+        account_type: form["account-type"].value
     };
 
     for (let i = 0; i < requiredFields.length; i++) {
@@ -94,7 +96,8 @@ async function signup() {
                 "password": formData.password,
                 "firstname": formData.firstname,
                 "lastname": formData.lastname,
-                "email": formData.email
+                "email": formData.email,
+                "account_type": formData.account_type
             })
         });
 
