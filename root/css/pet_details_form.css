@@ -87,6 +87,15 @@ margin-left: auto;
 text-align: right;
 }
 
+.radio-label {
+    padding:0;
+    margin: 0;
+}
+
+.radio-button {
+    
+}
+
 .form-group input,
 .form-group select,
 .inline-form-group input,
