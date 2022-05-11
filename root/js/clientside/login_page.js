@@ -121,14 +121,9 @@ async function signup() {
 // This function is responsible for swapping the sign up form between sign up 
 // and log-in
 // ============================================================================
-function swapForm() {
-    let signUpElements = ["label[for='firstname']",
-            "input[name='firstname']",
-            "label[for='lastname']",
-            "input[name='lastname']",
-            "label[for='email']",
-            "input[id='email']"];
-    
+function swapForm() {    
+    let signUpElements = document.querySelectorAll(".signup");
+
     // If the form currently displays only login items, change it and display sign-up elements
     if (formState == 0) {
         formState = 1;
@@ -140,7 +135,7 @@ function swapForm() {
         document.getElementById("email").setAttribute("required", true);
         
         for (let i = 0; i < signUpElements.length; i++) {
-            document.querySelector(signUpElements[i]).classList.remove("hidden");
+            signUpElements[i].classList.remove("hidden");
         }
     } else {
         formState = 0;
@@ -152,7 +147,7 @@ function swapForm() {
         document.getElementById("email").removeAttribute("required");
 
         for (let i = 0; i < signUpElements.length; i++) {
-            document.querySelector(signUpElements[i]).classList.add("hidden");
+            signUpElements[i].classList.add("hidden");
         }
     }
 
