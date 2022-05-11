@@ -105,13 +105,13 @@ app.get("/home", (req, res) => {
 
 app.get("/login", (req, res) => {
     if (req.session.loggedIn && req.session.admin) {
-        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+        let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
         res.send(doc);
     } else if (req.session.loggedIn && !req.session.admin) {
-        let doc = fs.readFileSync("./root/index.html", "utf-8");
+        let doc = filesys.readFileSync("./root/index.html", "utf-8");
         res.send(doc);
     } else {
-        let doc = fs.readFileSync("./root/login.html", "utf-8");
+        let doc = filesys.readFileSync("./root/login.html", "utf-8");
         res.send(doc);
     }
 });
