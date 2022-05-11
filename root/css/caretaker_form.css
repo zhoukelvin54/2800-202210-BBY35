@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
+
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-image: url(../img/dogs.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-blend-mode: lighten;
+}
+
+
+#user-creation-form {
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: min(90vw, 475px);
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+}
+
+#user-creation-form * {
+  box-sizing: border-box;
+}
+
+.form-panel {
+  display: grid;
+  border: none;
+  border-radius: 1.25rem;
+  color: #EEE;
+  background-color: #666;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  padding: 0;
+  padding-bottom: 1rem;
+  font-family: "Bitter", sans-serif;
+}
+
+.form-panel legend {
+  /* Float trick to get legends to display differently */
+  float: left;
+  padding: 1.25rem;
+  border-radius: 1.25rem 1.25rem 0 0;
+  font-size: 175%;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  background-color: #222;
+  font-family: "Satisfy", sans-serif;
+}
+
+.legend-hr {
+  width: 100%;
+  margin-top: 0;
+}
+
+.form-group {
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
+}
+
+.inline-form-group {
+  flex-direction: row;
+}
+
+.inline-form-group label {
+  max-width: 70%;
+  padding-right: 0.25rem;
+}
+
+.form-group, .inline-form-group {
+  display: flex;
+  align-items: stretch;
+  padding: 0.75rem 2rem;
+}
+
+.inline-form-group input, .inline-form-group select {
+  height: min-content;
+  max-width: 30%;
+  margin-left: auto;
+  text-align: right;
+}
+
+.form-group input,
+.form-group select,
+.inline-form-group input,
+.inline-form-group select {
+  flex-grow: 1;
+  min-height: 1.5rem;
+}
+
+.input {
+  height: 2rem;
+}
+
+.form-button {
+  width: 75%;
+  font-family: "Satisfy", sans-serif;
+  font-weight: bold;
+  font-size: 1.75rem;
+  padding: 0.5rem;
+  margin: 0 auto;
+  border: 2px #222;
+  border-radius: 2rem;
+}
+
+textarea {
+  resize: vertical;
+}
+
+@media only screen and (min-width: 769px) {
+  .form-panel {
+    font-size: 125%;
+  }
+}
