@@ -1,12 +1,9 @@
-@font-face {
-    font-family: Tapestry;
-    src: url(font/Tapestry/SquarePeg-Regular.ttf);
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Bitter', serif;
 }
 
 .navbar {
@@ -60,7 +57,7 @@ body {
     width: 400px;
     background-color: #343a40;
     box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
-    margin: 100px auto;
+    margin: 0 auto;
 }
 
 .login h1 {
@@ -100,14 +97,13 @@ body {
     padding: 0 15px;
 }
 
-
 .login form input[name="firstname"],
 .login form label[for="firstname"],
 .login form input[name="lastname"],
 .login form label[for="lastname"],
 .login form input[id="email"],
 .login form label[for="email"] {
-    display:none;
+    display: none;
 }
 
 
@@ -144,29 +140,31 @@ footer a {
     color: white;
 }
 
+#logo {
+    max-width: 40vw;
+    max-height: 30vh;
+    margin: 2rem auto;
+    filter: drop-shadow(5px 5px 5px #222);
+}
+
 #errorMsg {
     color: red;
     padding-bottom: 1rem;
 }
 
-
 @media only screen and (max-width: 768px) {
     nav {
         display: grid;
-
     }
-    
     .navbar a {
         font-size: 13px;
         padding: 7px 9px;
     }
-
     .d-sm-none {
         display: none;
     }
-    
-        .logo {
-            width: 35vw;
-            height: 25vh;
-        }
+    .logo {
+        width: 35vw;
+        height: 25vh;
+    }
 }

@@ -21,8 +21,13 @@ function handleForm(e) {
 // repsponds that we are logged in.
 // ============================================================================
 async function login() {
-    let user = document.getElementById("username").value;
-    let pass = document.getElementById("password").value;
+    let user = document.getElementById("username").value.trim();
+    let pass = document.getElementById("password").value.trim();
+    if (user == "" || pass == "") {
+        document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+        return;
+    }
+    
     try {
         let response = await fetch("/login", {
             method: "POST",
@@ -59,12 +64,19 @@ async function login() {
 // ============================================================================
 async function signup() {
     let formData = {
-        username: document.getElementById("username").value,
-        password: document.getElementById("password").value,
-        firstname: document.getElementById("firstname").value,
-        lastname: document.getElementById("lastname").value,
-        email: document.getElementById("email").value
+        username: document.getElementById("username").value.trim(),
+        password: document.getElementById("password").value.trim(),
+        firstname: document.getElementById("firstname").value.trim(),
+        lastname: document.getElementById("lastname").value.trim(),
+        email: document.getElementById("email").value.trim()
     };
+
+    for (let prop in formData) {
+        if (formData[prop] == "" || formData[prop] == null) {
+            document.getElementById("errorMsg").innerText = "Please fill out all fields.";
+            return;
+        }
+    }
 
     try {
         let response = await fetch("/add-account", {
@@ -116,6 +128,7 @@ function swapForm() {
     if (formState == 0) {
         formState = 1;
         document.getElementById("swap").value = "Already have an account?";
+        document.querySelector("#login-form > h1").innerText = "Sign up";
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("signup").removeAttribute("hidden");
         
@@ -125,6 +138,7 @@ function swapForm() {
     } else {
         formState = 0;
         document.getElementById("swap").value = "New User?";
+        document.querySelector("#login-form > h1").innerText = "Login";
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
         
