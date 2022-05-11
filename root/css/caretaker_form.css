@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 
 body {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
   background-image: url(../img/dogs.jpg);
@@ -26,10 +26,11 @@ body {
 }
 
 .form-panel {
+  display: grid;
   border: none;
   border-radius: 1.25rem;
-  color: #DDD;
-  background-color: #555;
+  color: #EEE;
+  background-color: #666;
   margin: 0 auto;
   margin-bottom: 1rem;
   padding: 0;
@@ -40,7 +41,7 @@ body {
 .form-panel legend {
   /* Float trick to get legends to display differently */
   float: left;
-  padding: 1.5rem;
+  padding: 1.25rem;
   border-radius: 1.25rem 1.25rem 0 0;
   font-size: 175%;
   width: 100%;
@@ -48,6 +49,11 @@ body {
   font-weight: bold;
   background-color: #222;
   font-family: "Satisfy", sans-serif;
+}
+
+.legend-hr {
+  width: 100%;
+  margin-top: 0;
 }
 
 .form-group {
@@ -86,6 +92,25 @@ body {
 .inline-form-group select {
   flex-grow: 1;
   min-height: 1.5rem;
+}
+
+.input {
+  height: 2rem;
+}
+
+.form-button {
+  width: 75%;
+  font-family: "Satisfy", sans-serif;
+  font-weight: bold;
+  font-size: 1.75rem;
+  padding: 0.5rem;
+  margin: 0 auto;
+  border: 2px #222;
+  border-radius: 2rem;
+}
+
+textarea {
+  resize: vertical;
 }
 
 @media only screen and (min-width: 769px) {
