@@ -9,7 +9,7 @@ const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
-const filesys = require("fs");
+const fs = require("fs");
 const jsdom = require("jsdom");
 const http = require("http");
 const https = require("https");
@@ -102,10 +102,10 @@ app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.admin) {
-        let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
         res.send(doc);
     } else {
-        let doc = filesys.readFileSync("./root/index.html", "utf-8");
+        let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new jsdom.JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
@@ -115,13 +115,13 @@ app.get("/home", (req, res) => {
 
 app.get("/login", (req, res) => {
     if (req.session.loggedIn && req.session.admin) {
-        let doc = filesys.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
         res.send(doc);
     } else if (req.session.loggedIn && !req.session.admin) {
-        let doc = filesys.readFileSync("./root/index.html", "utf-8");
+        let doc = fs.readFileSync("./root/index.html", "utf-8");
         res.send(doc);
     } else {
-        let doc = filesys.readFileSync("./root/login.html", "utf-8");
+        let doc = fs.readFileSync("./root/login.html", "utf-8");
         res.send(doc);
     }
 });
