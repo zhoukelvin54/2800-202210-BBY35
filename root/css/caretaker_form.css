@@ -1,16 +1,75 @@
-.form-group {
-  display: flex;
-  flex-direction: column;
+body {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+
+#user-creation-form {
+  margin-top: 5vh;
+  margin-left: auto;
+  box-sizing: border-box;
+}
+
+#user-creation-form * {
+  box-sizing: border-box;
 }
 
 .form-panel {
-  margin: 1rem;
-  margin-bottom: 0.5rem;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+  padding: 0;
+  padding-bottom: 1rem;
+  border: none;
+  width: 95vw;
+  border-radius: 1.25rem;
+  background-color: #555;
+  color: #DDD;
+  /* Change to custom fonts */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-panel legend {
+  /* Float trick to get legends to display differently */
+  float: left;
+  padding: 1rem;
+  border-radius: 1.25rem 1.25rem 0 0;
+  font-size: 125%;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  background-color: #222;
+}
+
+.form-group {
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
 }
 
 .inline-form-group {
-  display: flex;
   flex-direction: row;
+}
+
+.inline-form-group label {
+  max-width: 70%;
+  padding-right: 0.25rem;
+}
+
+.form-group, .inline-form-group {
+  display: flex;
+  align-items: stretch;
+  padding: 0.75rem 2rem;
+}
+
+.inline-form-group input, .inline-form-group select {
+  height: min-content;
+  max-width: 30%;
+  margin-left: auto;
+  text-align: end;
 }
 
 .form-group input,
@@ -18,22 +77,4 @@
 .inline-form-group input,
 .inline-form-group select {
   flex-grow: 1;
-}
-
-.form-group, .inline-form-group {
-  margin: 0.5rem;
-}
-
-.form-group, .inline-form-group label {
-  margin-right: 0.75rem;
-}
-
-.form-group label {
-  margin-bottom: 0.25rem;
-}
-
-#user-creation-form {
-  margin-top: 5vh;
-  margin-left: auto;
-  box-sizing: border-box;
 }
