@@ -74,7 +74,7 @@ box-sizing: border-box;
 }
 
 .inline-form-group label {
-    max-width: 70%;
+    max-width: 55%;
     padding-right: 0.25rem;
 }
 
@@ -84,26 +84,17 @@ box-sizing: border-box;
     padding: 0.75rem 2rem;
 }
 
-.inline-form-group input, .inline-form-group select {
+.inline-form-group input, .inline-form-group select, .inline-form-group div{
     height: min-content;
-    max-width: 30%;
+    max-width: 45%;
     margin-left: auto;
     text-align: right;
-}
-
-.inline-form-group div {
-    height:min-content;
-    max-width: 80%;
-    margin-left: auto; 
-}
-
-inline-form-group div input{
-    
 }
 
 .form-group input,
 .form-group select,
 .inline-form-group input,
+.inline-form-group div input,
 .inline-form-group select {
     flex-grow: 1;
     min-height: 1.5rem;
