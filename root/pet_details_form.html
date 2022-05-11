@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="css/pet_details_form.css">
+    </head>
+
+    <body>
+
+
+<!--Pet Details Form-->
+        <form>
+            <fieldset class="form-panel">
+            <legend>Create User Profile</legend>
+            <h2 class="form-header">User Profile</h2>
+                <div>
+                    <label class="material-icons">android_dialer</label>
+                    <input type="text" placeholder="Phone" required>
+                </div>
+                <div>
+                    <label class="material-icons">border_color</label>
+                    <input type="text" placeholder="Address" required>
+                </div>
+                <div>
+                    <label class="material-icons">border_color</label>
+                    <input type="text" placeholder="City" required>
+                </div>
+                <div>
+                    <label class="material-icons">border_color</label>
+                    <input type="text" placeholder="State/Province" required>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Pet Details</legend>
+                <h2 class="form-header">Pet Details</h2>
+                <div>
+                    <label>Name:</label>
+                    <input type="text">
+                </div>
+                <div>
+                    <label>Sex:</label>
+                    <input type="radio">
+                </div>
+                <div>
+                    <label>Spayed or Neutered</label>
+                    <label>Yes</label>
+                    <input type="radio">
+                    <label>No</label>
+                    <input type="radio">
+                </div>
+                <div>
+                    <label>Medical Information</label>
+                    <input type="text" >
+                </div>
+                <div>
+                    <label>Description</label>
+                    <input type="text" >
+                </div>
+                <button onclick="clearForm()">More pets?</button>
+            </fieldset>
+        </form>
+
+    </body>
+
+</html>
