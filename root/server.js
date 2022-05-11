@@ -104,7 +104,7 @@ app.get("/home", (req, res) => {
         if (parseInt(req.session.caretaker)){
             res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
         } else {
-            res.send(fs.readFileSync("./root/pet_owner_form.html", "utf-8"));
+            res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
         }
     } else {
         let doc = getUserView(req);
