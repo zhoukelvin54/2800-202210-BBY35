@@ -94,31 +94,40 @@ app.post("/add-account", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.redirect("/home");
+    res.redirect("/login");
 });
 
 app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
-    } else if (req.session.admin) {
-        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+    } else if (req.session.newAccount) {
+        if (parseInt(req.session.caretaker)){
+            res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
+        } else {
+            res.send(fs.readFileSync("./root/pet_owner_form.html", "utf-8"));
+        }
+    } else {
+        let doc = getUserView(req);
         res.send(doc);
+    }
+});
+
+function getUserView(req) {
+    if (req.session.admin) {
+        return fs.readFileSync("./root/user_management.html", "utf-8");
     } else {
         let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new jsdom.JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
-        res.send(pageDOM.serialize());
+        
+        return pageDOM.serialize();
     }
-});
+}
 
 app.get("/login", (req, res) => {
-    if (req.session.loggedIn && req.session.admin) {
-        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
-        res.send(doc);
-    } else if (req.session.loggedIn && !req.session.admin) {
-        let doc = fs.readFileSync("./root/index.html", "utf-8");
-        res.send(doc);
+    if (req.session.loggedIn) {
+        res.redirect("/home");
     } else {
         let doc = fs.readFileSync("./root/login.html", "utf-8");
         res.send(doc);
@@ -141,6 +150,7 @@ app.post("/login", (req, res) => {
                 req.session.userid = data[0].id;
                 req.session.admin = data[0].is_admin;
                 req.session.caretaker = data[0].is_caretaker;
+                req.session.newAccount = req.body.new_account;
                 req.session.save((e) => {
                     if (e) {
                         console.log("Error: " + e);
