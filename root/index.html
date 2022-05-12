@@ -36,7 +36,7 @@
             <p>
                 You are a (caretaker or pet owner), *details of role*
             </p>
-            <button onclick="hidehero()">I understand</button>
+            <button id="hiderhero" onclick="hidehero()">I understand</button>
         </div>
     </div>
 
@@ -45,7 +45,29 @@
         <div id="content-text">
             <h1>
                 Welcome back, <span id="username">USER</span>!
-                Browse through caretakers or pets.
+                
+                
+                <main id="pet-panel">
+                    <div class="panel">
+                        <h2>Your Pets:</h2>
+                        <hr>
+                        <table id="pet-table">
+                            <thead>
+                                <tr>
+                                    <th>Picture</th>
+                                    <th>Name</th>
+                                    <th>Species</th>
+                                    <th>Gender</th>
+                                    <th>Description</th>
+                                    <th>Caretaker</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
             </h1>
         </div>
     </div>
@@ -63,6 +85,7 @@
     </footer>
 
     <script src="js/index.js"></script>
+    <script src="js/fetch_pets.js"></script>
 </body>
 
 </html>
