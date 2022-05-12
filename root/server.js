@@ -116,12 +116,7 @@ app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.newAccount) {
-        req.session.newAccount = false;
-        if (req.session.caretaker){
-            res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
-        } else {
-            res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
-        }
+        res.redirect("/sign-up");
     } else {
         let doc = getUserView(req);
         res.send(doc);
@@ -177,6 +172,16 @@ app.post("/login", (req, res) => {
                 res.send({ status: "failure", msg: "Log In Unsuccessful" });
             }
         });
+    }
+});
+
+app.get("/sign-up", (req, res) => {
+    // To be replaced later by injecting the forms as a modal and their scripts
+    req.session.newAccount = false;
+    if (req.session.caretaker) {
+        res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
+    } else {
+        res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
     }
 });
 
