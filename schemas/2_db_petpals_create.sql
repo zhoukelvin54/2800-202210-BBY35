@@ -33,6 +33,9 @@ CREATE TABLE `BBY35_accounts` (
   `password` varchar(20) NOT NULL,
   `is_admin` tinyint NOT NULL DEFAULT '0',
   `is_caretaker` tinyint NOT NULL DEFAULT '0',
+  `profile_photo_url` varchar(255) DEFAULT NULL,
+  `telephone` varchar(255) DEFAULT NULL.
+  `address` varchar (255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

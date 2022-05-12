@@ -43,7 +43,6 @@ const dbConnection = {
 const mysql2 = require("mysql2");
 
 
-
 if(is_Heroku) {
     var connection = mysql2.createConnection(process.env.JAWSDB_MARIA_URL);
 } else {
@@ -106,6 +105,8 @@ app.post("/add-account", (req, res) => {
             }
         });
 });
+
+app.post("/add-")
 
 app.get("/", (req, res) => {
     res.redirect("/login");
