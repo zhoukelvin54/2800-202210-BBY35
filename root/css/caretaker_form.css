@@ -13,7 +13,7 @@ body {
 }
 
 
-#user-creation-form {
+#user_creation_form {
   box-sizing: border-box;
   margin: 0 auto;
   max-width: min(90vw, 475px);
@@ -21,11 +21,11 @@ body {
   padding-bottom: 5vh;
 }
 
-#user-creation-form * {
+#user_creation_form * {
   box-sizing: border-box;
 }
 
-.form-panel {
+.form_panel {
   display: grid;
   border: none;
   border-radius: 1.25rem;
@@ -38,7 +38,7 @@ body {
   font-family: "Bitter", sans-serif;
 }
 
-.form-panel legend {
+.form_panel legend {
   /* Float trick to get legends to display differently */
   float: left;
   padding: 1.25rem;
@@ -51,45 +51,45 @@ body {
   font-family: "Satisfy", sans-serif;
 }
 
-.legend-hr {
+.legend_hr {
   width: 100%;
   margin-top: 0;
 }
 
-.form-group {
+.form_group {
   flex-direction: column;
 }
 
-.form-group label {
+.form_group label {
   margin-bottom: 0.25rem;
 }
 
-.inline-form-group {
+.inline_form_group {
   flex-direction: row;
 }
 
-.inline-form-group label {
+.inline_form_group label {
   max-width: 70%;
   padding-right: 0.25rem;
 }
 
-.form-group, .inline-form-group {
+.form_group, .inline_form_group {
   display: flex;
   align-items: stretch;
   padding: 0.75rem 2rem;
 }
 
-.inline-form-group input, .inline-form-group select {
+.inline_form_group input, .inline_form_group select {
   height: min-content;
   max-width: 30%;
   margin-left: auto;
   text-align: right;
 }
 
-.form-group input,
-.form-group select,
-.inline-form-group input,
-.inline-form-group select {
+.form_group input,
+.form_group select,
+.inline_form_group input,
+.inline_form_group select {
   flex-grow: 1;
   min-height: 1.5rem;
 }
@@ -98,7 +98,7 @@ body {
   height: 2rem;
 }
 
-.form-button {
+.form_button {
   width: 75%;
   font-family: "Satisfy", sans-serif;
   font-weight: bold;
@@ -114,7 +114,7 @@ textarea {
 }
 
 @media only screen and (min-width: 769px) {
-  .form-panel {
+  .form_panel {
     font-size: 125%;
   }
 }
