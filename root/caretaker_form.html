@@ -1,0 +1,131 @@
+<!-- THIS HTML DOCUMENT SHOULD EVENTUALLY BE AN INJECTED MODAL. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Caretaker Sign-up</title>
+    <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/caretaker_form.css"/>
+</head>
+
+<body>
+    <form id="user-creation-form">
+        <!-- Profile Details Creation fields. -->
+        <fieldset class="form-panel">
+            <legend>Create User Profile</legend>
+            <hr class="legend-hr"/>
+
+            <div class="form-group">
+                <label for="upload-profile-picture">Upload Profile Picture:</label>
+                <input class="file-input" type="file" name="upload-profile-picture" id="upload-profile-picture"/>
+            </div>
+
+            <div class="form-group">
+                <label for="telephone">Telephone Number:</label>
+                <input class="input" type="tel" name="telephone" id="telephone"/>
+            </div>
+
+            <div class="form-group">
+                <label for="street-address">Street Address:</label>
+                <input class="input" type="text" name="street-address" id="street-address"/>
+            </div>
+
+            <div class="form-group">
+                <label for="region">State / Province:</label>
+                <input class="input" type="text" name="region" id="region"/>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <input class="input" type="text" name="country" id="country"/>
+            </div>
+        </fieldset>
+
+        <!-- Caretaking experience and accomodations fields. -->
+        <fieldset class="form-panel">
+            <legend>Caretaking Experience and Accomodations</legend>
+            <hr class="legend-hr"/>
+
+            <div class="inline-form-group">
+                <label for="animal-affection">How much do you like animals? (1-10)</label>
+                <input class="input" type="number" name="animal-affection" id="animal-affection" min="1" max="10" value="5"/>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Any past experience with animals?</label>
+                <textarea class="input" name="experience" id="experience" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="allergies">Any allergies to specific animals?</label>
+                <textarea class="input" name="allergies" id="allergies" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="other-pets">List any other animals at your house:</label>
+                <textarea class="input" name="other-pets" id="other-pets" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="busy-hours">What are your working / busy hours?</label>
+                <textarea class="input" name="busy-hours" id="busy-hours" rows="3"></textarea>
+            </div>
+
+            <div class="inline-form-group">
+                <label for="house-type">What type of home do you live in?</label>
+                <select class="input" name="house-type" id="house-type">
+                    <option value="house">House</option>
+                    <option value="barn">Barn</option>
+                    <option value="trailer">Trailer</option>
+                    <option value="condo">Condo</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="apartment">Other</option>
+                </select>
+            </div>
+
+            <div class="inline-form-group">
+                <label for="house-activity">How active is your household?</label>
+                <select class="input" name="house-activity" id="house-activity">
+                    <option value="low" selected>Low</option>
+                    <option value="med">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <div class="inline-form-group">
+                <label for="people-in-home">How many people live in your house?</label>
+                <input class="input" type="number" name="people-in-home" id="people-in-home" min="1" max="20" value="1"/>
+            </div>
+
+            <div class="inline-form-group">
+                <label for="children-in-home">Are there children in your house?</label>
+                <select class="input" name="children-in-home" id="children-in-home">
+                    <option value="no" selected>No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+
+            <div class="inline-form-group">
+                <label for="yard-enclosure">Is your yard enclosed?</label>
+                <select class="input" name="yard-enclosure" id="yard-enclosure">
+                    <option value="enclosed" selected>Enclosed</option>
+                    <option value="partial">Partially Enclosed</option>
+                    <option value="none">Not Enclosed</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="accomodation-pictures">Upload Accomodation Photos:</label>
+                <input class="file-input" type="file" name="accomodation-pictures" id="accomodation-pictures"/>
+            </div>
+
+            <input class="form-button" type="submit" value="Submit"/>
+        </fieldset>
+    </form>
+</body>
+
+</html>
