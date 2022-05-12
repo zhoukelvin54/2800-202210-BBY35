@@ -21,28 +21,30 @@
 
             <div class="form_group">
                 <label for="upload_profile_picture">Upload Profile Picture:</label>
-                <input class="file_input" type="file" name="upload_profile_picture" id="upload_profile_picture" />
+                <input class="file_input" type="file" name="upload_profile_picture" id="upload_profile_picture" required />
             </div>
 
             <div class="form_group">
                 <label for="telephone">Telephone Number:</label>
-                <input class="input" type="tel" name="telephone" id="telephone" />
+                <input class="input" type="tel" name="telephone" id="telephone" required />
             </div>
 
             <div class="form_group">
                 <label for="street_address">Street Address:</label>
-                <input class="input" type="text" name="street_address" id="street_address" />
+                <input class="input" type="text" name="street_address" id="street_address" required />
             </div>
 
             <div class="form_group">
                 <label for="region">State / Province:</label>
-                <input class="input" type="text" name="region" id="region" />
+                <input class="input" type="text" name="region" id="region" required />
             </div>
 
             <div class="form_group">
                 <label for="country">Country:</label>
-                <input class="input" type="text" name="country" id="country" />
+                <input class="input" type="text" name="country" id="country" required />
             </div>
+            
+            <div class="form_group" id="profile_error_message"></div>
         </fieldset>
 
         <!-- Caretaking experience and accomodations fields. -->
@@ -122,11 +124,13 @@
 
             <div class="form_group">
                 <label for="accomodation_picture">Upload Accomodation Photos:</label>
-                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" />
+                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" required multiple />
             </div>
-
-            <input class="form_button" type="submit" value="Submit" />
+            
+            <div class="form_group" id="info_error_message"></div>
         </fieldset>
+
+        <input class="form_button" type="submit" value="Submit" />
     </form>
 
     <script src="js/caretaker_form.js"></script>
