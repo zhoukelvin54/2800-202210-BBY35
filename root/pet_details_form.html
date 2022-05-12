@@ -24,22 +24,22 @@
                 </div>
                 <div class="form-group">
                     <label for="telephone">Telephone Number:</label>
-                    <input type="tel" name="telephone" id="telephone"/>
+                    <input type="tel" name="telephone" id="telephone" required/>
                 </div>
     
                 <div class="form-group">
                     <label for="street-address">Street Address:</label>
-                    <input type="text" name="street-address" id="street-address"/>
+                    <input type="text" name="street-address" id="street-address" required/>
                 </div>
     
                 <div class="form-group">
                     <label for="region">State / Province:</label>
-                    <input type="text" name="region" id="region"/>
+                    <input type="text" name="region" id="region" required/>
                 </div>
     
                 <div class="form-group">
                     <label for="country">Country:</label>
-                    <input type="text" name="country" id="country"/>
+                    <input type="text" name="country" id="country" required/>
                 </div>
             </fieldset>
 
@@ -47,22 +47,23 @@
                 <legend>Pet Details</legend>
     
                 <div class="inline-form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name">
+                    <label for="pet-name">Name:</label>
+                    <input type="text" id="name" required>
                 </div>
                 <div class="inline-form-group">
                     <label>Sex:</label>
                     <div class="radio-button">
                         <label class="radio-label" for="male">Male</label>
-                        <input type="radio" id="male" name="sex">
+                        <input type="radio" value="M" id="male" name="pet-sex" required>
                         <label class="radio-label" for="female">Female</label>
-                        <input type="radio" id="female" name="sex">
+                        <input type="radio" value="F" id="female" name="pet-sex">
                     </div>
                 </div>
                 <div class="inline-form-group">
                     <label for="species">Species:</label>
-                    <input type="text" id="species">
+                    <input type="text" name="pet-species" id="pet-species" required>
                 </div>
+                <!-- IMPLEMENT LATER
                 <div class="inline-form-group">
                     <label for="breed">Breed:</label>
                     <input type="text" id="breed">
@@ -80,22 +81,25 @@
                     <label for="medical-info">Medical Information:</label>
                     <textarea class="text-area" id="medical-info"></textarea>
                 </div>
+                -->
                 <div class="form-group">
                     <label for="pet-description">Description:</label>
-                    <textarea class="text-area" id="pet-description"></textarea>
+                    <textarea class="text-area" name="pet-description" id="pet-description" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="upload-pet-picture">Upload Pet Picture:</label>
                     <input type="file" name="upload-pet-picture" id="upload-pet-picture"/>
                 </div>
+                <!-- IMPLEMENT LATER
                 <div class="form-group">
                     <label for="more-pets">More pets?</label>
-                    <input type="button" id="more-pets" value="Add another pet"  onclick="clearform()">
+                    <input type="button" class="form-button" id="more-pets" value="Add another pet"  onclick="clearform()">
                 </div>
+                -->
+                <input class="submit-button" type="submit" value="Submit"/>
             </fieldset>
-            <input type="submit">
         </form>
-
-        <script src="js/"></script>
+        <button onclick="submitPetDetails()">test</button>
+        <script src="js/pet_details_form.js"></script>
     </body>
 </html>
