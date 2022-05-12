@@ -30,6 +30,16 @@ const upload = multer({ storage: storage });
 
 const app = express();
 
+/*
+    const dbConnection = {
+    host: "localhost",
+    user: "nodeapp",
+    password: "",
+    database: "COMP2800",
+    port: 3306
+};
+*/
+
 const dbConnection = {
     host: "localhost",
     user: "nodeapp",
@@ -37,6 +47,7 @@ const dbConnection = {
     database: "COMP2800",
     port: 3306
 };
+
 const mysql2 = require("mysql2");
 const connection = mysql2.createConnection(dbConnection);
 connection.connect((err) => {
