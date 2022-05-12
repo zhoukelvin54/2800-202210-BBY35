@@ -157,7 +157,7 @@ footer a {
         font-size: 13px;
         padding: 7px 9px;
     }
-    .d-sm-none {
+    .sm_hidden {
         display: none;
     }
     .logo {
