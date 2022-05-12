@@ -170,7 +170,7 @@ app.get("/logout", (req, res) => {
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.admin) {
-        connection.query("SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM BBY35_accounts", (err, data, fields) => {
+        connection.query("SELECT id, username, firstname, lastname, email, is_admin, is_caretaker FROM BBY35_accounts", (err, data, fields) => {
             res.send(data);
         });
     } else {
@@ -199,6 +199,14 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
     res.send( {url: req.file.filename} );
+});
+
+app.delete("/delete", (req, res) => {
+    let accountID = req.body.id;
+    let accountName = req.body.user;
+    connection.query('UPDATE BBY35_accounts SET `username` = "", password = "", `firstname` = "DELETED", `lastname` = "USER" WHERE id = ?', [accountID], (err, data, fields) => {
+        res.send({ status: "success", msg: `Removed user: ${accountName}`});
+    });
 });
 
 console.log("Starting Server...");
