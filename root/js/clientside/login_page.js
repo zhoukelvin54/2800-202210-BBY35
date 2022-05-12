@@ -1,11 +1,15 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 "use strict";
 
-ready(function () {
-    document.getElementById("login-form").addEventListener("submit", handleForm);
-});
-
+const FORM = document.forms.login_form;
 // Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
 let formState = 0;
+
+ready(function () {
+    FORM.addEventListener("submit", handleForm);
+});
 
 // ============================================================================
 // This handles what function will be called upon login / signup submission.
@@ -20,29 +24,22 @@ function handleForm(e) {
 // This is responsible for logging in and redirecting the user if server 
 // repsponds that we are logged in.
 // ============================================================================
-async function login(newAccount) {
+async function login() {
     let username = document.getElementById("username").value.trim();
     let password = document.getElementById("password").value.trim();
-    newAccount = (!newAccount) ? 0 : 1;
 
     if (username == "" || password == "") {
         document.getElementById("errorMsg").innerText = "Please fill out all fields.";
         return;
     }
-    
-    try {
-        let response = await fetch("/login", {
-            method: "POST",
-            headers: { "Content-type": "application/json" },
-            body: JSON.stringify({
-                "username": username,
-                "password": password,
-                "new_account": newAccount
-            })
-        });
 
-        if (response.status == 200) {
-            let data = await response.text();
+    fetch("/login", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ "username": username, "password": password })
+    }).then(async res => {
+        if (res.status == 200) {
+            let data = await res.text();
             if (data) {
                 let parsed = JSON.parse(data);
 
@@ -52,29 +49,25 @@ async function login(newAccount) {
                     window.location.replace("/home");
                 }
             }
-        } else {
-            console.error(response.status, response.statusText);
         }
-    } catch (error) {
-        console.error(error);
-    }
+    }).catch(err => {
+        console.err(err);
+    });
 }
-
 
 // ============================================================================
 // This function is responsible for logging in and redirecting the user if 
 // logged in.
 // ============================================================================
-async function signup() {
-    let form = document.forms["login-form"];
+function signup() {
     let requiredFields = ["username", "password", "email"];
     let formData = {
-        username: form["username"].value.trim(),
-        password: form["password"].value.trim(),
-        firstname: form["firstname"].value.trim(),
-        lastname: form["lastname"].value.trim(),
-        email: form["email"].value.trim(),
-        account_type: form["account-type"].value
+        username: FORM.username.value.trim(),
+        password: FORM.password.value.trim(),
+        firstname: FORM.firstname.value.trim(),
+        lastname: FORM.lastname.value.trim(),
+        email: FORM.email.value.trim(),
+        account_type: FORM.account_type.value
     };
 
     for (let i = 0; i < requiredFields.length; i++) {
@@ -85,65 +78,60 @@ async function signup() {
         }
     }
 
-    try {
-        let response = await fetch("/add-account", {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                "username": formData.username,
-                "password": formData.password,
-                "firstname": formData.firstname,
-                "lastname": formData.lastname,
-                "email": formData.email,
-                "account_type": formData.account_type
-            })
-        });
-
-        if (response.status == 200) {
-            let data = await response.text();
+    fetch("/add-account", {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+            "username": formData.username,
+            "password": formData.password,
+            "firstname": formData.firstname,
+            "lastname": formData.lastname,
+            "email": formData.email,
+            "account_type": formData.account_type
+        })
+    }).then(async res => {
+        if (res.status == 200) {
+            let data = await res.text();
             if (data) {
                 let parsedData = JSON.parse(data);
                 if (parsedData.status == "success") {
-                    login(true);
-                }   else {
+                    login();
+                } else {
                     document.getElementById("errorMsg").innerText = parsedData.msg;
                 }
             }
-        } else {
-            console.error(response.status, response.statusText);
         }
-    } catch (error) {
-        console.error(error);
-    }
-    
-};
+    }).catch(err => {
+        console.err(err);
+    });
+}
 
 // ============================================================================
 // This function is responsible for swapping the sign up form between sign up 
 // and log-in
 // ============================================================================
-function swapForm() {    
+function swapForm() {
     let signUpElements = document.querySelectorAll(".signup");
 
     // If the form currently displays only login items, change it and display sign-up elements
     if (formState == 0) {
         formState = 1;
         document.getElementById("swap").value = "Already have an account?";
-        document.querySelector("#login-form > h1").innerText = "Sign up";
+        FORM.querySelector("h1").innerText = "Sign up";
 
         document.getElementById("signup").removeAttribute("hidden");
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("email").setAttribute("required", true);
-        
+
         for (let i = 0; i < signUpElements.length; i++) {
             signUpElements[i].classList.remove("hidden");
         }
     } else {
         formState = 0;
         document.getElementById("swap").value = "New User?";
-        document.querySelector("#login-form > h1").innerText = "Login";
+        FORM.querySelector("h1").innerText = "Login";
 
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
@@ -154,7 +142,7 @@ function swapForm() {
         }
     }
 
-    document.getElementById("errorMsg").innerText="";
+    document.getElementById("errorMsg").innerText = "";
 }
 
 // ============================================================================
