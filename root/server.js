@@ -30,16 +30,6 @@ const upload = multer({ storage: storage });
 
 const app = express();
 
-/*
-    const dbConnection = {
-    host: "localhost",
-    user: "nodeapp",
-    password: "",
-    database: "COMP2800",
-    port: 3306
-};
-*/
-
 const dbConnection = {
     host: "localhost",
     user: "nodeapp",
@@ -49,7 +39,14 @@ const dbConnection = {
 };
 
 const mysql2 = require("mysql2");
-const connection = mysql2.createConnection(dbConnection);
+
+if(process.env.JAWSDB_MARIA_URL) {
+    connection = mysql2.createConnection(process.env.JAWSDB_MARIA_URL);
+} else {
+    mysql2.createConnection(dbConnection);
+}
+
+
 connection.connect((err) => {
     if (err) {
         console.error("Error connecting to database: " + err.stack);
