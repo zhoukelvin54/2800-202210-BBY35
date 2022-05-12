@@ -18,6 +18,8 @@ const https = require("https");
 const sanitize = require("sanitize-html");
 const multer = require("multer");
 
+const is_Heroku = process.env.is_Heroku || false;
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "./root/img/uploads");
@@ -37,8 +39,18 @@ const dbConnection = {
     database: "COMP2800",
     port: 3306
 };
+
 const mysql2 = require("mysql2");
-const connection = mysql2.createConnection(dbConnection);
+
+
+
+if(is_Heroku) {
+    var connection = mysql2.createConnection(process.env.JAWSDB_MARIA_URL);
+} else {
+    var connection = mysql2.createConnection(dbConnection);
+}
+
+
 connection.connect((err) => {
     if (err) {
         console.error("Error connecting to database: " + err.stack);
@@ -215,7 +227,12 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
 
 console.log("Starting Server...");
 
-const port = 8000;
+if(is_Heroku) {
+    var port = process.env.PORT;
+} else {
+    var port = 8000;
+}
+
 function onBoot() {
     console.log("Started on port: " + port);
 }
