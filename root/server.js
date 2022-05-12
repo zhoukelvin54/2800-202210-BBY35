@@ -41,9 +41,9 @@ const dbConnection = {
 const mysql2 = require("mysql2");
 
 if(process.env.JAWSDB_MARIA_URL) {
-    connection = mysql2.createConnection(process.env.JAWSDB_MARIA_URL);
+    var connection = mysql2.createConnection(process.env.JAWSDB_MARIA_URL);
 } else {
-    mysql2.createConnection(dbConnection);
+    var connection = mysql2.createConnection(dbConnection);
 }
 
 
