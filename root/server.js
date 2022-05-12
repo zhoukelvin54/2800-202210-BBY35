@@ -40,6 +40,8 @@ const dbConnection = {
 
 const mysql2 = require("mysql2");
 
+console.log(process.env.JAWSDB_MARIA_URL);
+
 if(process.env.JAWSDB_MARIA_URL) {
     var connection = mysql2.createConnection(process.env.JAWSDB_MARIA_URL);
 } else {
@@ -221,7 +223,12 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
 
 console.log("Starting Server...");
 
-const port = 8000;
+if(orocess.env.PORT) {
+    const port = process.env.PORT;
+} else {
+    const port = 8000;
+}
+
 function onBoot() {
     console.log("Started on port: " + port);
 }
