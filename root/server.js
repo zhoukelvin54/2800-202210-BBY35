@@ -224,9 +224,9 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
 console.log("Starting Server...");
 
 if(process.env.PORT) {
-    const port = process.env.PORT;
+    var port = process.env.PORT;
 } else {
-    const port = 8000;
+    var port = 8000;
 }
 
 function onBoot() {
