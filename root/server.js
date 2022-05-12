@@ -78,10 +78,10 @@ app.post("/add-account", (req, res) => {
             } else if (results.length > 0) {
                 res.send({ status: "failure", msg: "Username or email already taken!" })
             } else {
-                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)"
-                    + "values (?, ?, ?, ?, ?, 0, 0)",
+                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker)"
+                    + "values (?, ?, ?, ?, ?, ?)",
                     [req.body.username, req.body.firstname, req.body.lastname,
-                    req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+                    req.body.email, req.body.password, req.body.account_type],
                     (error, results, fields) => {
                         if (error) {
                             res.send({ status: "failure", msg: "Internal Server Error" });
