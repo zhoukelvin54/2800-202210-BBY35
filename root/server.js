@@ -89,16 +89,17 @@ app.post("/add-account", (req, res) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
             } else if (results.length > 0) {
-                res.send({ status: "failure", msg: "Username or email already taken!" })
+                res.send({ status: "failure", msg: "Username or email already taken!" });
             } else {
-                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker)"
-                    + "values (?, ?, ?, ?, ?, ?)",
+                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker)" +
+                    "values (?, ?, ?, ?, ?, ?)",
                     [req.body.username, req.body.firstname, req.body.lastname,
                     req.body.email, req.body.password, req.body.account_type],
                     (error, results, fields) => {
                         if (error) {
                             res.send({ status: "failure", msg: "Internal Server Error" });
                         } else {
+                            req.session.newAccount = true;
                             res.send({ status: "success", msg: "Record added." });
                         }
                     });
@@ -114,12 +115,12 @@ app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.newAccount) {
+        req.session.newAccount = false;
         if (req.session.caretaker){
             res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
         } else {
             res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
         }
-        req.session.newAccount = false;
     } else {
         let doc = getUserView(req);
         res.send(doc);
