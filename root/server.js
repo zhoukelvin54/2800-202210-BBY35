@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
         cb(null, "./root/img/uploads");
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname.split("/").pop().trim())
+        cb(null, file.originalname.split("/").pop().trim());
     }
 });
 const upload = multer({ storage: storage });
@@ -59,6 +59,7 @@ let sessionObj = {
 app.use(bodyParser.json());
 app.use(session(sessionObj));
 
+// Set up file structure routing
 app.use("/common", express.static("./root/common"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
@@ -106,6 +107,7 @@ app.get("/home", (req, res) => {
         } else {
             res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
         }
+        req.session.newAccount = false;
     } else {
         let doc = getUserView(req);
         res.send(doc);
@@ -116,6 +118,7 @@ function getUserView(req) {
     if (req.session.admin) {
         return fs.readFileSync("./root/user_management.html", "utf-8");
     } else {
+        // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new jsdom.JSDOM(doc);
         let user = req.session.username;
@@ -150,7 +153,6 @@ app.post("/login", (req, res) => {
                 req.session.userid = data[0].id;
                 req.session.admin = data[0].is_admin;
                 req.session.caretaker = data[0].is_caretaker;
-                req.session.newAccount = req.body.new_account;
                 req.session.save((e) => {
                     if (e) {
                         console.log("Error: " + e);
@@ -184,7 +186,7 @@ app.get("/userData", (req, res) => {
             res.send(data);
         });
     } else {
-        res.send({ status: "failure", msg: "User not logged in!" });
+        res.send({ status: "failure", msg: "Unauthorized!" });
     }
 });
 
