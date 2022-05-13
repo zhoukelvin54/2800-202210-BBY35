@@ -245,6 +245,76 @@ app.delete("/delete", async (req, res) => {
     }
 });
 
+app.put("/grant", async (req, res) => {
+    let isRequesterAdmin = req.session.admin;
+    let accountID  = req.body.id;
+
+    let targetName;
+    let isTargetAdmin;
+
+    async function getTargetInfo(id) {
+        await connection.promise()
+        .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
+        .then((data) => {
+            targetName = data[0][0].username;
+            isTargetAdmin = data[0][0].is_admin;
+        });
+    }
+
+    await getTargetInfo(accountID);
+
+    if (isRequesterAdmin && !isTargetAdmin) {
+        connection.query('UPDATE BBY35_accounts SET is_admin = 1 WHERE id = ?', [accountID], async () => {
+            res.send({status: "success", msg: `User ${targetName} was granted admin privileges`})
+        });
+    } else {
+        res.send({status: "failure", msg: `User ${targetName} could not be granted admin privileges`});
+    }
+});
+
+app.put("/revoke", async (req, res) => {
+    let requesterID = req.session.userid;
+    let isRequesterAdmin = req.session.admin;
+    let accountID  = req.body.id;
+    
+    let targetName;
+    let isTargetAdmin;
+    let adminCount;
+    
+    async function getTargetInfo(id) {
+        await connection.promise()
+        .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
+        .then((data) => {
+            targetName = data[0][0].username;
+            isTargetAdmin = data[0][0].is_admin;
+        });
+    }
+
+    async function getAdminCount() {
+        await connection.promise()
+        .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
+        .then((data) => {
+            adminCount = data[0].length;
+        });
+    }
+
+    await getTargetInfo(accountID);
+    await getAdminCount();
+
+    let isSelfRevoke = (requesterID == accountID);
+    let areRequesterAndTargetAdmins = (isTargetAdmin && isRequesterAdmin);
+    let allowRevoke = (!isSelfRevoke && areRequesterAndTargetAdmins && (adminCount >= 2));
+
+    if (allowRevoke) {
+        connection.query('UPDATE BBY35_accounts SET is_admin = 0  WHERE id = ?', [accountID], async () => {
+            await getAdminCount();
+            res.send({ status: "success", msg: `Revoked admin: ${targetName}; Remaining admins: ${adminCount}`});
+        });
+    } else {
+        res.send({status: "failure", msg: `Could not revoke admin ${targetName}` });
+    }
+});
+
 console.log("Starting Server...");
 
 const port = 8000;
