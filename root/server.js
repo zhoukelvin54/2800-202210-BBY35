@@ -128,7 +128,7 @@ app.post("/login", (req, res) => {
             if (data.length > 0) {
                 req.session.loggedIn = true;
                 req.session.username = data[0].username;
-                req.session.name = data[0].firstname + " " + data[0].lastname;
+                req.session.name = data[0].firstname + "," + data[0].lastname;
                 req.session.username = data[0].username;
                 req.session.userid = data[0].id;
                 req.session.admin = data[0].is_admin;
@@ -157,6 +157,21 @@ app.get("/logout", (req, res) => {
             }
         });
     }
+});
+
+app.get("/profile", (req, res) => {
+    let doc = fs.readFileSync("./root/profile.html", "utf-8");
+    let pageDOM = new jsdom.JSDOM(doc);
+    let pageDocument = pageDOM.window.document;
+    let img_location = ""; // TODO FILL IN IMG
+    let first_last_name = req.session.name.split(',');
+
+    pageDocument.getElementById("profile_picture").style = `background-image: url(${img_location});`;
+    pageDocument.getElementById("username").innerText = req.session.username;
+    pageDocument.getElementById("first_name").innerText = first_last_name[0];
+    pageDocument.getElementById("last_name").innerText = first_last_name[1];
+
+    res.send(pageDOM.serialize());
 });
 
 app.get("/userData", (req, res) => {
