@@ -43,19 +43,22 @@ function updateProfile() {
           pp_url = await res.json();
           pp_url = pp_url.url;
           console.log(pp_url);
+
+          fetch("/update-profile", { 
+            method: "PUT",
+            headers: {
+              "content-type": "application/json"
+            },
+            body: JSON.stringify(getProfileData(pp_url))
+          }).then(
+            () => {
+              // TODO UPDATE DATA
+              console.log("Uploaded?");
+            }
+          ).catch(err => {
+            throw err;
+          });
       }
-  }).finally( () => {
-    fetch("/update-profile", { 
-      method: "PUT",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(getProfileData())
-    }).then(
-      // TODO UPDATE DATA
-    ).catch(err => {
-      throw err;
-    })
   }).catch(err => {
     console.error(err);
     throw err;
@@ -81,10 +84,10 @@ function updateCaretakerInfo(data) {
 // ============================================================================
 // Gets profile information from the form.
 // ============================================================================
-function getProfileData() {
+function getProfileData(url) {
   return {
     profile_picture: form.upload_profile_picture.files[0],
-    profile_picture_url: pp_url,
+    profile_picture_url: url,
     telephone: form.telephone.value.trim(),
     street_address: form.street_address.value.trim(),
     region: form.region.value.trim(),
