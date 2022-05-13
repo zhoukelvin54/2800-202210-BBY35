@@ -160,10 +160,10 @@ app.put("/update-caretaker-info", upload.single("picture"), (req, res) => {
         }
     }
 
-    query += ") VALUES (?) ON DUPLICATE KEY UPDATE ";
+    query += ") VALUES (";
 
     for (let i = 0; i < recievedFields.length; i++) {
-        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        query += "?"
         if (i == recievedFields.length - 1) {
             query += ";";
         } else {
@@ -171,10 +171,15 @@ app.put("/update-caretaker-info", upload.single("picture"), (req, res) => {
         }
     }
 
+    ") ON DUPLICATE KEY UPDATE ";
+
     connection.query(query, actualFields, (error,results,fields) => {
         if(error) {
+            console.log({status: "failure", msg: query});
+            
             res.send({status: "failure", msg: "Internal Server Error" });
         } else {
+            console.log({status: "success"});
             res.send({status: "success", msg: "Caretaker information updated."});
         }        
     });
