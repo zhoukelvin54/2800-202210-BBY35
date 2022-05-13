@@ -131,7 +131,7 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
-    } else if (req.session.newAccount) {
+    } else if (req.session.newAccount && !req.session.admin) {
         res.redirect("/sign-up");
     } else {
         let doc = getUserView(req);
@@ -198,6 +198,16 @@ app.get("/sign-up", (req, res) => {
         res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
     } else {
         res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
+    }
+});
+
+app.post("/sign-up", (req, res) => {
+    console.log(req.body);
+    
+    if (req.session.caretaker) {
+        // Handle caretaker req.body
+    } else {
+        // Handle pet owner req.body
     }
 });
 
