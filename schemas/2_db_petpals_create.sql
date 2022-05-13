@@ -34,7 +34,7 @@ CREATE TABLE `BBY35_accounts` (
   `is_admin` tinyint NOT NULL DEFAULT '0',
   `is_caretaker` tinyint NOT NULL DEFAULT '0',
   `profile_photo_url` varchar(255) DEFAULT NULL,
-  `telephone` varchar(255) DEFAULT NULL.
+  `telephone` varchar(20) DEFAULT NULL,
   `address` varchar (255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

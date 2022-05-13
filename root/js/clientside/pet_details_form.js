@@ -18,9 +18,8 @@ function submitPetDetails() {
     let profileInfo = {
         profile_picture: form["upload-profile-picture"].files[0],
         telephone: form["telephone"].value,
-        street_address: form["street-address"].value,
-        region: form["region"].value,
-        country: form["country"].value
+        address: (form["street-address"].value + ", "
+        + form["region"].value + ", " + form["country"].value)
     }
 
     let petInfo = {
@@ -32,39 +31,31 @@ function submitPetDetails() {
     }
 
 
-    console.log(profileInfo);
-    console.log(petInfo);
-
-    try {
-        let response = await fetch("/add-account", {
+    fetch("/create-profile", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
             body: JSON.stringify({
-                "username": formData.username,
-                "password": formData.password,
-                "firstname": formData.firstname,
-                "lastname": formData.lastname,
-                "email": formData.email,
-                "account_type": formData.account_type
+                "profile_picture": profileInfo.profile_picture,
+                "telephone": profileInfo.telephone,
+                "address": profileInfo.address
             })
-        });
-
-        if (response.status == 200) {
-            let data = await response.text();
+        }).then(async res => {
+        if (res.status == 200) {
+            let data = await res.text();
+            console.log(data);
             if (data) {
-                let parsedData = JSON.parse(data);
-                if (parsedData.status == "success") {
-                    login(true);
-                }   else {
-                    document.getElementById("errorMsg").innerText = parsedData.msg;
+                let parsed = JSON.parse(data);
+                if (parsed.status == "failure") {
+                    console.log("error");
+                } else {
+                    console.log("success");
                 }
             }
-        } else {
-            console.error(response.status, response.statusText);
         }
-    } catch (error) {
-        console.error(error);
-    }
+        }).catch(err => {
+            console.err(err);
+        });
+    
 }

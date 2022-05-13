@@ -41,6 +41,7 @@ const dbConnection = {
 };
 
 const mysql2 = require("mysql2");
+const { connect } = require("http2");
 
 
 if(is_Heroku) {
@@ -106,7 +107,22 @@ app.post("/add-account", (req, res) => {
         });
 });
 
-app.post("/add-")
+//KELVIN's BUGGY CODE BELOW
+app.post("/create-profile", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    console.log(req.body);
+    
+    connection.query("UPDATE BBY35_accounts SET telephone = ?, address = ? "
+        + "WHERE username = ?",
+        [req.body.telephone, req.body.address, req.session.username],
+        (error,results,fields) => {
+            if(error) {
+                res.send({status: "failure", msg: "Internal Server Error" });
+            } else {
+                res.send({status: "success", msg: "Profile added."})
+            }        
+    })    
+})
 
 app.get("/", (req, res) => {
     res.redirect("/login");
