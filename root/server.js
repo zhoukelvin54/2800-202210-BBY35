@@ -39,14 +39,6 @@ const dbConnection = {
 };
 const mysql2 = require("mysql2");
 const connection = mysql2.createPool(dbConnection);
-// connection.connect((err) => {
-//     if (err) {
-//         console.error("Error connecting to database: " + err.stack);
-//         return;
-//     }
-
-//     console.log("Database connected successfully.");
-// });
 
 // initializing sessions
 let sessionObj = {
@@ -211,35 +203,18 @@ app.delete("/delete", async (req, res) => {
     let adminCount;
     
     async function getTargetInfo(id) {
-        //console.log("fetching username for id:" + id);
         await connection.promise()
         .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
         .then((data) => {
-            //console.log(data);
-            //console.log(data[0][0]);
-            //console.log(data[0].username);
-            //console.log(typeof data);
-            //console.log(typeof data[0][0].username);
-            //console.log(data[0][0].username);
-            //console.log("returning: " + data[0][0].username)
             targetName = data[0][0].username;
             isTargetAdmin = data[0][0].is_admin;
         });
     }
 
     async function getAdminCount() {
-        //console.log("fetching username for id:" + id);
         await connection.promise()
         .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
         .then((data) => {
-            //console.log(data);
-            //console.log(data[0][0]);
-            //console.log(data[0].username);
-            //console.log(typeof data);
-            //console.log(typeof data[0][0].username);
-            //console.log(data[0][0].username);
-            //console.log("returning: " + data[0][0].username)
-            //console.log(data[0].length);
             adminCount = data[0].length;
         });
     }
@@ -253,13 +228,6 @@ app.delete("/delete", async (req, res) => {
     let adminOnUserDelete = (!isTargetAdmin && isRequesterAdmin);
     let adminDelete =  (adminOnAdminDelete || adminOnUserDelete);
     let allowDelete = (userSelfDelete || adminDelete);
-
-    // console.log("userSelfDelete: ", userSelfDelete);
-    // console.log("areRequesterAndTargetAdmins: ", areRequesterAndTargetAdmins);
-    // console.log("adminOnAdminDelete: ", adminOnAdminDelete);
-    // console.log("adminOnUserDelete ", adminOnUserDelete);
-    // console.log("adminDelete ", adminDelete);
-    // console.log("allowDelete ", allowDelete);
 
     if (allowDelete) {
         connection.query('UPDATE BBY35_accounts SET username = NULL, password = NULL, firstname = "DELETED", lastname = "USER", is_admin = 0  WHERE id = ?', [accountID], async () => {
@@ -275,10 +243,6 @@ app.delete("/delete", async (req, res) => {
     } else {
         res.send({status: "failure", msg: `Could not remove user ${targetName}` });
     }
-
-    // //console.log("this time with a fucking vengeance: " + targetName);
-    // connection.query('UPDATE BBY35_accounts SET username = "", password = "", firstname = "DELETED", lastname = "USER", is_admin = 0  WHERE id = ?', [accountID], (err, data, fields) => {
-    // });
 });
 
 console.log("Starting Server...");
