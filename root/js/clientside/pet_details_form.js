@@ -18,11 +18,11 @@ form.addEventListener("submit", handleForm);
 function handleForm(e) {
     e.preventDefault();
     try {
-      let profileData = getProfileData();
-      let petData = getCaretakerData();
+      
+      let petData = getPetData();
   
-      updateProfile(profileData);
-      updatePetInfo(PetData);
+      updateProfile();
+      updatePetInfo(petData);
   
     } catch (err) {
       document.getElementById("error_message").innerText = err;
@@ -63,35 +63,43 @@ function handleForm(e) {
 // Updates the account on the DB
 // ============================================================================
 
-async function updateProfile() {
-    fetch("/update-profile", {
-            method: "PUT",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                "profile_picture": profileData.profile_picture,
-                "telephone": profileData.telephone,
-                "address": profileData.address
-            })
-        }).then(async res => {
-        if (res.status == 200) {
-            let data = await res.text();
-            console.log(data);
-            if (data) {
-                let parsed = JSON.parse(data);
-                if (parsed.status == "failure") {
-                    console.log("error");
-                } else {
-                    console.log("success");
-                }
-            }
+function updateProfile() {
+    var pp_url; 
+    let profile_picture = form.upload_profile_picture.files[0]
+    const formData = new FormData();
+  
+    formData.append("picture", profile_picture)
+  
+    fetch("/addPhoto", {
+      method: "POST",
+      body: formData
+    }).then(async res => {
+        if (res.status == 201) {
+            pp_url = await res.json();
+            pp_url = pp_url.url;
+            console.log(pp_url);
+  
+            fetch("/update-profile", { 
+              method: "PUT",
+              headers: {
+                "content-type": "application/json"
+              },
+              body: JSON.stringify(getProfileData(pp_url))
+            }).then(
+              () => {
+                // TODO UPDATE DATA
+                console.log("Uploaded?");
+              }
+            ).catch(err => {
+              throw err;
+            });
         }
-        }).catch(err => {
-            console.err(err);
-        });
-
-}
+    }).catch(err => {
+      console.error(err);
+      throw err;
+    });
+  
+  }
 
 // ============================================================================
 // Creates a pet data table row for the pet owner.

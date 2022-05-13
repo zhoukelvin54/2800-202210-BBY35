@@ -110,9 +110,6 @@ app.post("/add-account", (req, res) => {
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");    
-    let expectedAccountFields = ["profile"]; 
-    let recievedFields = [];
-    let actualFields = [];
 
     connection.query("UPDATE BBY35_accounts SET profile_picture_url = ?, telephone = ?, address = ? " +
         "WHERE username = ?",
@@ -126,6 +123,51 @@ app.put("/update-profile", (req, res) => {
     });   
 
 });
+
+app.put("/update-pet", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    if(req.session.caretaker) {
+        res.send({status: "failure", msg: "Current user is a caretake!"});
+    }
+
+    let expectedFields = ["name", "gender", "species", "description", "photo_url"];
+    let recievedFields = [];
+    let actualFields = [req.session.userid];
+    let query = "INSERT INTO `BBY35_pets` (`";
+
+    let firstProp = true;
+    for (let prop in req.body) {
+        if (expectedFields.includes(prop)) {
+            if (!firstProp) query += ", `";
+            else firstProp = false;
+
+            query += prop + "`";
+            actualFields.push(req.body[prop]);
+            recievedFields.push(prop);
+        }
+    }
+
+    query += ") VALUES (?";
+    for (let i = 0; i < recievedFields.length; i++) query += ",?";
+    query += ") ON DUPLICATE KEY UPDATE ";
+
+    for (let i = 0; i < recievedFields.length; i++) {
+        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        if (i == recievedFields.length - 1) {
+            query += ";";
+        } else {
+            query += ",";
+        }
+    }
+
+    connection.query(query, actualFields, (error,results,fields) => {
+        if(error) {
+            res.send({status: "failure", msg: "Internal Server Error" });
+        } else {
+            res.send({status: "success", msg: "Pet details updated."});
+        }        
+    });
+})
 
 app.put("/update-caretaker-info",  (req, res) => {
     res.setHeader("Content-Type", "application/json");
