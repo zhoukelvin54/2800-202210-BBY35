@@ -42,7 +42,7 @@ CREATE TABLE `BBY35_pets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Table structure for table `BBY35_caretaker_info
+-- Table structure for table BBY35_caretaker_info
 --
 
 DROP TABLE IF EXISTS `BBY35_caretaker_info`;
