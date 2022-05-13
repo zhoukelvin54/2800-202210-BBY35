@@ -12,14 +12,15 @@ form.addEventListener("submit", handleForm);
 function handleForm(e) {
   e.preventDefault();
   try {
-    let profileData = getProfileData();
+
+    
     let caretakerData = getCaretakerData();
 
-    updateProfile(profileData);
+    updateProfile();
     updateCaretakerInfo(caretakerData);
 
   } catch (err) {
-    document.getElementById("error_message").innerText = err;
+    document.getElementById("info_error_message").innerText = err;
     return;
   }
 }
@@ -27,18 +28,39 @@ function handleForm(e) {
 // ============================================================================
 // Sends profile information update request from the form.
 // ============================================================================
-function updateProfile(data) {
-  fetch("/update-profile", { 
-    method: "PUT",
-    headers: {
-      "content-type": "application/json"
-    },
-    body: JSON.stringify(data)
-  }).then(
-    // TODO UPDATE DATA
-  ).catch(err => {
+function updateProfile() {
+  var pp_url; 
+  let profile_picture = form.upload_profile_picture.files[0]
+  const formData = new FormData();
+
+  formData.append("picture", profile_picture)
+
+  fetch("/addPhoto", {
+    method: "POST",
+    body: formData
+  }).then(async res => {
+      if (res.status == 201) {
+          pp_url = await res.json();
+          pp_url = pp_url.url;
+          console.log(pp_url);
+      }
+  }).finally( () => {
+    fetch("/update-profile", { 
+      method: "PUT",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(getProfileData())
+    }).then(
+      // TODO UPDATE DATA
+    ).catch(err => {
+      throw err;
+    })
+  }).catch(err => {
+    console.error(err);
     throw err;
   });
+
 }
 
 // ============================================================================
@@ -51,9 +73,7 @@ function updateCaretakerInfo(data) {
       "content-type": "application/json"
     },
     body: JSON.stringify(data)
-  }).then(
-    // TODO UPDATE DATA
-  ).catch(err => {
+  }).catch(err => {
     throw err;
   });
 }
@@ -64,6 +84,7 @@ function updateCaretakerInfo(data) {
 function getProfileData() {
   return {
     profile_picture: form.upload_profile_picture.files[0],
+    profile_picture_url: pp_url,
     telephone: form.telephone.value.trim(),
     street_address: form.street_address.value.trim(),
     region: form.region.value.trim(),

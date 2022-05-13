@@ -82,7 +82,7 @@ app.use("/scss", express.static("./root/scss"));
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
-
+    
     // TODO Figure out simplified SQL to insert if not exists.
     connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
         (error, results, fields) => {
@@ -109,21 +109,14 @@ app.post("/add-account", (req, res) => {
 
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    console.log(req.body);
-    
-    if(req.session.caretker) {
-        res.send({status: "failure", msg: "You're a caretaker! GET OUT"})
-    }
-
-    let expectedAccountFields = []; 
+    res.setHeader("Content-Type", "application/json");    
+    let expectedAccountFields = ["profile"]; 
+    let recievedFields = [];
     let actualFields = [];
-    let queryAccount = "UPDATE BBY35_accounts SET";
-    let queryPet = "INSERT INTO BBY35_pets"
 
-    connection.query("UPDATE BBY35_accounts SET telephone = ?, address = ? " +
+    connection.query("UPDATE BBY35_accounts SET profile_picture_url = ?, telephone = ?, address = ? " +
         "WHERE username = ?",
-        [req.body.telephone, req.body.street_address, req.session.username],
+        [req.body.profile_picture_url , req.body.telephone, req.body.street_address, req.session.username],
         (error,results,fields) => {
             if(error) {
                 res.send({status: "failure", msg: "Internal Server Error" });
@@ -132,12 +125,9 @@ app.put("/update-profile", (req, res) => {
             }        
     });   
 
-    for (let prop in req.body) {
-
-    }
 });
 
-app.put("/update-caretaker-info", upload.single("picture"), (req, res) => {
+app.put("/update-caretaker-info",  (req, res) => {
     res.setHeader("Content-Type", "application/json");
     if(!req.session.caretaker) {
         res.send({status: "failure", msg: "Current user is not a caretaker!"});
@@ -161,24 +151,22 @@ app.put("/update-caretaker-info", upload.single("picture"), (req, res) => {
     }
 
     query += ") VALUES (?";
+    for (let i = 0; i < recievedFields.length; i++) query += ",?";
+    query += ") ON DUPLICATE KEY UPDATE ";
+
     for (let i = 0; i < recievedFields.length; i++) {
-        query += ",?";
+        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
         if (i == recievedFields.length - 1) {
             query += ";";
         } else {
             query += ",";
         }
     }
-   
-    query += ")";
 
     connection.query(query, actualFields, (error,results,fields) => {
         if(error) {
-            console.log({status: "failure", msg: query, msg2: actualFields});
-            
             res.send({status: "failure", msg: "Internal Server Error" });
         } else {
-            console.log({status: "success"});
             res.send({status: "success", msg: "Caretaker information updated."});
         }        
     });
@@ -315,7 +303,7 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    res.send( {url: req.file.filename} );
+    res.send( {url: "./img/uploads/" + req.file.filename} );
 });
 
 console.log("Starting Server...");
