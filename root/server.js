@@ -108,21 +108,53 @@ app.post("/add-account", (req, res) => {
 });
 
 //KELVIN's BUGGY CODE BELOW
-app.post("/create-profile", (req, res) => {
+app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
     
-    connection.query("UPDATE BBY35_accounts SET telephone = ?, address = ? "
-        + "WHERE username = ?",
-        [req.body.telephone, req.body.address, req.session.username],
+    connection.query("UPDATE BBY35_accounts SET telephone = ?, address = ? " +
+        "WHERE username = ?",
+        [req.body.telephone, req.body.street_address, req.session.username],
         (error,results,fields) => {
             if(error) {
                 res.send({status: "failure", msg: "Internal Server Error" });
             } else {
-                res.send({status: "success", msg: "Profile added."})
+                res.send({status: "success", msg: "Profile updated."});
             }        
-    })    
-})
+    });   
+});
+
+app.put("/update-caretaker-info", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    if(!req.session.caretaker) {
+        res.send({status: "failure", msg: "Current user is not a caretaker!"});
+    }
+
+    let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
+    let actualFields = [];
+    let query = "UPDATE BBY35_caretaker_info SET ";
+
+    for (let prop in req.body) {
+        if (expectedFields.includes(prop)) {
+            query += prop + " = ?";
+            actualFields.push(req.body[prop]);
+            if (actualFields.length != Object.keys(req.body).length) {
+                query += ", ";
+            }
+        }
+    }
+
+    query += " WHERE `account_id` = ?";
+    actualFields.push(req.session.userid);
+
+    connection.query(query, actualFields, (error,results,fields) => {
+        if(error) {
+            res.send({status: "failure", msg: "Internal Server Error" });
+        } else {
+            res.send({status: "success", msg: "Caretaker information updated."});
+        }        
+    });
+});
 
 app.get("/", (req, res) => {
     res.redirect("/login");
@@ -201,7 +233,7 @@ app.get("/sign-up", (req, res) => {
     }
 });
 
-app.post("/sign-up", (req, res) => {
+app.put("/sign-up", (req, res) => {
     console.log(req.body);
     
     if (req.session.caretaker) {
