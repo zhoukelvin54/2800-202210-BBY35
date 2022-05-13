@@ -38,15 +38,7 @@ const dbConnection = {
     port: 3306
 };
 const mysql2 = require("mysql2");
-const connection = mysql2.createConnection(dbConnection);
-connection.connect((err) => {
-    if (err) {
-        console.error("Error connecting to database: " + err.stack);
-        return;
-    }
-
-    console.log("Database connected successfully.");
-});
+const connection = mysql2.createPool(dbConnection);
 
 // initializing sessions
 let sessionObj = {
@@ -170,7 +162,7 @@ app.get("/logout", (req, res) => {
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.admin) {
-        connection.query("SELECT username, firstname, lastname, email, is_admin, is_caretaker FROM BBY35_accounts", (err, data, fields) => {
+        connection.query("SELECT id, username, firstname, lastname, email, is_admin, is_caretaker FROM BBY35_accounts", (err, data, fields) => {
             res.send(data);
         });
     } else {
@@ -199,6 +191,58 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
     res.send( {url: req.file.filename} );
+});
+
+app.delete("/delete", async (req, res) => {
+    let requesterID = req.session.userid;
+    let isRequesterAdmin = req.session.admin;
+    let accountID  = req.body.id;
+    
+    let targetName;
+    let isTargetAdmin;
+    let adminCount;
+    
+    async function getTargetInfo(id) {
+        await connection.promise()
+        .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
+        .then((data) => {
+            targetName = data[0][0].username;
+            isTargetAdmin = data[0][0].is_admin;
+        });
+    }
+
+    async function getAdminCount() {
+        await connection.promise()
+        .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
+        .then((data) => {
+            adminCount = data[0].length;
+        });
+    }
+
+    await getTargetInfo(accountID);
+    await getAdminCount();
+
+    let userSelfDelete = (!isRequesterAdmin && (accountID == requesterID));
+    let areRequesterAndTargetAdmins = (isTargetAdmin && isRequesterAdmin);
+    let adminOnAdminDelete = (areRequesterAndTargetAdmins && (adminCount >= 2));
+    let adminOnUserDelete = (!isTargetAdmin && isRequesterAdmin);
+    let adminDelete =  (adminOnAdminDelete || adminOnUserDelete);
+    let allowDelete = (userSelfDelete || adminDelete);
+
+    if (allowDelete) {
+        connection.query('UPDATE BBY35_accounts SET username = NULL, password = NULL, firstname = "DELETED", lastname = "USER", is_admin = 0  WHERE id = ?', [accountID], async () => {
+            await getAdminCount();
+            if (adminOnAdminDelete) {
+                res.send({ status: "success", msg: `Removed user: ${targetName}; Remaining admins: ${adminCount}`});
+            } else if (userSelfDelete) {
+                res.send({ status: "success", msg: `Your account has been removed.`});
+            } else {
+                res.send({ status: "success", msg: `Removed user: ${targetName}`});
+            }
+        });
+    } else {
+        res.send({status: "failure", msg: `Could not remove user ${targetName}` });
+    }
 });
 
 console.log("Starting Server...");

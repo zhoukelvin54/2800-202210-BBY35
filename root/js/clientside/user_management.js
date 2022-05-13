@@ -11,13 +11,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   let userData = await getUserData();
   userData.forEach(user => {
     let row = document.createElement("tr");
-    let tableFields = ["username", "firstname", "lastname", "email", "is_admin", "is_caretaker"];
+    let tableFields = ["id", "username", "firstname", "lastname", "email", "is_admin", "is_caretaker"];
     
     tableFields.forEach(field => {
       let currentField = document.createElement("td");
       currentField.innerText = user[field];
       row.appendChild(currentField);
     });
+
+    let deleteButton = document.createElement("button");
+    deleteButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      callDelete(user.id, user.username);
+    });
+    deleteButton.innerText = 'Delete';
+    row.appendChild(deleteButton);
 
     table.appendChild(row);
   });
@@ -35,6 +43,30 @@ async function getUserData() {
     if (response.status == 200) {
       let data = await response.text();
       return JSON.parse(data);
+    } else {
+      console.error(response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function callDelete(userid) {
+  try {
+    let response = await fetch("/delete", {
+      "method": 'DELETE',
+      "headers": {
+        "content-type": "application/json",
+      },
+
+      "body": JSON.stringify({
+        "id": userid,
+      })
+    });
+
+    if (response.status == 200) {
+      response.json().then(response => {console.log(response.msg)});
+      //location.reload();
     } else {
       console.error(response.status, response.statusText);
     }
