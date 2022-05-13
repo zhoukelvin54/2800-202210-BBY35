@@ -130,6 +130,7 @@ app.post("/login", (req, res) => {
                 req.session.username = data[0].username;
                 req.session.name = data[0].firstname + "," + data[0].lastname;
                 req.session.username = data[0].username;
+                req.session.email = data[0].email;
                 req.session.userid = data[0].id;
                 req.session.admin = data[0].is_admin;
                 req.session.caretaker = data[0].is_caretaker;
@@ -168,10 +169,11 @@ app.get("/profile", (req, res) => {
     let img_location = ""; // TODO FILL IN IMG
     let first_last_name = req.session.name.split(',');
 
-    pageDOM.window.document.getElementById("profile_picture").style = `background-image: url(${img_location});`;
-    pageDOM.window.document.getElementById("username").textContent = req.session.username;
-    pageDOM.window.document.getElementById("first_name").textContent = first_last_name[0];
-    pageDOM.window.document.getElementById("last_name").textContent = first_last_name[1];
+    pageDocument.getElementById("profile_picture").style = `background-image: url(${img_location});`;
+    pageDocument.getElementById("username").textContent = req.session.username;
+    pageDocument.getElementById("first_name").textContent = first_last_name[0];
+    pageDocument.getElementById("last_name").textContent = first_last_name[1];
+    pageDocument.getElementById("email").textContent = req.session.email;
 
     res.send(pageDOM.serialize());
 });
