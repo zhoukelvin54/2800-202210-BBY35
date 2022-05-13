@@ -143,10 +143,10 @@ app.put("/update-caretaker-info", upload.single("picture"), (req, res) => {
         res.send({status: "failure", msg: "Current user is not a caretaker!"});
     }
 
-    let expectedFields = ["account_id", "animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
+    let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
     let recievedFields = [];
     let actualFields = [req.session.userid];
-    let query = "INSERT INTO `BBY35_caretaker_info` (`";
+    let query = "INSERT INTO `BBY35_caretaker_info` (`account_id`, `";
 
     let firstProp = true;
     for (let prop in req.body) {
@@ -160,22 +160,21 @@ app.put("/update-caretaker-info", upload.single("picture"), (req, res) => {
         }
     }
 
-    query += ") VALUES (";
-
+    query += ") VALUES (?";
     for (let i = 0; i < recievedFields.length; i++) {
-        query += "?"
+        query += ",?";
         if (i == recievedFields.length - 1) {
             query += ";";
         } else {
             query += ",";
         }
     }
-
-    ") ON DUPLICATE KEY UPDATE ";
+   
+    query += ")";
 
     connection.query(query, actualFields, (error,results,fields) => {
         if(error) {
-            console.log({status: "failure", msg: query});
+            console.log({status: "failure", msg: query, msg2: actualFields});
             
             res.send({status: "failure", msg: "Internal Server Error" });
         } else {
