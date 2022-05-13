@@ -1,12 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
-/*
-.form-header {
-    text-align: center;
-    width: 100%;
-    padding-bottom: 3vh;
-    border-bottom: 2px solid #FA5C2A;
-}
-*/
+
 
 body {
     width: 100vw;
@@ -20,7 +13,7 @@ body {
     background-blend-mode: lighten;
 }
 
-#pet-details-form {
+#pet_details_form {
     box-sizing: border-box;
     margin: 0 auto;
     max-width: min(90vw, 475px);
@@ -28,11 +21,11 @@ body {
     padding-bottom: 5vh;
 }
   
-#pet-details-form * {
+#pet_details_form * {
 box-sizing: border-box;
 }
 
-.form-panel {
+.form_panel {
     display: grid;
     border: none;
     border-radius: 1.25rem;
@@ -45,7 +38,7 @@ box-sizing: border-box;
     font-family: "Bitter", sans-serif;
 }
   
-.form-panel legend {
+.form_panel legend {
 /* Float trick to get legends to display differently */
     float:left;
     padding: 1.5rem;
@@ -58,51 +51,51 @@ box-sizing: border-box;
     font-family: "Satisfy", sans-serif;
 }
 
-.form-group {
+.form_group {
     flex-direction: column;
 }
 
-.form-group label {
+.form_group label {
     margin-bottom: 0.25rem;
 }
 
-.inline-form-group {
+.inline_form_group {
     flex-direction: row;
 }
 
-.inline-form-group label {
+.inline_form_group label {
     max-width: 55%;
     padding-right: 0.25rem;
 }
 
-.form-group, .inline-form-group {
+.form_group, .inline_form_group {
     display: flex;
     align-items: stretch;
     padding: 0.75rem 2rem;
 }
 
-.form-group textarea {
+.form_group textarea {
     resize: none;
     height: 10vh;
 }
 
-.inline-form-group input, .inline-form-group select, .inline-form-group div{
+.inline_form_group input, .inline_form_group select, .inline_form_group div{
     height: min-content;
     max-width: 45%;
     margin-left: auto;
     text-align: right;
 }
 
-.form-group input,
-.form-group select,
-.inline-form-group input,
-.inline-form-group div input,
-.inline-form-group select {
+.form_group input,
+.form_group select,
+.inline_form_group input,
+.inline_form_group div input,
+.inline_form_group select {
     flex-grow: 1;
     min-height: 1.5rem;
 }
 
-.form-button {
+.form_button {
     width: 75%;
     font-family: "Satisfy", sans-serif;
     font-weight: bold;
@@ -115,7 +108,7 @@ box-sizing: border-box;
     background-color: #222;
 }
 
-.submit-button {
+.submit_button {
     width: 75%;
     font-family: "Satisfy", sans-serif;
     font-weight: bold;
@@ -127,7 +120,7 @@ box-sizing: border-box;
   }
 
 @media only screen and (min-width: 769px) {
-.form-panel {
+.form_panel {
     font-size: 125%;
 }
 }

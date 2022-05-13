@@ -9,7 +9,7 @@ function uploadImages(e) {
 
     const imageUpload = document.getElementById('image-upload');
     const formData = new FormData();
-
+    
     formData.append("picture", imageUpload.files[0]);
 
     const options = {

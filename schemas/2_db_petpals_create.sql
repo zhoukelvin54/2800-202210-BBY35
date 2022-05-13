@@ -2,10 +2,18 @@ CREATE DATABASE IF NOT EXISTS `COMP2800`;
 USE `COMP2800`;
 
 --
+-- Drop tables in order to avoid foreign key restraint
+--
+
+DROP TABLE IF EXISTS `BBY35_caretaker_info`;
+DROP TABLE IF EXISTS `BBY35_pets`;
+DROP TABLE IF EXISTS `BBY35_accounts`;
+
+--
 -- Table structure for table `BBY35_accounts`
 --
 
-DROP TABLE IF EXISTS `BBY35_accounts`;
+
 
 CREATE TABLE `BBY35_accounts` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -26,7 +34,6 @@ CREATE TABLE `BBY35_accounts` (
 -- Table structure for table `BBY35_pets`
 --
 
-DROP TABLE IF EXISTS `BBY35_pets`;
 
 CREATE TABLE `BBY35_pets` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -48,7 +55,7 @@ CREATE TABLE `BBY35_pets` (
 -- Table structure for table BBY35_caretaker_info
 --
 
-DROP TABLE IF EXISTS `BBY35_caretaker_info`;
+
 
 CREATE TABLE `BBY35_caretaker_info` (
   `account_id` int NOT NULL,

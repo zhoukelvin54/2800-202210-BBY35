@@ -51,6 +51,6 @@ INSERT INTO `BBY35_caretaker_info`
   `children_in_home`,
   `yard_type`)
   VALUES (10, 5, 
-          NULL, NULL,
+          '', NULL,
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
