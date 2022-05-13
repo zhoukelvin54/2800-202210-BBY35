@@ -22,10 +22,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     let deleteButton = document.createElement("button");
     deleteButton.addEventListener("click", (event) => {
       event.preventDefault();
-      callDelete(user.id, user.username);
+      callDelete(user.id);
     });
+    
+    let grantButton = document.createElement("button");
+    deleteButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      callGrant(user.id);
+    });
+
+    let revokeButton = document.createElement("button");
+    deleteButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      callRevoke(user.id);
+    });
+
     deleteButton.innerText = 'Delete';
-    row.appendChild(deleteButton);
+    grantButton.innerText = 'Grant Admin';
+    revokeButton.innerHTML = 'Revoke Admin';
+    
+    row.appendChild(deleteButton, grantButton, revokeButton);
 
     table.appendChild(row);
   });
