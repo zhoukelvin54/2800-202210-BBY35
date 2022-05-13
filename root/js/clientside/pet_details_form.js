@@ -131,8 +131,6 @@ async function updatePetInfo() {
                 }
             }
         }
-        }).then(async res => {
-            res => res.json();
         }).catch(err => {
             console.err(err);
         });
