@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       row.appendChild(currentField);
     });
 
+    let container = document.createElement("div");
+
     let deleteButton = document.createElement("button");
     deleteButton.addEventListener("click", (event) => {
       event.preventDefault();
@@ -26,22 +28,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     
     let grantButton = document.createElement("button");
-    deleteButton.addEventListener("click", (event) => {
+    grantButton.addEventListener("click", (event) => {
       event.preventDefault();
       callGrant(user.id);
     });
 
     let revokeButton = document.createElement("button");
-    deleteButton.addEventListener("click", (event) => {
+    revokeButton.addEventListener("click", (event) => {
       event.preventDefault();
       callRevoke(user.id);
     });
 
-    deleteButton.innerText = 'Delete';
+    deleteButton.innerText = 'Delete User';
     grantButton.innerText = 'Grant Admin';
     revokeButton.innerHTML = 'Revoke Admin';
+
+    container.appendChild(deleteButton);
+    container.appendChild(grantButton);
+    container.appendChild(revokeButton);
     
-    row.appendChild(deleteButton, grantButton, revokeButton);
+    row.appendChild(container);
 
     table.appendChild(row);
   });
@@ -71,6 +77,54 @@ async function callDelete(userid) {
   try {
     let response = await fetch("/delete", {
       "method": 'DELETE',
+      "headers": {
+        "content-type": "application/json",
+      },
+
+      "body": JSON.stringify({
+        "id": userid,
+      })
+    });
+
+    if (response.status == 200) {
+      response.json().then(response => {console.log(response.msg)});
+      //location.reload();
+    } else {
+      console.error(response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function callGrant(userid) {
+  try {
+    let response = await fetch("/grant", {
+      "method": 'PUT',
+      "headers": {
+        "content-type": "application/json",
+      },
+
+      "body": JSON.stringify({
+        "id": userid,
+      })
+    });
+
+    if (response.status == 200) {
+      response.json().then(response => {console.log(response.msg)});
+      //location.reload();
+    } else {
+      console.error(response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function callRevoke(userid) {
+  try {
+    let response = await fetch("/revoke", {
+      "method": 'PUT',
       "headers": {
         "content-type": "application/json",
       },
