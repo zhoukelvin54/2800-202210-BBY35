@@ -1,3 +1,6 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 'use strict'
 /*
 ready(function () {
