@@ -51,7 +51,7 @@ async function getUserData() {
   }
 }
 
-async function callDelete(userid, username) {
+async function callDelete(userid) {
   try {
     let response = await fetch("/delete", {
       "method": 'DELETE',
@@ -61,12 +61,11 @@ async function callDelete(userid, username) {
 
       "body": JSON.stringify({
         "id": userid,
-        "user": username,
       })
     });
 
     if (response.status == 200) {
-      console.log(response.text());
+      response.json().then(response => {console.log(response.msg)});
       //location.reload();
     } else {
       console.error(response.status, response.statusText);
