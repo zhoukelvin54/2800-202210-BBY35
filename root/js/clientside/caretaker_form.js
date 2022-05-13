@@ -3,16 +3,78 @@
 /* jshint browser: true */
 "use strict";
 
-function submitCaretakerInfo() {
-  let form = document.forms.user_creation_form;
-  let profileInfo = {
+const form = document.forms.user_creation_form;
+form.addEventListener("submit", handleForm);
+
+// ============================================================================
+// Handles the form and error output.
+// ============================================================================
+function handleForm(e) {
+  e.preventDefault();
+  try {
+    let profileData = getProfileData();
+    let caretakerData = getCaretakerData();
+
+    updateProfile(profileData);
+    updateCaretakerInfo(caretakerData);
+
+  } catch (err) {
+    document.getElementById("error_message").innerText = err;
+    return;
+  }
+}
+
+// ============================================================================
+// Sends profile information update request from the form.
+// ============================================================================
+function updateProfile(data) {
+  fetch("/update-profile", { 
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(data)
+  }).then(
+    // TODO UPDATE DATA
+  ).catch(err => {
+    throw err;
+  });
+}
+
+// ============================================================================
+// Sends caretaker information update request from the form.
+// ============================================================================
+function updateCaretakerInfo(data) {
+  fetch("/update-caretaker-info", { 
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(data)
+  }).then(
+    // TODO UPDATE DATA
+  ).catch(err => {
+    throw err;
+  });
+}
+
+// ============================================================================
+// Gets profile information from the form.
+// ============================================================================
+function getProfileData() {
+  return {
     profile_picture: form.upload_profile_picture.files[0],
     telephone: form.telephone.value.trim(),
     street_address: form.street_address.value.trim(),
     region: form.region.value.trim(),
     country: form.country.value.trim()
   };
+}
 
+// ============================================================================
+// Gets caretaker information from the form.
+// ============================================================================
+function getCaretakerData() {
   let caretakerInfo = {
     animal_affection: form.animal_affection.value,
     experience: form.experience.value.trim(),
@@ -30,9 +92,8 @@ function submitCaretakerInfo() {
   let requiresValidation = ["experience","allergies","other_pets","busy_hours"];
   for(let i; i < requiresValidation.length; i++) {
     if (caretakerInfo[requiresValidation[i]] == "") {
-      document.getElementById("error_message").innerText = "Please fill out all form fields.";
+      throw "Please fill out all form fields.";
     }
   }
-
-  console.log(profileInfo, caretakerInfo);
+  return caretakerInfo;
 }
