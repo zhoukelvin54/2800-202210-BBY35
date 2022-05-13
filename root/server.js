@@ -160,16 +160,18 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
+    if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
+
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
     let pageDOM = new jsdom.JSDOM(doc);
     let pageDocument = pageDOM.window.document;
     let img_location = ""; // TODO FILL IN IMG
     let first_last_name = req.session.name.split(',');
 
-    pageDocument.getElementById("profile_picture").style = `background-image: url(${img_location});`;
-    pageDocument.getElementById("username").innerText = req.session.username;
-    pageDocument.getElementById("first_name").innerText = first_last_name[0];
-    pageDocument.getElementById("last_name").innerText = first_last_name[1];
+    pageDOM.window.document.getElementById("profile_picture").style = `background-image: url(${img_location});`;
+    pageDOM.window.document.getElementById("username").textContent = req.session.username;
+    pageDOM.window.document.getElementById("first_name").textContent = first_last_name[0];
+    pageDOM.window.document.getElementById("last_name").textContent = first_last_name[1];
 
     res.send(pageDOM.serialize());
 });
