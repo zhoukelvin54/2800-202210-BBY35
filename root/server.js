@@ -130,22 +130,33 @@ app.put("/update-caretaker-info", (req, res) => {
         res.send({status: "failure", msg: "Current user is not a caretaker!"});
     }
 
-    let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
-    let actualFields = [];
-    let query = "UPDATE BBY35_caretaker_info SET ";
+    let expectedFields = ["account_id", "animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
+    let recievedFields = [];
+    let actualFields = [req.session.userid];
+    let query = "INSERT INTO `BBY35_caretaker_info` (`";
 
+    let firstProp = true;
     for (let prop in req.body) {
         if (expectedFields.includes(prop)) {
-            query += prop + " = ?";
+            if (!firstProp) query += ", `";
+            else firstProp = false;
+
+            query += prop + "`";
             actualFields.push(req.body[prop]);
-            if (actualFields.length != Object.keys(req.body).length) {
-                query += ", ";
-            }
+            recievedFields.push(prop);
         }
     }
 
-    query += " WHERE `account_id` = ?";
-    actualFields.push(req.session.userid);
+    query += ") VALUES (?) ON DUPLICATE KEY UPDATE ";
+
+    for (let i = 0; i < recievedFields.length; i++) {
+        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        if (i == recievedFields.length - 1) {
+            query += ";";
+        } else {
+            query += ",";
+        }
+    }
 
     connection.query(query, actualFields, (error,results,fields) => {
         if(error) {
