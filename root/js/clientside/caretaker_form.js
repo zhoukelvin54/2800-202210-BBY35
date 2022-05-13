@@ -43,6 +43,7 @@ function updateProfile() {
           pp_url = await res.json();
           pp_url = pp_url.url;
           console.log(pp_url);
+          return pp_url;
       }
   }).finally( () => {
     fetch("/update-profile", { 
