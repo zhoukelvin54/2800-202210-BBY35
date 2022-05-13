@@ -101,14 +101,14 @@ app.post("/add-account", (req, res) => {
                         } else {
                             req.session.newAccount = true;
                             res.send({ status: "success", msg: "Record added." });
-                        }
+                         }
                     });
             }
         });
 });
 
-//KELVIN's BUGGY CODE BELOW
-app.post("/create-profile", (req, res) => {
+//KELVIN's BUGGY CODE
+app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
     
@@ -131,7 +131,7 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
-    } else if (req.session.newAccount && !req.session.admin) {
+    } else if (req.session.newAccount) {
         res.redirect("/sign-up");
     } else {
         let doc = getUserView(req);
@@ -198,16 +198,6 @@ app.get("/sign-up", (req, res) => {
         res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
     } else {
         res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
-    }
-});
-
-app.post("/sign-up", (req, res) => {
-    console.log(req.body);
-    
-    if (req.session.caretaker) {
-        // Handle caretaker req.body
-    } else {
-        // Handle pet owner req.body
     }
 });
 

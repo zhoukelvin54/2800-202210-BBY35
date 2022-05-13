@@ -31,7 +31,7 @@ function submitPetDetails() {
     }
 
 
-    fetch("/create-profile", {
+    fetch("/update-proofile", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
