@@ -99,7 +99,7 @@ async function updateProfile() {
 // Creates a pet data table row for the pet owner.
 // ============================================================================
 
-async function updatePetInfo(petData) {
+async function updatePetInfo() {
   let petData = getPetData();
   fetch("/update-pet", {
     method: "PUT",
@@ -123,6 +123,7 @@ async function updatePetInfo(petData) {
           console.log("error");
         } else {
           console.log("success");
+          window.location.assign("/home");
         }
       }
     }
