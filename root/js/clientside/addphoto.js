@@ -1,3 +1,4 @@
+'use strict'
 // this file is for testing and example purposes and should be removed from dev/production once every form with img uploading is completed
 
 const upLoadForm = document.getElementById("upload-images-form");
@@ -8,7 +9,7 @@ function uploadImages(e) {
 
     const imageUpload = document.getElementById('image-upload');
     const formData = new FormData();
-
+    
     formData.append("picture", imageUpload.files[0]);
 
     const options = {

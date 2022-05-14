@@ -1,9 +1,18 @@
+-- Removes existing or out of date databases
+-- As well as creates the COMP2800 database
 DROP DATABASE IF EXISTS db_petpals;
 CREATE DATABASE  IF NOT EXISTS `COMP2800`;
+
+-- Selects the COMP2800 database to perform creation
 USE `COMP2800`;
 
 DROP TABLE IF EXISTS `BBY35_pets`;
+DROP TABLE IF EXISTS `BBY35_caretake_info`;
 DROP TABLE IF EXISTS `BBY35_accounts`;
+
+--
+-- Table structure for table BBY35_pets
+--
 
 CREATE TABLE `BBY35_accounts` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -14,10 +23,15 @@ CREATE TABLE `BBY35_accounts` (
   `password` varchar(20),
   `is_admin` tinyint NOT NULL DEFAULT '0',
   `is_caretaker` tinyint NOT NULL DEFAULT '0',
+  `profile_photo_url` varchar(255) DEFAULT NULL,
+  `telephone` varchar(20) DEFAULT NULL,
+  `address` varchar (255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-
+--
+-- Table structure for table BBY35_pets
+--
 CREATE TABLE `BBY35_pets` (
   `id` int NOT NULL AUTO_INCREMENT,
   `owner_id` int NOT NULL,
@@ -34,6 +48,32 @@ CREATE TABLE `BBY35_pets` (
   CONSTRAINT `owner_id` FOREIGN KEY (`owner_id`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Table structure for table BBY35_caretaker_info
+--
+
+CREATE TABLE `BBY35_caretaker_info` (
+  `account_id` int NOT NULL,
+  `animal_affection` int NOT NULL,
+  `experience` varchar(255) NOT NULL,
+  `allergies` varchar(255) DEFAULT NULL,
+  `other_pets` varchar(255) DEFAULT NULL,
+  `busy_hours` varchar(255) DEFAULT NULL,
+  `house_type` varchar(32) NOT NULL,
+  `house_active_level` int NOT NULL,
+  `people_in_home` int NOT NULL,
+  `children_in_home` boolean NOT NULL,
+  `yard_type` varchar(32) NOT NULL,
+  PRIMARY KEY (`account_id`),
+  key `account_id_idx` (`account_id`),
+  CONSTRAINT `account_id` FOREIGN KEY (`account_id`) REFERENCES `BBY35_accounts` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+
+
+--------------------------------------------------------
+--Add data to BBY35_accounts table
+--------------------------------------------------------
 INSERT INTO BBY35_accounts (id, username, firstname, lastname, 
 email, password, is_admin, is_caretaker) VALUES (
 1, 'kzhou', 'Kelvin', 'Zhou', 'szhou54@my.bcit.ca', '12345', 0, 0);
@@ -86,6 +126,10 @@ INSERT INTO BBY35_accounts (id, username, firstname, lastname,
 email, password, is_admin, is_caretaker) VALUES (
 13, 'user3', 'End', 'User', 'user@email.com', '12345', 0, 0);
 
+
+--------------------------------------------------------
+--Add data to BBY35_pets table
+--------------------------------------------------------
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (1,1,4,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
 
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (2,1,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
@@ -101,3 +145,64 @@ INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`speci
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (7,4,1,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
 
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (8,4,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
+
+
+
+
+--------------------------------------------------------
+--Add data to BBY35_caretaker_info table
+--------------------------------------------------------
+INSERT INTO `BBY35_caretaker_info`
+  (`account_id`,
+  `animal_affection`,
+  `experience`,
+  `allergies`,
+  `other_pets`,
+  `busy_hours`,
+  `house_type`,
+  `house_active_level`,
+  `people_in_home`,
+  `children_in_home`,
+  `yard_type`)
+  VALUES (8, 9,
+          'None, I like dogs.',
+          '',
+          '',
+          '',
+          'house', 0, 2, 0, 'not enclosed');
+
+INSERT INTO `BBY35_caretaker_info`
+  (`account_id`,
+  `animal_affection`,
+  `experience`,
+  `allergies`,
+  `other_pets`,
+  `busy_hours`,
+  `house_type`,
+  `house_active_level`,
+  `people_in_home`,
+  `children_in_home`,
+  `yard_type`)
+  VALUES (9, 10,
+          'I like cats',
+          'I''m allergic to dogs.',
+          '2 Cats, Siamese and Tabby.',
+          'I''m retired.',
+          'apartment', 1, 3, 1, 'no yard');
+
+INSERT INTO `BBY35_caretaker_info`
+  (`account_id`,
+  `animal_affection`,
+  `experience`,
+  `allergies`,
+  `other_pets`,
+  `busy_hours`,
+  `house_type`,
+  `house_active_level`,
+  `people_in_home`,
+  `children_in_home`,
+  `yard_type`)
+  VALUES (10, 5, 
+          '', NULL,
+          NULL, NULL, 
+          'other', 2, 5, 0, 'partially enclosed');
