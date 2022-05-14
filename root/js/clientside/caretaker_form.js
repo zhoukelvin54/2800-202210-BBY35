@@ -71,6 +71,19 @@ function updateCaretakerInfo(data) {
       "content-type": "application/json"
     },
     body: JSON.stringify(data)
+  }).then(async res => {
+    if (res.status == 200) {
+      let data = await res.text();
+      if (data) {
+        let parsed = JSON.parse(data);
+        if (parsed.status == "failure") {
+          console.error("Could not update caretaker information.");
+        } else {
+          console.log("Caretaker information updated");
+          window.location.assign("/home");
+        }
+      }
+    }
   }).catch(err => {
     throw err;
   });
