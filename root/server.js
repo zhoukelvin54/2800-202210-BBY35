@@ -110,12 +110,37 @@ app.post("/add-account", (req, res) => {
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");    
-
     console.log(req.body);
 
-    connection.query("UPDATE BBY35_accounts SET profile_photo_url = ?, telephone = ?, address = ? " +
-        "WHERE id = ?",
-        [req.body.profile_picture , req.body.telephone, req.body.address, req.session.userid],
+    let expectedFields = ["firstname" , "lastname", "email", "password", "profile_photo_url", "telephone", "address"];
+    let recievedFields = [];
+    let actualFields = [];
+    let query = "UPDATE BBY35_accounts SET ";
+    let loops = 0; 
+
+    for (let prop in req.body) {
+        loops += 1;
+        if (expectedFields.includes(prop)) {
+            if(Object.keys(req.body).length == loops) {
+                query += prop + " = ? "
+                actualFields.push(req.body[prop]);
+                recievedFields.push(prop);
+            } else {
+            query += prop + " = ?, ";
+            actualFields.push(req.body[prop]);
+            recievedFields.push(prop);
+            }   
+        }
+    }
+
+    query += "WHERE id = ?";
+
+    actualFields.push(req.session.userid);
+
+    console.log(actualFields);
+
+    connection.query(query, 
+        actualFields,
         (error,results,fields) => {
             if(error) {
                 res.send({status: "failure", msg: "Internal Server Error" });
