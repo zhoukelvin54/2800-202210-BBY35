@@ -135,7 +135,7 @@ app.put("/update-pet", (req, res) => {
     let expectedFields = ["name", "gender", "species", "description", "photo_url"];
     let recievedFields = [];
     let actualFields = [req.session.userid];
-    let query = "INSERT INTO `BBY35_pets` (`owner_id`";
+    let query = "INSERT INTO `BBY35_pets` (`owner_id`,`";
 
     let firstProp = true;
     for (let prop in req.body) {
