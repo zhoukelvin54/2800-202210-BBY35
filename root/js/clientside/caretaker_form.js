@@ -94,7 +94,7 @@ function updateCaretakerInfo(data) {
 // ============================================================================
 function getProfileData(pp_url) {
   return {
-    profile_picture: pp_url,
+    profile_photo_url: pp_url,
     telephone: form.telephone.value.trim(),
     address: form.street_address.value.trim() + " " + form.region.value.trim() + " " + form.country.value.trim()
     //street_address: form.street_address.value.trim(),
