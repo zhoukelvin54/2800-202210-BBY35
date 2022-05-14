@@ -18,7 +18,6 @@ form.addEventListener("submit", handleForm);
 function handleForm(e) {
     e.preventDefault();
     try {
-      
       let petData = getPetData();
   
       updateProfile();
@@ -33,13 +32,15 @@ function handleForm(e) {
 // ============================================================================
 // Gets data from forms
 // ============================================================================
-    function getProfileData() {
-        return {
-            profile_picture: form["upload_profile_picture"].files[0],
-            telephone: form["telephone"].value,
-            address: (form["street_address"].value + ", "
-            + form["region"].value + ", " + form["country"].value)
-        }
+    function getProfileData(pp_url) {
+      return {
+        profile_picture: pp_url,
+        telephone: form.telephone.value.trim(),
+        address: form.street_address.value.trim() + " " + form.region.value.trim() + " " + form.country.value.trim()
+        //street_address: form.street_address.value.trim(),
+        //region: form.region.value.trim(),
+        //country: form.country.value.trim()
+      };
     }
 
     function getPetData() {
@@ -63,42 +64,38 @@ function handleForm(e) {
 // Updates the account on the DB
 // ============================================================================
 
-function updateProfile() {
-    var pp_url; 
-    let profile_picture = form.upload_profile_picture.files[0]
-    const formData = new FormData();
-  
-    formData.append("picture", profile_picture)
-  
-    fetch("/addPhoto", {
-      method: "POST",
-      body: formData
-    }).then(async res => {
-        if (res.status == 201) {
-            pp_url = await res.json();
-            pp_url = pp_url.url;
-            console.log(pp_url);
-  
-            fetch("/update-profile", { 
-              method: "PUT",
-              headers: {
-                "content-type": "application/json"
-              },
-              body: JSON.stringify(getProfileData(pp_url))
-            }).then(
-              () => {
-                // TODO UPDATE DATA
-                console.log("Uploaded?");
-              }
-            ).catch(err => {
-              throw err;
-            });
-        }
-    }).catch(err => {
+async function updateProfile() {
+  var pp_url; 
+  let profile_picture = form.upload_profile_picture.files[0]
+  const formData = new FormData();
+
+  formData.append("picture", profile_picture)
+
+  await fetch("/addPhoto", {
+    method: "POST",
+    body: formData
+    }).then(res => res.json())
+    .then(res => (pp_url = res.url))
+    .catch(err => {
       console.error(err);
       throw err;
-    });
-  
+    })
+
+  await fetch("/update-profile", { 
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(getProfileData(pp_url))
+  }).then(
+    () => {
+      // TODO UPDATE DATA
+      console.log("Uploaded?");
+    }
+  ).catch(err => {
+    throw err;
+  });
+
   }
 
 // ============================================================================
