@@ -18,12 +18,14 @@ const https = require("https");
 const sanitize = require("sanitize-html");
 const multer = require("multer");
 
+const is_Heroku = process.env.is_Heroku || false;
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "./root/img/uploads");
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname.split("/").pop().trim())
+        cb(null, file.originalname.split("/").pop().trim());
     }
 });
 const upload = multer({ storage: storage });
@@ -37,8 +39,26 @@ const dbConnection = {
     database: "COMP2800",
     port: 3306
 };
+
 const mysql2 = require("mysql2");
-const connection = mysql2.createPool(dbConnection);
+const { connect } = require("http2");
+
+
+if(is_Heroku) {
+    var connection = mysql2.createPool(process.env.JAWSDB_MARIA_URL);
+} else {
+    var connection = mysql2.createPool(dbConnection);
+}
+
+
+connection.connect((err) => {
+    if (err) {
+        console.error("Error connecting to database: " + err.stack);
+        return;
+    }
+
+    console.log("Database connected successfully.");
+});
 
 // initializing sessions
 let sessionObj = {
@@ -51,6 +71,7 @@ let sessionObj = {
 app.use(bodyParser.json());
 app.use(session(sessionObj));
 
+// Set up file structure routing
 app.use("/common", express.static("./root/common"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
@@ -61,56 +82,197 @@ app.use("/scss", express.static("./root/scss"));
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
-
+    
     // TODO Figure out simplified SQL to insert if not exists.
     connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
         (error, results, fields) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
             } else if (results.length > 0) {
-                res.send({ status: "failure", msg: "Username or email already taken!" })
+                res.send({ status: "failure", msg: "Username or email already taken!" });
             } else {
-                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_admin, is_caretaker)"
-                    + "values (?, ?, ?, ?, ?, 0, 0)",
+                connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker)" +
+                    "values (?, ?, ?, ?, ?, ?)",
                     [req.body.username, req.body.firstname, req.body.lastname,
-                    req.body.email, req.body.password, req.body.is_admin, req.body.is_caretaker],
+                    req.body.email, req.body.password, req.body.account_type],
                     (error, results, fields) => {
                         if (error) {
                             res.send({ status: "failure", msg: "Internal Server Error" });
                         } else {
+                            req.session.newAccount = true;
                             res.send({ status: "success", msg: "Record added." });
-                        }
+                         }
                     });
             }
         });
 });
 
+//KELVIN's BUGGY CODE BELOW
+app.put("/update-profile", (req, res) => {
+    res.setHeader("Content-Type", "application/json");    
+    console.log(req.body);
+
+    let expectedFields = ["firstname" , "lastname", "email", "password", "profile_photo_url", "telephone", "address"];
+    let recievedFields = [];
+    let actualFields = [];
+    let query = "UPDATE BBY35_accounts SET ";
+    let loops = 0; 
+
+    for (let prop in req.body) {
+        loops += 1;
+        if (expectedFields.includes(prop)) {
+            if(Object.keys(req.body).length == loops) {
+                query += prop + " = ? "
+                actualFields.push(req.body[prop]);
+                recievedFields.push(prop);
+            } else {
+            query += prop + " = ?, ";
+            actualFields.push(req.body[prop]);
+            recievedFields.push(prop);
+            }   
+        }
+    }
+
+    query += "WHERE id = ?";
+
+    actualFields.push(req.session.userid);
+
+    console.log(actualFields);
+
+    connection.query(query, 
+        actualFields,
+        (error,results,fields) => {
+            if(error) {
+                res.send({status: "failure", msg: "Internal Server Error" });
+            } else {
+                res.send({status: "success", msg: "Profile updated."});
+            }        
+    });   
+
+});
+
+app.put("/update-pet", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    if(req.session.caretaker) {
+        res.send({status: "failure", msg: "Current user is a caretake!"});
+    }
+    console.log(req.body);
+    let expectedFields = ["name", "gender", "species", "description", "photo_url"];
+    let recievedFields = [];
+    let actualFields = [req.session.userid];
+    let query = "INSERT INTO `BBY35_pets` (`owner_id`,`";
+
+    let firstProp = true;
+    for (let prop in req.body) {
+        if (expectedFields.includes(prop)) {
+            if (!firstProp) query += ", `";
+            else firstProp = false;
+
+            query += prop + "`";
+            actualFields.push(req.body[prop]);
+            recievedFields.push(prop);
+        }
+    }
+
+    query += ") VALUES (?";
+    for (let i = 0; i < recievedFields.length; i++) query += ",?";
+    query += ") ON DUPLICATE KEY UPDATE ";
+
+    for (let i = 0; i < recievedFields.length; i++) {
+        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        if (i == recievedFields.length - 1) {
+            query += ";";
+        } else {
+            query += ",";
+        }
+    }
+
+    connection.query(query, actualFields, (error,results,fields) => {
+        if(error) {
+            res.send({status: "failure", msg: "Internal Server Error" });
+        } else {
+            res.send({status: "success", msg: "Pet details updated."});
+        }        
+    });
+})
+
+app.put("/update-caretaker-info",  (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    if(!req.session.caretaker) {
+        res.send({status: "failure", msg: "Current user is not a caretaker!"});
+    }
+    console.log(req.body);
+    let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
+    let recievedFields = [];
+    let actualFields = [req.session.userid];
+    let query = "INSERT INTO `BBY35_caretaker_info` (`account_id`, `";
+
+    let firstProp = true;
+    for (let prop in req.body) {
+        if (expectedFields.includes(prop)) {
+            if (!firstProp) query += ", `";
+            else firstProp = false;
+
+            query += prop + "`";
+            actualFields.push(req.body[prop]);
+            recievedFields.push(prop);
+        }
+    }
+
+    query += ") VALUES (?";
+    for (let i = 0; i < recievedFields.length; i++) query += ",?";
+    query += ") ON DUPLICATE KEY UPDATE ";
+
+    for (let i = 0; i < recievedFields.length; i++) {
+        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        if (i == recievedFields.length - 1) {
+            query += ";";
+        } else {
+            query += ",";
+        }
+    }
+
+    connection.query(query, actualFields, (error,results,fields) => {
+        if(error) {
+            res.send({status: "failure", msg: "Internal Server Error" });
+        } else {
+            res.send({status: "success", msg: "Caretaker information updated."});
+        }        
+    });
+});
+
 app.get("/", (req, res) => {
-    res.redirect("/home");
+    res.redirect("/login");
 });
 
 app.get("/home", (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
-    } else if (req.session.admin) {
-        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
-        res.send(doc);
+    } else if (req.session.newAccount) {
+        res.redirect("/sign-up");
     } else {
+        let doc = getUserView(req);
+        res.send(doc);
+    }
+});
+
+function getUserView(req) {
+    if (req.session.admin) {
+        return fs.readFileSync("./root/user_management.html", "utf-8");
+    } else {
+        // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new jsdom.JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
-        res.send(pageDOM.serialize());
+        
+        return pageDOM.serialize();
     }
-});
+}
 
 app.get("/login", (req, res) => {
-    if (req.session.loggedIn && req.session.admin) {
-        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
-        res.send(doc);
-    } else if (req.session.loggedIn && !req.session.admin) {
-        let doc = fs.readFileSync("./root/index.html", "utf-8");
-        res.send(doc);
+    if (req.session.loggedIn) {
+        res.redirect("/home");
     } else {
         let doc = fs.readFileSync("./root/login.html", "utf-8");
         res.send(doc);
@@ -144,6 +306,26 @@ app.post("/login", (req, res) => {
                 res.send({ status: "failure", msg: "Log In Unsuccessful" });
             }
         });
+    }
+});
+
+app.get("/sign-up", (req, res) => {
+    // To be replaced later by injecting the forms as a modal and their scripts
+    req.session.newAccount = false;
+    if (req.session.caretaker) {
+        res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
+    } else {
+        res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
+    }
+});
+
+app.put("/sign-up", (req, res) => {
+    console.log(req.body);
+    
+    if (req.session.caretaker) {
+        // Handle caretaker req.body
+    } else {
+        // Handle pet owner req.body
     }
 });
 
@@ -185,7 +367,7 @@ app.get("/userData", (req, res) => {
             res.send(data);
         });
     } else {
-        res.send({ status: "failure", msg: "User not logged in!" });
+        res.send({ status: "failure", msg: "Unauthorized!" });
     }
 });
 
@@ -336,7 +518,12 @@ app.put("/revoke", async (req, res) => {
 
 console.log("Starting Server...");
 
-const port = 8000;
+if(is_Heroku) {
+    var port = process.env.PORT;
+} else {
+    var port = 8000;
+}
+
 function onBoot() {
     console.log("Started on port: " + port);
 }
