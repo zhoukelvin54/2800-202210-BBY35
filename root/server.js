@@ -111,9 +111,11 @@ app.post("/add-account", (req, res) => {
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");    
 
-    connection.query("UPDATE BBY35_accounts SET profile_picture_url = ?, telephone = ?, address = ? " +
-        "WHERE username = ?",
-        [req.body.profile_picture_url , req.body.telephone, req.body.street_address, req.session.username],
+    console.log(req.body);
+
+    connection.query("UPDATE BBY35_accounts SET profile_photo_url = ?, telephone = ?, address = ? " +
+        "WHERE id = ?",
+        [req.body.profile_picture , req.body.telephone, req.body.address, req.session.userid],
         (error,results,fields) => {
             if(error) {
                 res.send({status: "failure", msg: "Internal Server Error" });
@@ -174,7 +176,7 @@ app.put("/update-caretaker-info",  (req, res) => {
     if(!req.session.caretaker) {
         res.send({status: "failure", msg: "Current user is not a caretaker!"});
     }
-
+    console.log(req.body);
     let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
     let recievedFields = [];
     let actualFields = [req.session.userid];
@@ -345,7 +347,7 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    res.send( {url: "./img/uploads/" + req.file.filename} );
+    res.send( {url: req.file.filename} );
 });
 
 console.log("Starting Server...");

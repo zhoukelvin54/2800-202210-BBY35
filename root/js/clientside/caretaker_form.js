@@ -28,42 +28,37 @@ function handleForm(e) {
 // ============================================================================
 // Sends profile information update request from the form.
 // ============================================================================
-function updateProfile() {
+async function updateProfile() {
   var pp_url; 
   let profile_picture = form.upload_profile_picture.files[0]
   const formData = new FormData();
 
   formData.append("picture", profile_picture)
 
-  fetch("/addPhoto", {
+  await fetch("/addPhoto", {
     method: "POST",
     body: formData
-  }).then(async res => {
-      if (res.status == 201) {
-          pp_url = await res.json();
-          pp_url = pp_url.url;
-          console.log(pp_url);
+    }).then(res => res.json())
+    .then(res => (pp_url = res.url))
+    .catch(err => {
+      console.error(err);
+      throw err;
+    })
 
-          fetch("/update-profile", { 
-            method: "PUT",
-            headers: {
-              "content-type": "application/json"
-            },
-            body: JSON.stringify(getProfileData(pp_url))
-          }).then(
-            () => {
-              // TODO UPDATE DATA
-              console.log("Uploaded?");
-            }
-          ).catch(err => {
-            throw err;
-          });
-      }
-  }).catch(err => {
-    console.error(err);
+  await fetch("/update-profile", { 
+    method: "PUT",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(getProfileData(pp_url))
+  }).then(
+    () => {
+      // TODO UPDATE DATA
+      console.log("Uploaded?");
+    }
+  ).catch(err => {
     throw err;
   });
-
 }
 
 // ============================================================================
@@ -84,14 +79,14 @@ function updateCaretakerInfo(data) {
 // ============================================================================
 // Gets profile information from the form.
 // ============================================================================
-function getProfileData(url) {
+function getProfileData(pp_url) {
   return {
-    profile_picture: form.upload_profile_picture.files[0],
-    profile_picture_url: url,
+    profile_picture: pp_url,
     telephone: form.telephone.value.trim(),
-    street_address: form.street_address.value.trim(),
-    region: form.region.value.trim(),
-    country: form.country.value.trim()
+    address: form.street_address.value.trim() + " " + form.region.value.trim() + " " + form.country.value.trim()
+    //street_address: form.street_address.value.trim(),
+    //region: form.region.value.trim(),
+    //country: form.country.value.trim()
   };
 }
 
