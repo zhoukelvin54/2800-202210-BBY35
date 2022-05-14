@@ -18,11 +18,8 @@ form.addEventListener("submit", handleForm);
 function handleForm(e) {
     e.preventDefault();
     try {
-      let petData = getPetData();
-  
       updateProfile();
-      updatePetInfo(petData);
-  
+      updatePetInfo();
     } catch (err) {
       document.getElementById("error_message").innerText = err;
       return;
@@ -52,11 +49,11 @@ function handleForm(e) {
             }
         }
         return {
-            pet_name: form["name"].value,
+            pet_name: form["pet_name"].value,
             pet_sex: selectedSex,
             pet_species: form["pet_species"].value,
             pet_description: form["pet_description"].value,
-            pet_picture: form["upload_pet_picture"].files[0]
+            pet_picture: form["upload_pet_picture"].files[0].name // TODO Replace with generated name from upload
         }
     }
 
@@ -103,33 +100,34 @@ async function updateProfile() {
 // ============================================================================
 
 async function updatePetInfo() {
-    fetch("/update-pet", {
-            method: "PUT",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                "name": petData.pet_name,
-                "gender": petData.pet_sex,
-                "species": petData.pet_species,
-                "description": petData.pet_description,
-                "photo_url": petData.pet_picture
-            })
-        }).then(async res => {
-        if (res.status == 200) {
-            let data = await res.text();
-            console.log(data);
-            if (data) {
-                let parsed = JSON.parse(data);
-                if (parsed.status == "failure") {
-                    console.log("error");
-                } else {
-                    console.log("success");
-                }
-            }
+  let petData = getPetData();
+  fetch("/update-pet", {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify({
+      "name": petData.pet_name,
+      "gender": petData.pet_sex,
+      "species": petData.pet_species,
+      "description": petData.pet_description,
+      "photo_url": petData.pet_picture
+    })
+  }).then(async res => {
+    if (res.status == 200) {
+      let data = await res.text();
+      console.log(data);
+      if (data) {
+        let parsed = JSON.parse(data);
+        if (parsed.status == "failure") {
+          console.log("error");
+        } else {
+          console.log("success");
+          window.location.assign("/home");
         }
-        }).catch(err => {
-            console.err(err);
-        });
-
+      }
+    }
+  }).catch(err => {
+    console.err(err);
+  });
 }
