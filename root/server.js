@@ -44,11 +44,12 @@ const mysql2 = require("mysql2");
 const { connect } = require("http2");
 
 
-if(is_Heroku) {
+if (is_Heroku) {
     var connection = mysql2.createPool(process.env.JAWSDB_MARIA_URL);
 } else {
     var connection = mysql2.createPool(dbConnection);
 }
+var promiseConnection = connection.promise();
 
 
 connection.getConnection((err) => {
@@ -82,7 +83,7 @@ app.use("/scss", express.static("./root/scss"));
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
-    
+
     // TODO Figure out simplified SQL to insert if not exists.
     connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
         (error, results, fields) => {
@@ -101,7 +102,7 @@ app.post("/add-account", (req, res) => {
                         } else {
                             req.session.newAccount = true;
                             res.send({ status: "success", msg: "Record added." });
-                         }
+                        }
                     });
             }
         });
@@ -109,52 +110,63 @@ app.post("/add-account", (req, res) => {
 
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
-    res.setHeader("Content-Type", "application/json");    
+    res.setHeader("Content-Type", "application/json");
     console.log(req.body);
 
-    let expectedFields = ["firstname" , "lastname", "email", "username", "password", "profile_photo_url", "telephone", "address"];
-    let recievedFields = [];
-    let actualFields = [];
-    let query = "UPDATE BBY35_accounts SET ";
-    let loops = 0; 
-
-    for (let prop in req.body) {
-        loops += 1;
-        if (expectedFields.includes(prop)) {
-            if(Object.keys(req.body).length == loops) {
-                query += prop + " = ? "
-                actualFields.push(req.body[prop]);
-                recievedFields.push(prop);
+    let username = (req.body.username) ? req.body.username : "";
+    let email = (req.body.email) ? req.body.email : "";
+    connection.query("SELECT BBY35_accounts.`username` FROM BBY35_accounts WHERE BBY35_accounts.`username` = ? UNION " +
+        "SELECT BBY35_accounts.`email` FROM BBY35_accounts WHERE BBY35_accounts.`email` = ?;",
+        [username, email],
+        (error, results, fields) => {
+            if (results.length > 0) {
+                res.status(400);
+                return res.send({ status: "failure", msg: "Username or email already taken!" });
             } else {
-            query += prop + " = ?, ";
-            actualFields.push(req.body[prop]);
-            recievedFields.push(prop);
-            }   
+                let expectedFields = ["firstname", "lastname", "email", "username", "password", "profile_photo_url", "telephone", "address"];
+                let recievedFields = [];
+                let actualFields = [];
+                let query = "UPDATE BBY35_accounts SET ";
+                let loops = 0;
+
+                for (let prop in req.body) {
+                    loops += 1;
+                    if (expectedFields.includes(prop)) {
+                        if (Object.keys(req.body).length == loops) {
+                            query += prop + " = ? "
+                            actualFields.push(req.body[prop]);
+                            recievedFields.push(prop);
+                        } else {
+                            query += prop + " = ?, ";
+                            actualFields.push(req.body[prop]);
+                            recievedFields.push(prop);
+                        }
+                    }
+                }
+
+                query += "WHERE id = ?";
+
+                actualFields.push(req.session.userid);
+
+                console.log(actualFields);
+
+                connection.query(query, actualFields, (error, results, fields) => {
+                    if (error) {
+                        res.send({ status: "failure", msg: "Internal Server Error" });
+                    } else {
+                        res.send({ status: "success", msg: "Profile updated." });
+                    }
+                });
+            }
         }
-    }
-
-    query += "WHERE id = ?";
-
-    actualFields.push(req.session.userid);
-
-    console.log(actualFields);
-
-    connection.query(query, 
-        actualFields,
-        (error,results,fields) => {
-            if(error) {
-                res.send({status: "failure", msg: "Internal Server Error" });
-            } else {
-                res.send({status: "success", msg: "Profile updated."});
-            }        
-    });   
+    );
 
 });
 
 app.put("/update-pet", (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    if(req.session.caretaker) {
-        res.send({status: "failure", msg: "Current user is a caretake!"});
+    if (req.session.caretaker) {
+        res.send({ status: "failure", msg: "Current user is a caretake!" });
     }
     console.log(req.body);
     let expectedFields = ["name", "gender", "species", "description", "photo_url"];
@@ -179,7 +191,7 @@ app.put("/update-pet", (req, res) => {
     query += ") ON DUPLICATE KEY UPDATE ";
 
     for (let i = 0; i < recievedFields.length; i++) {
-        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        query += recievedFields[i] + "=VALUES(" + recievedFields[i] + ")";
         if (i == recievedFields.length - 1) {
             query += ";";
         } else {
@@ -187,19 +199,19 @@ app.put("/update-pet", (req, res) => {
         }
     }
 
-    connection.query(query, actualFields, (error,results,fields) => {
-        if(error) {
-            res.send({status: "failure", msg: "Internal Server Error" });
+    connection.query(query, actualFields, (error, results, fields) => {
+        if (error) {
+            res.send({ status: "failure", msg: "Internal Server Error" });
         } else {
-            res.send({status: "success", msg: "Pet details updated."});
-        }        
+            res.send({ status: "success", msg: "Pet details updated." });
+        }
     });
 })
 
-app.put("/update-caretaker-info",  (req, res) => {
+app.put("/update-caretaker-info", (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    if(!req.session.caretaker) {
-        res.send({status: "failure", msg: "Current user is not a caretaker!"});
+    if (!req.session.caretaker) {
+        res.send({ status: "failure", msg: "Current user is not a caretaker!" });
     }
     console.log(req.body);
     let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
@@ -224,7 +236,7 @@ app.put("/update-caretaker-info",  (req, res) => {
     query += ") ON DUPLICATE KEY UPDATE ";
 
     for (let i = 0; i < recievedFields.length; i++) {
-        query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
+        query += recievedFields[i] + "=VALUES(" + recievedFields[i] + ")";
         if (i == recievedFields.length - 1) {
             query += ";";
         } else {
@@ -232,12 +244,12 @@ app.put("/update-caretaker-info",  (req, res) => {
         }
     }
 
-    connection.query(query, actualFields, (error,results,fields) => {
-        if(error) {
-            res.send({status: "failure", msg: "Internal Server Error" });
+    connection.query(query, actualFields, (error, results, fields) => {
+        if (error) {
+            res.send({ status: "failure", msg: "Internal Server Error" });
         } else {
-            res.send({status: "success", msg: "Caretaker information updated."});
-        }        
+            res.send({ status: "success", msg: "Caretaker information updated." });
+        }
     });
 });
 
@@ -265,7 +277,7 @@ function getUserView(req) {
         let pageDOM = new jsdom.JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
-        
+
         return pageDOM.serialize();
     }
 }
@@ -281,7 +293,7 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
     res.setHeader("content-type", "application/json");
-    
+
     let username = req.body.username;
     let password = req.body.password;
     if (username && password) {
@@ -322,7 +334,7 @@ app.get("/sign-up", (req, res) => {
 
 app.put("/sign-up", (req, res) => {
     console.log(req.body);
-    
+
     if (req.session.caretaker) {
         // Handle caretaker req.body
     } else {
@@ -391,33 +403,33 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    res.send( {url: req.file.filename} );
+    res.send({ url: req.file.filename });
 });
 
 app.delete("/delete", async (req, res) => {
     let requesterID = req.session.userid;
     let isRequesterAdmin = req.session.admin;
-    let accountID  = req.body.id;
-    
+    let accountID = req.body.id;
+
     let targetName;
     let isTargetAdmin;
     let adminCount;
-    
+
     async function getTargetInfo(id) {
         await connection.promise()
-        .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
-        .then((data) => {
-            targetName = data[0][0].username;
-            isTargetAdmin = data[0][0].is_admin;
-        });
+            .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
+            .then((data) => {
+                targetName = data[0][0].username;
+                isTargetAdmin = data[0][0].is_admin;
+            });
     }
 
     async function getAdminCount() {
         await connection.promise()
-        .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
-        .then((data) => {
-            adminCount = data[0].length;
-        });
+            .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
+            .then((data) => {
+                adminCount = data[0].length;
+            });
     }
 
     await getTargetInfo(accountID);
@@ -427,76 +439,76 @@ app.delete("/delete", async (req, res) => {
     let areRequesterAndTargetAdmins = (isTargetAdmin && isRequesterAdmin);
     let adminOnAdminDelete = (areRequesterAndTargetAdmins && (adminCount >= 2));
     let adminOnUserDelete = (!isTargetAdmin && isRequesterAdmin);
-    let adminDelete =  (adminOnAdminDelete || adminOnUserDelete);
+    let adminDelete = (adminOnAdminDelete || adminOnUserDelete);
     let allowDelete = (userSelfDelete || adminDelete);
 
     if (allowDelete) {
         connection.query('UPDATE BBY35_accounts SET username = NULL, password = NULL, firstname = "DELETED", lastname = "USER", is_admin = 0  WHERE id = ?', [accountID], async () => {
             await getAdminCount();
             if (adminOnAdminDelete) {
-                res.send({ status: "success", msg: `Removed user: ${targetName}; Remaining admins: ${adminCount}`});
+                res.send({ status: "success", msg: `Removed user: ${targetName}; Remaining admins: ${adminCount}` });
             } else if (userSelfDelete) {
-                res.send({ status: "success", msg: `Your account has been removed.`});
+                res.send({ status: "success", msg: `Your account has been removed.` });
             } else {
-                res.send({ status: "success", msg: `Removed user: ${targetName}`});
+                res.send({ status: "success", msg: `Removed user: ${targetName}` });
             }
         });
     } else {
-        res.send({status: "failure", msg: `Could not remove user ${targetName}` });
+        res.send({ status: "failure", msg: `Could not remove user ${targetName}` });
     }
 });
 
 app.put("/grant", async (req, res) => {
     let isRequesterAdmin = req.session.admin;
-    let accountID  = req.body.id;
+    let accountID = req.body.id;
 
     let targetName;
     let isTargetAdmin;
 
     async function getTargetInfo(id) {
         await connection.promise()
-        .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
-        .then((data) => {
-            targetName = data[0][0].username;
-            isTargetAdmin = data[0][0].is_admin;
-        });
+            .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
+            .then((data) => {
+                targetName = data[0][0].username;
+                isTargetAdmin = data[0][0].is_admin;
+            });
     }
 
     await getTargetInfo(accountID);
 
     if (isRequesterAdmin && !isTargetAdmin) {
         connection.query('UPDATE BBY35_accounts SET is_admin = 1 WHERE id = ?', [accountID], async () => {
-            res.send({status: "success", msg: `User ${targetName} was granted admin privileges`})
+            res.send({ status: "success", msg: `User ${targetName} was granted admin privileges` })
         });
     } else {
-        res.send({status: "failure", msg: `User ${targetName} could not be granted admin privileges`});
+        res.send({ status: "failure", msg: `User ${targetName} could not be granted admin privileges` });
     }
 });
 
 app.put("/revoke", async (req, res) => {
     let requesterID = req.session.userid;
     let isRequesterAdmin = req.session.admin;
-    let accountID  = req.body.id;
-    
+    let accountID = req.body.id;
+
     let targetName;
     let isTargetAdmin;
     let adminCount;
-    
+
     async function getTargetInfo(id) {
         await connection.promise()
-        .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
-        .then((data) => {
-            targetName = data[0][0].username;
-            isTargetAdmin = data[0][0].is_admin;
-        });
+            .query("SELECT username, is_admin FROM BBY35_accounts WHERE id = ?", [id])
+            .then((data) => {
+                targetName = data[0][0].username;
+                isTargetAdmin = data[0][0].is_admin;
+            });
     }
 
     async function getAdminCount() {
         await connection.promise()
-        .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
-        .then((data) => {
-            adminCount = data[0].length;
-        });
+            .query("SELECT id FROM BBY35_accounts WHERE is_admin = 1")
+            .then((data) => {
+                adminCount = data[0].length;
+            });
     }
 
     await getTargetInfo(accountID);
@@ -509,16 +521,16 @@ app.put("/revoke", async (req, res) => {
     if (allowRevoke) {
         connection.query('UPDATE BBY35_accounts SET is_admin = 0  WHERE id = ?', [accountID], async () => {
             await getAdminCount();
-            res.send({ status: "success", msg: `Revoked admin: ${targetName}; Remaining admins: ${adminCount}`});
+            res.send({ status: "success", msg: `Revoked admin: ${targetName}; Remaining admins: ${adminCount}` });
         });
     } else {
-        res.send({status: "failure", msg: `Could not revoke admin ${targetName}` });
+        res.send({ status: "failure", msg: `Could not revoke admin ${targetName}` });
     }
 });
 
 console.log("Starting Server...");
 
-if(is_Heroku) {
+if (is_Heroku) {
     var port = process.env.PORT;
 } else {
     var port = 8000;
