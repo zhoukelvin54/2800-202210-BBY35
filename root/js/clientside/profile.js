@@ -43,8 +43,10 @@ function swapInputToSpan(element) {
   span.id = element.id;
 
   element.parentNode.replaceChild(span, element);
-  element.addEventListener("click", e => {swapSpanToInput(e.target)});
-  swappableElements = document.querySelectorAll(".editable")
+  swappableElements = document.querySelectorAll(".editable");
+  for (let i = 0; i < swappableElements.length; i++) {
+    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
+  }
   console.log(swappableElements);
 }
 
