@@ -112,7 +112,7 @@ app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");    
     console.log(req.body);
 
-    let expectedFields = ["firstname" , "lastname", "email", "password", "profile_photo_url", "telephone", "address"];
+    let expectedFields = ["firstname" , "lastname", "email", "username", "password", "profile_photo_url", "telephone", "address"];
     let recievedFields = [];
     let actualFields = [];
     let query = "UPDATE BBY35_accounts SET ";
