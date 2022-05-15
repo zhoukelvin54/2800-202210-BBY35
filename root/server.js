@@ -108,6 +108,31 @@ app.post("/add-account", (req, res) => {
         });
 });
 
+app.get("/get-profile", (req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    console.log (req.body);
+    let actualFields = [req.session.userid];
+    let query = "SELECT "
+    letloops = 0;
+    for (let prop in req.body) {
+        if (Object.keys(req.body).length == loops) {
+            query += prop
+        }
+        query += prop + ", ";
+        
+    }
+    query += " FROM BBY35_accounts WHERE id = ?"
+    
+    connection.query(query, actualFields, (error, results, fields) => {
+        if (error) {
+            res.send({status: "failure", msg: "Server error"})
+        } else {
+            console.log("profile is ", results)
+            res.send({status: "success", information: results})
+        }
+    })
+}) 
+
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");
@@ -363,18 +388,18 @@ app.get("/profile", (req, res) => {
     let pageDocument = pageDOM.window.document;
     let first_last_name = req.session.name.split(',');
 
-    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.session.profile_photo_url});`;
-    pageDocument.getElementById("username").textContent = req.session.username;
-    pageDocument.getElementById("first_name").textContent = first_last_name[0];
-    pageDocument.getElementById("last_name").textContent = first_last_name[1];
-    pageDocument.getElementById("email").textContent = req.session.email;
+    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.body.profile_photo_url});`;
+    pageDocument.getElementById("username").textContent = req.body.username;
+    pageDocument.getElementById("first_name").textContent = req.body.firstname;
+    pageDocument.getElementById("last_name").textContent = req.body.lastname;
+    pageDocument.getElementById("email").textContent = req.body.email;
 
     res.send(pageDOM.serialize());
 });
 
 app.put("/password-update", (req,res) => {
     res.setHeader("Content-type", "application/json");
-    console.log(req.body);
+    
     connection.query("UPDATE BBY35_accounts SET password = ? WHERE id = ?", 
     [req.body.password, req.session.userid],
     (error, results, fields) => {

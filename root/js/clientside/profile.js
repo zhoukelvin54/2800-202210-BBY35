@@ -4,6 +4,7 @@
 let swappableElements;
 
 document.addEventListener("DOMContentLoaded", () => {
+  getDatabaseData();
   swappableElements = document.querySelectorAll(".editable");
   document.getElementById("save_profile").addEventListener("click", updateProfile);
 
@@ -67,7 +68,7 @@ function swapButtonToInput(e) {
 
   e.target.replaceWith(pwInput);
 
-  pwInput.addEventListener("keyup", (e) => {
+  pwInput.addEventListener("keyup", async (e) => {
     if (e.key == "Enter") {
       let pwButton = document.createElement("button");
       pwButton.setAttribute("onclick", "swapButtonToInput()");
@@ -75,7 +76,7 @@ function swapButtonToInput(e) {
       let password = pwInput.value;
       e.target.replaceWith(pwButton);
 
-      fetch("/password-update", {
+      fetch("/update-profile", {
         method: "PUT",
         headers: {
           "Content-type": "application/json"
@@ -101,6 +102,47 @@ function swapButtonToInput(e) {
     }
   })
 }
+
+// ============================================================================
+// Gets the updated database profile data to update the page on load
+// ============================================================================
+async function getDatabaseData() {
+
+  let neededProfileData = {
+    username: "nothing",
+    firstname: "nothing",
+    lastname: "nothing",
+    email: "nothing",
+    profile_photo_url: "nothing"
+  }
+
+  await fetch("/get-profile", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(neededProfileData)
+  }).then(async res => {
+    let data = await res.text();
+    if (data) {
+      let parsedData = JSON.parse(data);
+      console.log(parsedData);
+      fetch("/get-profile", {
+        method: "GET",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(parsedData)
+      }).catch(err => {
+        document.getElementById("response_message").innerText = err;
+      });
+  }
+  }).catch(err => {
+    document.getElementById("response_message").innerText = err;
+  });
+}
+
+
 // ============================================================================
 // Sends profile information update request from the form.
 // ============================================================================
