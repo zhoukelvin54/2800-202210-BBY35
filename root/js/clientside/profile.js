@@ -43,7 +43,9 @@ function swapInputToSpan(element) {
   span.id = element.id;
 
   element.parentNode.replaceChild(span, element);
+  element.addEventListener("click", e => {swapSpanToInput(e.target)});
   swappableElements = document.querySelectorAll(".editable")
+  console.log(swappableElements);
 }
 
 // ============================================================================
@@ -59,7 +61,7 @@ async function updateProfile() {
   }).then(
     () => {
       document.querySelectorAll("input.editable").forEach(element => {
-        swapInputToSpan(element);
+      swapInputToSpan(element); 
       })
     }
   ).catch(err => {

@@ -23,7 +23,7 @@
     font-size: 17px;
 }
 
-#logout {
+nav form input {
     float: right;
     padding: 15px;
     background-color: #696c72;
@@ -34,7 +34,7 @@
     transition: background-color 0.2s;
 }
 
-#logout:hover {
+nav form input:hover {
     background-color: #3f4041;
     transition: background-color 0.2s;
 }
