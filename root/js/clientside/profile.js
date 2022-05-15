@@ -174,11 +174,14 @@ async function updateProfile() {
         document.querySelectorAll("input.editable").forEach(element => {
           swapInputToSpan(element); 
         });
+        if (profile_picture != null) {
+          document.getElementById("round_img").style=`background-image: url(/img/uploads/${profile_picture});`;
+        }
       } else {
         let data = await res.text();
         if (data) {
           let parsed = JSON.parse(data);
-          document.getElementById("round_img").style=`background-image: url(/img/uploads/${profile_picture[0].name});`;
+          
           if (parsed.status == "failure") {
             document.getElementById("response_message").innerText = parsed.msg;
           } else {
