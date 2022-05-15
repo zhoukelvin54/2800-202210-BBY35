@@ -6,7 +6,9 @@ let swappableElements = document.querySelectorAll(".editable");
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("save_profile").addEventListener("click", updateProfile);
 
-  updateEditableElementEvents();
+  for (let i = 0; i < swappableElements.length; i++) {
+    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
+  }
 });
 
 function swapEditableSpan(element) {
