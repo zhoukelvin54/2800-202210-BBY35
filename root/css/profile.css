@@ -70,11 +70,9 @@ body {
     display: none;
 }
 
-.round_img {
-    width: 100%;
-    height: 0;
-    padding-bottom: 100%;
-    border-radius: 50%;
+.profile_picture {
+    display:grid;
+    grid-template-rows: 80% 20%;
 }
 
 .panel_header {
@@ -103,7 +101,11 @@ body {
     font-family: "Lato", sans-serif;
 }
 
-#profile_picture {
+#round_img {
+    width: 100%;
+    height: 0;
+    padding-bottom: 85%;
+    border-radius: 50%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

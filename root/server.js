@@ -391,12 +391,7 @@ app.get("/profile", (req, res) => {
     */
 });
 
-app.put("/profile-data", (req, res) => {
-    console.log(req.body);
-    
-    res.send(pageDOM.serialize());
-});
-
+/*
 app.put("/password-update", (req,res) => {
     res.setHeader("Content-type", "application/json");
     
@@ -410,6 +405,7 @@ app.put("/password-update", (req,res) => {
         }
     })
 })
+*/
 
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");

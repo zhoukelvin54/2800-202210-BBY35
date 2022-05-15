@@ -1,8 +1,10 @@
 
 "use strict";
 let swappableElements;
-
+let profile_picture;
+let pp_url
 document.addEventListener("DOMContentLoaded", () => {
+  
   getDatabaseData();
   swappableElements = document.querySelectorAll(".editable");
   document.getElementById("save_profile").addEventListener("click", updateProfile);
@@ -106,10 +108,12 @@ function swapButtonToInput(e) {
 // ============================================================================
 // Gets the updated database profile data to update the page on load
 // ============================================================================
-async function getDatabaseData() {
-
+function getDatabaseData() {
+  document.getElementById("upload_picture").addEventListener('change', (e) => {
+    profile_picture = e.target.files;
+  })
    // document.getElementById("profile_picture").style = `background-image: url(/img/uploads/${});`
-  await fetch("/get-profile", {
+  fetch("/get-profile", {
     method: "GET",
     headers: {
       "Content-type": "application/json"
@@ -119,13 +123,12 @@ async function getDatabaseData() {
     let data = await res.text();
     if (data) {
       let parsedData = JSON.parse(data);
-      console.log(parsedData);
       var neededProfileData = parsedData.information[0];
       document.getElementById("username").innerText=neededProfileData.username
       document.getElementById("first_name").innerText=neededProfileData.firstname
       document.getElementById("last_name").innerText=neededProfileData.lastname
       document.getElementById("email").innerText=neededProfileData.email
-      document.getElementById("profile_picture").style=`background-image: url(/img/uploads/${neededProfileData.profile_photo_url});`;
+      document.getElementById("round_img").style.backgroundImage = "url(\"img/uploads/" + neededProfileData.profile_photo_url + "\")";
     } else {
       console.log("failure");
     }
@@ -139,6 +142,24 @@ async function getDatabaseData() {
 // Sends profile information update request from the form.
 // ============================================================================
 async function updateProfile() {
+  pp_url = profile_picture[0].name; 
+  let photo = profile_picture[0];
+
+  const formData = new FormData();
+
+  formData.append("picture", photo)
+
+  console.log(getProfileData());
+
+  await fetch("/addPhoto", {
+    method: "POST",
+    body: formData
+    }).then(res => res.json())
+    .catch(err => {
+      console.error(err);
+      throw err;
+  })
+  
   await fetch("/update-profile", { 
     method: "PUT",
     headers: {
@@ -154,6 +175,7 @@ async function updateProfile() {
         let data = await res.text();
         if (data) {
           let parsed = JSON.parse(data);
+          document.getElementById("round_img").style=`background-image: url(/img/uploads/${pp_url});`;
           if (parsed.status == "failure") {
             document.getElementById("response_message").innerText = parsed.msg;
           } else {
@@ -171,7 +193,7 @@ async function updateProfile() {
 function getProfileData() {
   let data = {};
 
-  document.querySelectorAll("input.editable, input[type='password']").forEach(element => {
+  document.querySelectorAll("input.editable").forEach(element => {
     data[element.id] = element.value.trim();
   });
 
@@ -180,6 +202,7 @@ function getProfileData() {
     firstname: data.first_name,
     lastname: data.last_name,
     email: data.email,
+    profile_photo_url: pp_url
     // password: data.new_password
   }
 }
