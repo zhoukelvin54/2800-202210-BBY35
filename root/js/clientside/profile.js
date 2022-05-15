@@ -1,5 +1,4 @@
-/* jshint esversion: 8 */
-/* jshint browser: true */
+
 "use strict";
 let swappableElements;
 
@@ -11,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   for (let i = 0; i < swappableElements.length; i++) {
     swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
   }
+  
 });
 
 function swapEditableSpan(element) {
@@ -108,35 +108,27 @@ function swapButtonToInput(e) {
 // ============================================================================
 async function getDatabaseData() {
 
-  let neededProfileData = {
-    username: "nothing",
-    firstname: "nothing",
-    lastname: "nothing",
-    email: "nothing",
-    profile_photo_url: "nothing"
-  }
-
+   // document.getElementById("profile_picture").style = `background-image: url(/img/uploads/${});`
   await fetch("/get-profile", {
     method: "GET",
     headers: {
-      "content-type": "application/json"
-    },
-    body: JSON.stringify(neededProfileData)
+      "Content-type": "application/json"
+    }
   }).then(async res => {
+    
     let data = await res.text();
     if (data) {
       let parsedData = JSON.parse(data);
       console.log(parsedData);
-      fetch("/get-profile", {
-        method: "GET",
-        headers: {
-          "content-type": "application/json"
-        },
-        body: JSON.stringify(parsedData)
-      }).catch(err => {
-        document.getElementById("response_message").innerText = err;
-      });
-  }
+      var neededProfileData = parsedData.information[0];
+      document.getElementById("username").innerText=neededProfileData.username
+      document.getElementById("first_name").innerText=neededProfileData.firstname
+      document.getElementById("last_name").innerText=neededProfileData.lastname
+      document.getElementById("email").innerText=neededProfileData.email
+      document.getElementById("profile_picture").style=`background-image: url(/img/uploads/${neededProfileData.profile_photo_url});`;
+    } else {
+      console.log("failure");
+    }
   }).catch(err => {
     document.getElementById("response_message").innerText = err;
   });

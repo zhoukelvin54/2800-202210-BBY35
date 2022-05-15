@@ -109,25 +109,16 @@ app.post("/add-account", (req, res) => {
 });
 
 app.get("/get-profile", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    console.log (req.body);
+    res.setHeader("Content-type", "application/json");
     let actualFields = [req.session.userid];
-    let query = "SELECT "
-    letloops = 0;
-    for (let prop in req.body) {
-        if (Object.keys(req.body).length == loops) {
-            query += prop
-        }
-        query += prop + ", ";
+    let query = "SELECT username, firstname, lastname, email, profile_photo_url"
         
-    }
     query += " FROM BBY35_accounts WHERE id = ?"
     
     connection.query(query, actualFields, (error, results, fields) => {
         if (error) {
             res.send({status: "failure", msg: "Server error"})
         } else {
-            console.log("profile is ", results)
             res.send({status: "success", information: results})
         }
     })
@@ -384,16 +375,25 @@ app.get("/profile", (req, res) => {
     if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
 
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
+    res.send(doc);
+    /*
     let pageDOM = new jsdom.JSDOM(doc);
     let pageDocument = pageDOM.window.document;
     let first_last_name = req.session.name.split(',');
 
-    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.body.profile_photo_url});`;
+    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.session.profile_photo_url});`;
     pageDocument.getElementById("username").textContent = req.body.username;
-    pageDocument.getElementById("first_name").textContent = req.body.firstname;
-    pageDocument.getElementById("last_name").textContent = req.body.lastname;
-    pageDocument.getElementById("email").textContent = req.body.email;
+    pageDocument.getElementById("first_name").textContent = first_last_name[0];
+    pageDocument.getElementById("last_name").textContent = first_last_name[1];
+    pageDocument.getElementById("email").textContent = req.session.email;
+    
+    res.send(pageDOM.serialize());
+    */
+});
 
+app.put("/profile-data", (req, res) => {
+    console.log(req.body);
+    
     res.send(pageDOM.serialize());
 });
 
