@@ -28,9 +28,10 @@ function swapSpanToInput(element) {
   input.value = element.textContent;
   input.classList = element.classList;
   input.id = element.id;
-
-  element.parentNode.replaceChild(input, element);
   swappableElements = document.querySelectorAll(".editable")
+  for (let i = 0; i < swappableElements.length; i++) {
+    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
+  }
 }
 
 function swapInputToSpan(element) {
@@ -42,12 +43,11 @@ function swapInputToSpan(element) {
   span.classList = element.classList;
   span.id = element.id;
 
+  
   element.parentNode.replaceChild(span, element);
+  console.log(element);
+  element.addEventListener("click", e => {swapSpanToInput(e.target)});
   swappableElements = document.querySelectorAll(".editable");
-  for (let i = 0; i < swappableElements.length; i++) {
-    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
-  }
-  console.log(swappableElements);
 }
 
 // ============================================================================
