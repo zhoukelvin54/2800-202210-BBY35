@@ -6,9 +6,7 @@ let swappableElements = document.querySelectorAll(".editable");
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("save_profile").addEventListener("click", updateProfile);
 
-  for (let i = 0; i < swappableElements.length; i++) {
-    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
-  }
+  updateEditableElementEvents();
 });
 
 function swapEditableSpan(element) {
@@ -58,9 +56,9 @@ async function updateProfile() {
     body: JSON.stringify(getProfileData())
   }).then(
     () => {
-      for (let i = 0; i < swappableElements.length; i++) {
-        swapInputToSpan(swappableElements[i]);
-      }
+      document.querySelectorAll("input.editable").forEach(element => {
+        swapInputToSpan(element);
+      })
     }
   ).catch(err => {
     throw err;
@@ -68,14 +66,17 @@ async function updateProfile() {
 }
 
 function getProfileData() {
-  document.querySelectorAll("input[type='text'], input[type='password']").forEach(element => {
-    console.log(element.id);
+  let data = {};
+
+  document.querySelectorAll("input.editable, input[type='password']").forEach(element => {
+    data[element.id] = element.value.trim();
   });
+
   return {
-    username: document.getElementById("username").value.trim(),
-    firstname: document.getElementById("first_name").value.trim(),
-    lastname: document.getElementById("last_name").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    password: document.getElementById("new_password").value.trim()
+    username: data.username,
+    firstname: data.first_name,
+    lastname: data.last_name,
+    email: data.email,
+    password: data.new_password
   }
 }
