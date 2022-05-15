@@ -2,6 +2,7 @@
 "use strict";
 let swappableElements;
 let profile_picture;
+let photo;
 let pp_url
 document.addEventListener("DOMContentLoaded", () => {
   
@@ -110,7 +111,8 @@ function swapButtonToInput(e) {
 // ============================================================================
 function getDatabaseData() {
   document.getElementById("upload_picture").addEventListener('change', (e) => {
-    profile_picture = e.target.files;
+    profile_picture = e.target.files[0].name;
+    photo = e.target.files[0];
   })
    // document.getElementById("profile_picture").style = `background-image: url(/img/uploads/${});`
   fetch("/get-profile", {
@@ -129,6 +131,7 @@ function getDatabaseData() {
       document.getElementById("last_name").innerText=neededProfileData.lastname
       document.getElementById("email").innerText=neededProfileData.email
       document.getElementById("round_img").style.backgroundImage = "url(\"img/uploads/" + neededProfileData.profile_photo_url + "\")";
+      
     } else {
       console.log("failure");
     }
@@ -142,23 +145,23 @@ function getDatabaseData() {
 // Sends profile information update request from the form.
 // ============================================================================
 async function updateProfile() {
-  pp_url = profile_picture[0].name; 
-  let photo = profile_picture[0];
+  if (photo != null) {
+    const formData = new FormData();
 
-  const formData = new FormData();
+    formData.append("picture", photo)
 
-  formData.append("picture", photo)
+    console.log(getProfileData());
 
-  console.log(getProfileData());
-
-  await fetch("/addPhoto", {
-    method: "POST",
-    body: formData
-    }).then(res => res.json())
-    .catch(err => {
-      console.error(err);
-      throw err;
-  })
+    await fetch("/addPhoto", {
+      method: "POST",
+      body: formData
+      }).then(res => res.json())
+      .catch(err => {
+        console.error(err);
+        throw err;
+      })
+  }
+  
   
   await fetch("/update-profile", { 
     method: "PUT",
@@ -175,7 +178,7 @@ async function updateProfile() {
         let data = await res.text();
         if (data) {
           let parsed = JSON.parse(data);
-          document.getElementById("round_img").style=`background-image: url(/img/uploads/${pp_url});`;
+          document.getElementById("round_img").style=`background-image: url(/img/uploads/${profile_picture[0].name});`;
           if (parsed.status == "failure") {
             document.getElementById("response_message").innerText = parsed.msg;
           } else {
@@ -202,7 +205,8 @@ function getProfileData() {
     firstname: data.first_name,
     lastname: data.last_name,
     email: data.email,
-    profile_photo_url: pp_url
+    profile_photo_url: profile_picture
+    
     // password: data.new_password
   }
 }
