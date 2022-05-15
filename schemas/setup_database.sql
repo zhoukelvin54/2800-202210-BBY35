@@ -6,10 +6,13 @@ CREATE DATABASE  IF NOT EXISTS `COMP2800`;
 -- Selects the COMP2800 database to perform creation
 USE `COMP2800`;
 
+SET FOREIGN_KEY_CHECKS=0; -- to disable them
+
+DROP TABLE IF EXISTS `BBY35_caretaker_info`;
 DROP TABLE IF EXISTS `BBY35_pets`;
-DROP TABLE IF EXISTS `BBY35_caretake_info`;
 DROP TABLE IF EXISTS `BBY35_accounts`;
 
+SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
 --
 -- Table structure for table BBY35_pets
 --
