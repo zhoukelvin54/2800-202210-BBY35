@@ -33,9 +33,6 @@ function swapSpanToInput(element) {
   element.parentNode.replaceChild(input, element);
   document.getElementById(element.id).focus();
   swappableElements = document.querySelectorAll(".editable")
-  for (let i = 0; i < swappableElements.length; i++) {
-    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
-  }
 }
 
 function swapInputToSpan(element) {
@@ -52,6 +49,58 @@ function swapInputToSpan(element) {
   swappableElements = document.querySelectorAll(".editable");
 }
 
+// ============================================================================
+// Password swap
+// ============================================================================
+function swapButtonToInput(e) {
+  let attributes = {
+    type: "password",
+    name: "new_password",
+    id: "new_password",
+    placeholder: "New Password"
+  };
+
+  let pwInput = document.createElement("input");
+  for (let [key, value] of Object.entries(attributes)) {
+    pwInput.setAttribute(key, value);
+  }
+
+  e.target.replaceWith(pwInput);
+
+  pwInput.addEventListener("keyup", (e) => {
+    if (e.key == "Enter") {
+      let pwButton = document.createElement("button");
+      pwButton.setAttribute("onclick", "swapButtonToInput()");
+      pwButton.innerHTML = "Change Password?";
+      let password = pwInput.value;
+      e.target.replaceWith(pwButton);
+
+      fetch("/password-update", {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          "password": password
+        })
+      }).then(async res => {
+        if (res.status == 200) {
+          let data = await res.text();
+          if (data) {
+            let parsedData = JSON.parse(data);
+            if (parsedData.status == "success") {
+              document.getElementById("response_message").innerText = parsedData.msg;
+            } else {
+              document.getElementById("response_message").innerText = parsedData.msg;
+            }
+          }
+        }
+      }).catch(err => {
+        console.error(err);
+      })
+    }
+  })
+}
 // ============================================================================
 // Sends profile information update request from the form.
 // ============================================================================

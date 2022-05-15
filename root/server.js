@@ -372,6 +372,20 @@ app.get("/profile", (req, res) => {
     res.send(pageDOM.serialize());
 });
 
+app.put("/password-update", (req,res) => {
+    res.setHeader("Content-type", "application/json");
+    console.log(req.body);
+    connection.query("UPDATE BBY35_accounts SET password = ? WHERE id = ?", 
+    [req.body.password, req.session.userid],
+    (error, results, fields) => {
+        if (error) {
+            res.send({ status: "failure", msg: "Serverside error"});
+        } else {
+            res.send({ status: "success", msg: "Password changed"});
+        }
+    })
+})
+
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.admin) {
