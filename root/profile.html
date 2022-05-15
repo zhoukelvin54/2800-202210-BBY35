@@ -30,15 +30,16 @@
       <div class="panel_header">
         <div class="round_img" id="profile_picture"></div>
         <div id="name_fields">
-          <span id="username" class="name_field">Username</span>
-          <span id="first_name" class="name_field">User's</span>
-          <span id="last_name" class="name_field">Name</span>
+          <span id="username" class="name_field editable">Username</span>
+          <span id="first_name" class="name_field editable">User's</span>
+          <span id="last_name" class="name_field editable">Name</span>
         </div>
       </div>
-      <span id="email" class="input">User@emailservice.com</span>
+      <span id="email" class="input_field editable">User@emailservice.com</span>
 
       <input type="password" name="new_password" id="new_password" placeholder="New Password"/>
-      <input type="submit" value="Save Profile"/>
+      <div id="response_message" class="error"></div>
+      <input id="save_profile" type="button" value="Save Profile"/>
     </main>
     
     <!-- footer -->
