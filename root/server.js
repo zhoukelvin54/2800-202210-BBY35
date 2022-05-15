@@ -51,7 +51,7 @@ if(is_Heroku) {
 }
 
 
-connection.connect((err) => {
+connection.getConnection((err) => {
     if (err) {
         console.error("Error connecting to database: " + err.stack);
         return;
@@ -296,6 +296,7 @@ app.post("/login", (req, res) => {
                 req.session.userid = data[0].id;
                 req.session.admin = data[0].is_admin;
                 req.session.caretaker = data[0].is_caretaker;
+                req.session.profile_photo_url = data[0].profile_photo_url;
                 req.session.save((e) => {
                     if (e) {
                         console.log("Error: " + e);
@@ -348,10 +349,9 @@ app.get("/profile", (req, res) => {
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
     let pageDOM = new jsdom.JSDOM(doc);
     let pageDocument = pageDOM.window.document;
-    let img_location = ""; // TODO FILL IN IMG
     let first_last_name = req.session.name.split(',');
 
-    pageDocument.getElementById("profile_picture").style = `background-image: url(${img_location});`;
+    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.session.profile_photo_url});`;
     pageDocument.getElementById("username").textContent = req.session.username;
     pageDocument.getElementById("first_name").textContent = first_last_name[0];
     pageDocument.getElementById("last_name").textContent = first_last_name[1];
