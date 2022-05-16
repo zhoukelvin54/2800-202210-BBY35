@@ -5,16 +5,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management</title>
+    <title>PetPals</title>
     <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="./css/user_management.css">
+    <link rel="stylesheet" href="css/profile.css">
 </head>
 
 <body>
+    <!--nav bar-->
     <nav class="navbar" id="navContents">
+
         <img src="img/PetPals-logos_white.png" alt="" class="logo">
-        <a href="#home">Home</a>
+        <a href="/home">Home</a>
         <a href="#about">About Us</a>
         <a href="#experiences">Experiences</a>
         <a href="#faqs">FAQs</a>
@@ -24,34 +26,29 @@
         </form>
     </nav>
 
-    <!-- User Management Panel  -->
-    <main id="userManagementPanel">
-        <div class="panel">
-            <h2>User Management</h2>
-            <hr>
-            <table id="userTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Admin</th>
-                        <th>Account Type</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-            </table>
+    <main class="container" id="profile_panel">
+      <div class="panel_header">
+        <div class="profile_picture" >
+          <div id="round_img"></div>
+          <input type="file" id="upload_picture">
         </div>
-    </main>
+        <div id="name_fields">
+          <span id="username" class="name_field editable">Username</span>
+          <span id="first_name" class="name_field editable">User's</span>
+          <span id="last_name" class="name_field editable">Name</span>
+        </div>
+      </div>
+      <span id="email" class="input_field editable">User@emailservice.com</span>
 
+      <button onclick="swapButtonToInput(event)">Change Password?</button>
+      <!-- <input type="password" name="new_password" id="new_password" placeholder="New Password"/> -->
+      <div id="response_message" class="error"></div>
+      <input id="save_profile" type="button" value="Save Profile"/>
+    </main>
+    
     <!-- footer -->
     <footer>
-        <div class="d-sm-none">
+        <div class="sm_hidden">
             <a href="#">FAQ</a>
             <a href="#">Contact Us</a>
             <a href="#">Terms of Use</a>
@@ -61,7 +58,7 @@
         <a href="#">&copy; 2022 | BBY35 </a>
     </footer>
 
-    <script src="js/user_management.js"></script>
+    <script src="js/profile.js"></script>
 </body>
 
 </html>

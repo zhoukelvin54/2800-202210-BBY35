@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Bitter', serif;
 }
 
 .navbar {
@@ -55,7 +57,8 @@ body {
     width: 400px;
     background-color: #343a40;
     box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
-    margin: 100px auto;
+    margin: 0 auto;
+    margin-bottom: 5vh;
 }
 
 .login h1 {
@@ -87,7 +90,8 @@ body {
 
 .login form input[type="password"],
 .login form input[type="text"],
-.login form input[type="email"] {
+.login form input[type="email"],
+.login select {
     width: 310px;
     height: 50px;
     border: 1px solid #dee0e4;
@@ -95,19 +99,14 @@ body {
     padding: 0 15px;
 }
 
-
-.login form input[name="firstname"],
-.login form label[for="firstname"],
-.login form input[name="lastname"],
-.login form label[for="lastname"],
-.login form input[id="email"],
-.login form label[for="email"] {
-    display:none;
+.hidden {
+    display: none !important;
 }
 
 
 
-.login form input[type="submit"] {
+.login form input[type="submit"],
+.login form input[type="button"] {
     width: 100%;
     padding: 15px;
     background-color: #696c72;
@@ -118,7 +117,8 @@ body {
     transition: background-color 0.2s;
 }
 
-.login form input[type="submit"]:hover {
+.login form input[type="submit"]:hover,
+.login form input[type="button"]:hover {
     background-color: #3f4041;
     transition: background-color 0.2s;
 }
@@ -137,29 +137,31 @@ footer a {
     color: white;
 }
 
+#logo {
+    max-width: 40vw;
+    max-height: 30vh;
+    margin: 2rem auto;
+    filter: drop-shadow(5px 5px 5px #222);
+}
+
 #errorMsg {
     color: red;
     padding-bottom: 1rem;
 }
 
-
 @media only screen and (max-width: 768px) {
     nav {
         display: grid;
-
     }
-    
     .navbar a {
         font-size: 13px;
         padding: 7px 9px;
     }
-
-    .d-sm-none {
+    .sm_hidden {
         display: none;
     }
-    
-        .logo {
-            width: 35vw;
-            height: 25vh;
-        }
+    .logo {
+        width: 35vw;
+        height: 25vh;
+    }
 }

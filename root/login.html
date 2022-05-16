@@ -12,21 +12,12 @@
 </head>
 
 <body>
-    <nav class="navbar" id="navContents">
-        <img src="img/PetPals-logos_white.png" alt="" class="logo">
-        <a href="#home">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#experiences">Experiences</a>
-        <a href="#faqs">FAQs</a>
-        <a href="#search">Search</a>
-    </nav>
-
-    <!-- login  -->
+    <img src="/img/PetPals-logos_white.png" alt="PetPals" id="logo"/>
+    <!-- Login Panel  -->
     <main class="login">
-        <form id="login-form">
+        <form id="login_form">
             <h1>Login</h1>
             <label for="username">
-                <!-- font awesome icon -->
                 <i class="material-icons">account_circle</i>
             </label>
             <input type="text" name="username" placeholder="Username" id="username" required/>
@@ -35,32 +26,38 @@
             </label>
             <input type="password" name="password" placeholder="Password" id="password" required/>
 
-            <!--hidden-->
-            <label for="firstname" class="hidden">
-                <i class="material-icons hidden">drive_file_rename_outline</i>
+            <!-- Sign-up details -->
+            <label for="firstname" class="signup hidden">
+                <i class="material-icons">drive_file_rename_outline</i>
             </label>
-            <input type="text" name="firstname" placeholder="First Name" id="firstname" class="hidden" />
-            <label for="lastname" class="hidden">
-                <i class="material-icons hidden">drive_file_rename_outline</i>
+            <input type="text" name="firstname" placeholder="First Name" id="firstname"  class="signup hidden"/>
+            <label for="lastname" class="signup hidden">
+                <i class="material-icons">drive_file_rename_outline</i>
             </label>
-            <input type="text" name="lastname" placeholder="Last Name" id="lastname" class="hidden" />
-            <label for="email" class="hidden">
-                <i class="material-icons hidden">mail</i>
+            <input type="text" name="lastname" placeholder="Last Name" id="lastname"  class="signup hidden"/>
+            <label for="email" class="signup hidden">
+                <i class="material-icons">mail</i>
             </label>
-            <input type="email" placeholder="Email" id="email" class="hidden">
-            <!--hidden-->
+            <input type="email" placeholder="Email" id="email"  class="signup hidden"/>
+            <label for="account_type" class="signup hidden">
+                <i class="material-icons">pets</i>
+            </label>
+            <select name="account_type" id="account_type" class="signup hidden">
+                <option value="0">Pet Owner</option>
+                <option value="1">Caretaker</option>
+            </select>
+            <!-- End of Sign-up details -->
 
             <div id="errorMsg"></div>
-
             <input type="submit" value="Log In" id="login"/>
             <input type="submit" value="Sign Up" id="signup" hidden/>
-            <input type="submit" value="New User?" id="swap" onclick="swapForm()">
+            <input type="button" value="New User?" id="swap" onclick="swapForm()">
         </form>
     </main>
 
     <!-- footer -->
     <footer>
-        <div class="d-sm-none">
+        <div class="sm_hidden">
             <a href="#">FAQ</a>
             <a href="#">Contact Us</a>
             <a href="#">Terms of Use</a>
@@ -70,9 +67,8 @@
         <a href="#">&copy; 2022 | BBY35 </a>
     </footer>
 
+    <script src="/js/login_page.js"></script>
 
-    <script src="/script/signup.js"></script>
-    <script src="/js/login_post.js"></script>
 </body>
 
 </html>

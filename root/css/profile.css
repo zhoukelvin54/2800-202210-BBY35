@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Bitter', serif;
 }
 
 .navbar {
@@ -23,7 +22,7 @@
     font-size: 17px;
 }
 
-nav form input {
+#logout {
     float: right;
     padding: 15px;
     background-color: #696c72;
@@ -34,9 +33,29 @@ nav form input {
     transition: background-color 0.2s;
 }
 
-nav form input:hover {
+#logout:hover {
     background-color: #3f4041;
     transition: background-color 0.2s;
+}
+
+body {
+    background-image: url(../img/dogs.jpg);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: lighten;
+    font-family: 'Bitter', serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding: 2rem;
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .logo {
@@ -49,6 +68,62 @@ nav form input:hover {
 
 .navbar .icon {
     display: none;
+}
+
+.profile_picture {
+    display:grid;
+    grid-template-rows: 80% 20%;
+}
+
+.panel_header {
+    display: grid;
+    grid-template-columns: 30% 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.name_field {
+    display: flex;
+    align-items: center;
+}
+
+.input_field {
+    min-height: 2.5rem;
+    width: 100%;
+    display: block;
+}
+
+#profile_panel {
+    background-color: #343a40;
+    color: white;
+    border-radius: 2rem;
+    font-family: "Lato", sans-serif;
+}
+
+#round_img {
+    width: 100%;
+    height: 0;
+    padding-bottom: 85%;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url("../img/body.jpg");
+}
+
+#name_fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#name_fields span, #profile_panel input {
+    min-height: 2.5rem;
+    width: 100%;
+}
+
+#username {
+    grid-column: span 2;
 }
 
 #content-img {
@@ -65,23 +140,6 @@ nav form input:hover {
 #content-text {
     text-align: center;
     padding-top: 2vh;
-}
-
-#welcome-img {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/dogs.jpg);
-    background-size: cover;
-    background-position: center;
-    font-family: "Poppins", sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    min-width: 100vh;
-}
-
-#welcome-text {
-    text-align: center;
-    padding-top: 50vh;
-    color: white;
 }
 
 footer {
@@ -110,15 +168,12 @@ footer a {
         width: 100vw;
         float: none;
     }
-    .d-sm-none {
+    .sm_hidden {
         display: none;
     }
     .logo {
         width: 35vw;
         height: 25vh;
-    }
-    #welcome-img {
-        min-width: 60vw;
     }
     #content-img {
         min-width: 60vw;
