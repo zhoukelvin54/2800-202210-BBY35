@@ -4,6 +4,8 @@
 
 "use strict";
 
+import * as helpers from "./js/serverside/helpers.js";
+
 // Constants
 const express = require("express");
 const session = require("express-session");
