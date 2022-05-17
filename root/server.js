@@ -4,24 +4,31 @@
 
 "use strict";
 
-// Variables
+// Constant Variables
 const SALT_ROUNDS = 10;
 
-// Constants
+// App import statements
+import * as helpers from "./js/serverside/helpers.js";
+import * as mysql2 from "mysql2";
+import express from "express";
+import bcrypt from "bcrypt";
+import session from "express-session";
+import { JSDOM } from "jsdom";
+import bodyParser from "body-parser";
+import fs from "fs";
+import { readFile } from "fs/promises";
+import multer from "multer";
+import sanitizeHtml from "sanitize-html";
 
-const bcrypt = require("bcrypt");
-const express = require("express");
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const fs = require("fs");
-const jsdom = require("jsdom");
-const http = require("http");
-const https = require("https");
+// Unused, to be implemented requires constants
+// const http = require("http");
+// Used for Secure HTTP connection
+// const https = require("https");
 // tiny-editor requires that there be a document object from HTML; 
 // as there is no HTML element just yet, it is safe to comment out
-// const tinyeditor = require("tiny-editor"); 
-const sanitize = require("sanitize-html");
-const multer = require("multer");
+// const tinyeditor = require("tiny-editor");
+// HTTP2 used for faster client connections via multiplexing
+// const { connect } = require("http2");
 
 const is_Heroku = process.env.is_Heroku || false;
 
@@ -44,10 +51,6 @@ const dbConnection = {
     database: "COMP2800",
     port: 3306
 };
-
-const mysql2 = require("mysql2");
-const { connect } = require("http2");
-
 
 if (is_Heroku) {
     var connection = mysql2.createPool(process.env.JAWSDB_MARIA_URL);
@@ -295,7 +298,7 @@ function getUserView(req) {
     } else {
         // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
-        let pageDOM = new jsdom.JSDOM(doc);
+        let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
 
