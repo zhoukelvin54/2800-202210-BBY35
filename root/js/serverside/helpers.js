@@ -2,6 +2,20 @@ import { JSDOM } from 'jsdom';
 import { readFile } from 'node:fs/promises';
 
 /**
+ * Redirects non-logged-in users to the `'/login'` route.
+ * @param {Response} res - Response object, may get redirected
+ * @returns `true` if the user was redirected, `false` otherwise.
+ */
+ function redirectToLogin(req, res) {
+	if (!req.session || !req.session.loggedIn) {
+		res.redirect("/login");
+		return true;
+	}
+	return false;
+}
+
+
+/**
  * Uses {@link loadHTMLComponent} to inject the header and footer into their tags.
  * @param { jsdom.JSDOM } baseDOM - DOM object to place template into.
  * @returns { jsdom.JSDOM } The original DOM object, modified.
@@ -33,8 +47,8 @@ async function loadHTMLComponent(baseDOM, templateSelector, templateLocation) {
 
 /**
  * Crafts an SQL query in the format of 
- * "INSERT INTO table (`{key_column}`, `{Recieved fields}`, [...]) VALUES (?, [...])
- * ON DUPLICATE KEY UPDATE {Recieved field}=VALUES(Recieved field), [...]"
+ * "INSERT INTO table (`key_column`, `Recieved fields`, [...]) VALUES (?, [...])
+ * ON DUPLICATE KEY UPDATE `recievedFields`}=VALUES(`recievedFields`), [...]"
  * 
  * @author Dakaro Mueller
  * @param {Request} req Request object with a body containing the JSON values under the columns to update.
@@ -90,4 +104,10 @@ function getFieldsFromRequest(req, expectedFields) {
   return { "recievedFields": recievedFields, "fieldValues": fieldValues }
 }
 
-export { injectHeaderFooter, loadHTMLComponent, craftInsertUpdateQueryFromRequest };
+// Functions to export out
+export {
+  injectHeaderFooter,
+  loadHTMLComponent,
+  craftInsertUpdateQueryFromRequest,
+  redirectToLogin
+};
