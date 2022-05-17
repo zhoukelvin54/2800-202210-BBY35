@@ -72,6 +72,21 @@ CREATE TABLE `BBY35_caretaker_info` (
   CONSTRAINT `account_id` FOREIGN KEY (`account_id`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Table structure for table BBY35_images
+--
+
+CREATE TABLE `BBY35_images` (
+  `uploader_id` tinyint NOT NULL,
+  `uploader_username`varchar(20) NOT NULL,
+  `img_name` varchar(255) NOT NULL,
+  `upload_time` varchar(255) DEFAULT NULL,
+  `img_type` varchar(20) DEFAULT NULL,
+  KEY `uploader_id_idx` (`uploader_id`),
+  key `uploader_name_idx` (`uploader_username`),
+  CONSTRAINT `uploader_id` FOREIGN KEY (`uploader_id`) REFERENCES `BBY35_accounts` (`id`),
+  CONSTRAINT `uploader_username` FOREIGN KEY (`uploader_username`) REFERENCES `BBY35_accounts` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 --------------------------------------------------------
@@ -209,3 +224,7 @@ INSERT INTO `BBY35_caretaker_info`
           '', NULL,
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
+
+--------------------------------------------------------
+--Add data to BBY35_images table
+--------------------------------------------------------
