@@ -72,6 +72,21 @@ CREATE TABLE `BBY35_caretaker_info` (
   CONSTRAINT `account_id` FOREIGN KEY (`account_id`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Table structure for table BBY35_images
+--
+
+CREATE TABLE `BBY35_images` (
+  `uploader_id` tinyint NOT NULL,
+  `uploader_username`varchar(20) NOT NULL,
+  `img_name` varchar(255) NOT NULL,
+  `upload_time` varchar(255) DEFAULT NULL,
+  `img_type` varchar(20) DEFAULT NULL,
+  KEY `uploader_id_idx` (`uploader_id`),
+  key `uploader_name_idx` (`uploader_username`),
+  CONSTRAINT `uploader_id` FOREIGN KEY (`uploader_id`) REFERENCES `BBY35_accounts` (`id`),
+  CONSTRAINT `uploader_username` FOREIGN KEY (`uploader_username`) REFERENCES `BBY35_accounts` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
 --------------------------------------------------------
@@ -209,3 +224,29 @@ INSERT INTO `BBY35_caretaker_info`
           '', NULL,
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
+
+--------------------------------------------------------
+--Add data to BBY35_images table
+--------------------------------------------------------
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (1,1,4,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (2,1,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (3,2,3,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (4,2,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (5,3,2,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (6,3,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (7,4,1,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
+
+INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (8,4,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
+
+
+
+
+--------------------------------------------------------
+--Add data to BBY35_caretaker_info table
+--------------------------------------------------------
