@@ -53,6 +53,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     table.appendChild(row);
   });
+
+  FORM.addEventListener("submit", (event) => {
+    event.preventDefault();
+    add();
+  })
 });
 
 // ============================================================================
@@ -185,7 +190,8 @@ function add() {
           if (data) {
               let parsedData = JSON.parse(data);
               if (parsedData.status == "success") {
-                  window.reload();
+                window.confirm(parsedData.msg);
+                location.reload();
               } else {
                   document.getElementById("errorMsg").innerText = parsedData.msg;
               }
