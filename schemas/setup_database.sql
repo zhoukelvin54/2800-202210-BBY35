@@ -75,7 +75,7 @@ CREATE TABLE `BBY35_caretaker_info` (
 
 
 --------------------------------------------------------
---Add data to BBY35_accounts table
+--Add data to BBY35_accounts table (All passwords '12345')
 --------------------------------------------------------
 INSERT INTO BBY35_accounts (id, username, firstname, lastname, 
 email, password, is_admin, is_caretaker) VALUES (
