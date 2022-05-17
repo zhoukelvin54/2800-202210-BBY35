@@ -460,7 +460,9 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    res.send({ url: req.file.filename });
+    let truncatedPath = req.file.path.replace("root/img/uploads/", "");
+    console.log(truncatedPath);
+    res.send({ url: truncatedPath });
 });
 
 app.delete("/delete", async (req, res) => {
