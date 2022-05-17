@@ -10,9 +10,11 @@ SET FOREIGN_KEY_CHECKS=0; -- to disable them
 
 DROP TABLE IF EXISTS `BBY35_caretaker_info`;
 DROP TABLE IF EXISTS `BBY35_pets`;
+DROP TABLE IF EXISTS `BBY35_images`;
 DROP TABLE IF EXISTS `BBY35_accounts`;
 
 SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
+
 --
 -- Table structure for table BBY35_pets
 --
@@ -35,6 +37,7 @@ CREATE TABLE `BBY35_accounts` (
 --
 -- Table structure for table BBY35_pets
 --
+
 CREATE TABLE `BBY35_pets` (
   `id` int NOT NULL AUTO_INCREMENT,
   `owner_id` int NOT NULL,
@@ -77,21 +80,19 @@ CREATE TABLE `BBY35_caretaker_info` (
 --
 
 CREATE TABLE `BBY35_images` (
-  `uploader_id` tinyint NOT NULL,
+  `uploader_id` int NOT NULL,
   `uploader_username`varchar(20) NOT NULL,
   `img_name` varchar(255) NOT NULL,
   `upload_time` varchar(255) DEFAULT NULL,
   `img_type` varchar(20) DEFAULT NULL,
   KEY `uploader_id_idx` (`uploader_id`),
-  key `uploader_name_idx` (`uploader_username`),
-  CONSTRAINT `uploader_id` FOREIGN KEY (`uploader_id`) REFERENCES `BBY35_accounts` (`id`),
-  CONSTRAINT `uploader_username` FOREIGN KEY (`uploader_username`) REFERENCES `BBY35_accounts` (`username`)
+  CONSTRAINT `uploader_id` FOREIGN KEY (`uploader_id`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
---------------------------------------------------------
---Add data to BBY35_accounts table (All passwords '12345')
---------------------------------------------------------
+--
+-- Add data to BBY35_accounts table (All passwords '12345')
+--
 INSERT INTO BBY35_accounts (id, username, firstname, lastname, 
 email, password, is_admin, is_caretaker) VALUES (
 1, 'kzhou', 'Kelvin', 'Zhou', 'szhou54@my.bcit.ca', '$2b$10$vAtaahOy4/IHyER30cSC.uqpHHawpIf1kbMNQJTAM73ABVjUr3iMS', 0, 0);
@@ -144,10 +145,7 @@ INSERT INTO BBY35_accounts (id, username, firstname, lastname,
 email, password, is_admin, is_caretaker) VALUES (
 13, 'user3', 'End', 'User', 'user@email.com', '$2b$10$vAtaahOy4/IHyER30cSC.uqpHHawpIf1kbMNQJTAM73ABVjUr3iMS', 0, 0);
 
-
---------------------------------------------------------
---Add data to BBY35_pets table
---------------------------------------------------------
+-- Add data to BBY35_pets table
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (1,1,4,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow');
 
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (2,1,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
@@ -165,11 +163,7 @@ INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`speci
 INSERT INTO BBY35_pets (`id`,`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`) VALUES (8,4,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark');
 
 
-
-
---------------------------------------------------------
---Add data to BBY35_caretaker_info table
---------------------------------------------------------
+-- Add data to BBY35_caretaker_info table
 INSERT INTO `BBY35_caretaker_info`
   (`account_id`,
   `animal_affection`,
@@ -225,6 +219,6 @@ INSERT INTO `BBY35_caretaker_info`
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
 
---------------------------------------------------------
---Add data to BBY35_images table
---------------------------------------------------------
+-- 
+-- Add data to BBY35_images table
+-- 
