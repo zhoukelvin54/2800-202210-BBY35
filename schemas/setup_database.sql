@@ -23,7 +23,7 @@ CREATE TABLE `BBY35_accounts` (
   `firstname` varchar(45) DEFAULT NULL,
   `lastname` varchar(45) DEFAULT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(20),
+  `password` varchar(100),
   `is_admin` tinyint NOT NULL DEFAULT '0',
   `is_caretaker` tinyint NOT NULL DEFAULT '0',
   `profile_photo_url` varchar(255) DEFAULT NULL,

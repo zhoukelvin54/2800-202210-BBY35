@@ -320,8 +320,16 @@ app.post("/login", (req, res) => {
     if (username) {
         connection.query("SELECT * FROM BBY35_accounts WHERE username = ?", [username], async (err, data, fields) => {
             if (err) throw err;
-            let passwordPatches = await bcrypt.compare(data[0].password, password)
-            if (data.length > 0 && passwordPatches) {
+            
+            console.log(password)
+                console.log(data[0].password)
+            let passwordMatches = await bcrypt.compare(await password, await data[0].password, (err, result) => {
+                console.log(password)
+                console.log(data[0].password)
+                return result;
+            });
+
+            if (data.length > 0 && passwordMatches) {
                 req.session.loggedIn = true;
                 req.session.username = data[0].username;
                 req.session.name = data[0].firstname + "," + data[0].lastname;
