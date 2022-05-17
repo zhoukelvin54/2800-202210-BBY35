@@ -4,7 +4,12 @@
 
 "use strict";
 
+// Variables
+const SALT_ROUNDS = 10;
+
 // Constants
+
+const bcrypt = require("bcrypt");
 const express = require("express");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -86,7 +91,7 @@ app.post("/add-account", (req, res) => {
 
     // TODO Figure out simplified SQL to insert if not exists.
     connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
-        (error, results, fields) => {
+        async (error, results, fields) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
             } else if (results.length > 0) {
@@ -95,7 +100,7 @@ app.post("/add-account", (req, res) => {
                 connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker)" +
                     "values (?, ?, ?, ?, ?, ?)",
                     [req.body.username, req.body.firstname, req.body.lastname,
-                    req.body.email, req.body.password, req.body.account_type],
+                    req.body.email, await bcrypt.hash(req.body.password, SALT_ROUNDS), req.body.account_type],
                     (error, results, fields) => {
                         if (error) {
                             res.send({ status: "failure", msg: "Internal Server Error" });
@@ -312,10 +317,11 @@ app.post("/login", (req, res) => {
 
     let username = req.body.username;
     let password = req.body.password;
-    if (username && password) {
-        connection.query("SELECT * FROM BBY35_accounts WHERE username = ? AND password = ?", [username, password], (err, data, fields) => {
+    if (username) {
+        connection.query("SELECT * FROM BBY35_accounts WHERE username = ?", [username], async (err, data, fields) => {
             if (err) throw err;
-            if (data.length > 0) {
+            let passwordMatches = await bcrypt.compare(password, data[0].password);
+            if (data.length > 0 && passwordMatches) {
                 req.session.loggedIn = true;
                 req.session.username = data[0].username;
                 req.session.name = data[0].firstname + "," + data[0].lastname;
