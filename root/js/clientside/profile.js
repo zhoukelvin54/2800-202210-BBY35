@@ -3,7 +3,9 @@
 let swappableElements;
 let profile_picture;
 let photo;
-let pp_url
+
+let server_url;
+
 document.addEventListener("DOMContentLoaded", () => {
   
   getDatabaseData();
@@ -156,6 +158,10 @@ async function updateProfile() {
       method: "POST",
       body: formData
       }).then(res => res.json())
+      .then(res => {
+        server_url = res.url;
+        console.log(server_url);
+      })
       .catch(err => {
         console.error(err);
         throw err;
@@ -208,7 +214,7 @@ function getProfileData() {
     firstname: data.first_name,
     lastname: data.last_name,
     email: data.email,
-    profile_photo_url: profile_picture
+    profile_photo_url: server_url
     
     // password: data.new_password
   }
