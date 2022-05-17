@@ -321,13 +321,8 @@ app.post("/login", (req, res) => {
         connection.query("SELECT * FROM BBY35_accounts WHERE username = ?", [username], async (err, data, fields) => {
             if (err) throw err;
             
-            console.log(password)
-                console.log(data[0].password)
-            let passwordMatches = await bcrypt.compare(await password, await data[0].password, (err, result) => {
-                console.log(password)
-                console.log(data[0].password)
-                return result;
-            });
+            
+            let passwordMatches = await bcrypt.compare(await password, await data[0].password);
 
             if (data.length > 0 && passwordMatches) {
                 req.session.loggedIn = true;
