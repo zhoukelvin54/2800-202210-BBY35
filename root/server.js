@@ -563,25 +563,6 @@ app.put("/revoke", async (req, res) => {
     }
 });
 
-app.post("/add", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-
-    let isRequesterAdmin = req.session.admin;
-
-    if (isRequesterAdmin) {
-        connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker) VALUES (?, ?, ?, ?, ?, ?)", 
-        [req.body.username, req.body.firstname, req.body.lastname, req.body.email, req.body.password, req.body.account_type], (error, data, fields) => {
-            if (error) {
-                res.send({ status: "failure", msg: "Internal Server Error" });
-            } else {
-                res.send({ status: "success", msg: "Record added." });
-            }
-        });
-    } else {
-        res.send({ status: "failure", msg: "Forbidden." });
-    }
-});
-
 console.log("Starting Server...");
 
 if (is_Heroku) {
