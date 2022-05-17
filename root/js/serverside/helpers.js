@@ -17,31 +17,38 @@ import { readFile } from 'node:fs/promises';
 
 /**
  * Uses {@link loadHTMLComponent} to inject the header and footer into their tags.
- * @param { jsdom.JSDOM } baseDOM - DOM object to place template into.
- * @returns { jsdom.JSDOM } The original DOM object, modified.
+ * @param { JSDOM } baseDOM - DOM object to place template into.
+ * @returns { JSDOM } The original DOM object, modified.
  */
 async function injectHeaderFooter(baseDOM) {
+  const headerSelector  = "header";
+  const footerSelector = "footer";
+
   // Inject the header navigation
-  baseDOM = await loadHTMLComponent(baseDOM, "header", "/common/navbar.html");
+  baseDOM = await loadHTMLComponent(baseDOM, headerSelector, headerSelector, "./root/common/navbar.html");
   // Inject the footer navigation
-  baseDOM = await loadHTMLComponent(baseDOM, "footer", "/common/footer.html");
+  baseDOM = await loadHTMLComponent(baseDOM, footerSelector, footerSelector, "./root/common/footer.html");
+  return baseDOM;
 }
 
 /**
- * Loads an HTML component from the filesystem into a DOM object using a selector.
- * @param { jsdom.JSDOM } baseDOM - DOM object to modify.
+ * Loads an HTML component's innerHTML from the filesystem into a DOM object using a selector.
+ * @param { JSDOM } baseDOM - DOM object to modify.
  * @param { String } templateSelector - CSS selector of the template element.
+ * @param { String } templateSelector - CSS selector of the component element.
  * @param { String } templateLocation - File path to template element location.
- * @returns { jsdom.JSDOM } The original DOM object, modified.
+ * @returns { JSDOM } The original DOM object, modified.
  */
-async function loadHTMLComponent(baseDOM, templateSelector, templateLocation) {
+async function loadHTMLComponent(baseDOM, templateSelector, componentSelector, templateLocation) {
   // Get the placeholder element to replace.
   const placeholderElement = baseDOM.window.document.querySelector(templateSelector) ;
   // Load and parse the requested component.
   const componentFile = await readFile(templateLocation, "utf-8");
-  const componentDoc = JSDOM.parse(componentFile).window.document;
 
-  placeholderElement.innerHTML = componentDoc.firstElementChild.innerHTML;
+  if (componentFile && placeholderElement) {
+    const componentDoc = new JSDOM(componentFile).window.document;
+    placeholderElement.innerHTML = componentDoc.querySelector(componentSelector).innerHTML;
+  }
   return baseDOM;
 }
 
