@@ -11,12 +11,19 @@ body {
   margin: 0;
 }
 
+header {
+  position: sticky;
+  top: 0;
+}
+
 main {
   min-height: 100vh;
 }
 
 footer {
   justify-content: center;
+  position: sticky;
+  bottom: 0;
 }
 
 .navbar {
@@ -45,7 +52,6 @@ footer {
 }
 
 #top_navigation {
-  position: sticky;
   display: grid;
   justify-items: right;
 }
