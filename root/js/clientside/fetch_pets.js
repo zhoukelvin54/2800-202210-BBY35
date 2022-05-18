@@ -14,7 +14,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (field == "photo_url") {
                 innerText = `<img src="/img/uploads/${pet[field]}" alt="${pet["name"]}" width="160" height="160">`;
             } else if (field == "status") {
-                innerText = pet[field] == 0 ? "Home" : "Away"
+                let state = ""
+                let allowChange = false;
+                let status = pet['status'];
+                if (status == 0) {
+                    state = "Home"
+                    allowChange = true;
+                } else if (status == 1) {
+                    state = "Away"
+                } else {
+                    state = "Pending"
+                    allowChange = true;
+                }
+                
+                let button = allowChange ? `<button onclick="changePetState(${pet["id"]})">Change</button>` : `<button disabled>Disabled</button>`
+                
+                innerText = 
+                `
+                    ${state}
+                    <br>
+                    ${button}
+                `
             } else if (field == "caretaker_id") {
                 if (pet[field] == null) {
                     innerText = "None";
