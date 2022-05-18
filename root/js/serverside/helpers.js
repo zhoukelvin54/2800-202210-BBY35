@@ -64,7 +64,8 @@ function injectScript(baseDOM, scriptLocation, type) {
   script.setAttribute("src", scriptLocation);
   if (type) {
     // Default to using async loading if type isn't defined properly.
-    script.toggleAttribute(type.toLowerCase == "defer" ? "defer" : "async");
+    type = type.toLowerCase() == "defer" ? "defer" : "async";
+    script.toggleAttribute(type);
   }
 
   doc.head.appendChild(script);
