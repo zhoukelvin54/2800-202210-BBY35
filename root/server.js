@@ -458,6 +458,28 @@ app.post("/getUserInfo", (req, res) => {
     });
 });
 
+app.put("/requestHousing", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+
+    connection.query(`SELECT status FROM BBY35_pets WHERE id = ?`, [petid], async (err, data, fields) => {
+        let status = data[0]['status'];
+        if (status == 1) {
+            res.send({status: "failure", msg: "Pet is away."});
+        } else {
+            if (status == 0) {
+                connection.query(`UPDATE BBY35_pets SET status = 2 WHERE id = ?`, [petid], () => {
+                    res.send({status: "success", msg: "Pet is now pending caretaker."});
+                });
+            } else {
+                connection.query(`UPDATE BBY35_pets SET status = 0 WHERE id = ?`, [petid], () => {
+                    res.send({status: "success", msg: "Pet is now returned home."});
+                });
+            }
+        }
+    });
+});
+
 // this route is for testing and example purposes only and should be cleaned up once the forms requiring image upload are completed
 app.get("/addPhoto", (req, res) => {
     let doc = fs.readFileSync("./root/addphoto.html", "utf-8");
