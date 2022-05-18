@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         table.appendChild(row);
     }
     
-    let table2 = document.getElementById("caretaker-panel").querySelector("tbody");
+    let table2 = document.getElementById("pet-table2").querySelector("tbody");
     let requestData = await getRequests();
     if (requestData.length >= 1) {
         requestData.forEach( (pet) => {
