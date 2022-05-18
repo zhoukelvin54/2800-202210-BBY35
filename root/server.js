@@ -45,10 +45,26 @@ const is_Heroku = process.env.is_Heroku || false;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./root/img/uploads");
+        let id = req.session.userid;
+        let dir = `./root/img/uploads/${id}/`;
+        fs.mkdir(dir, (exists) => {
+            if (!exists) {
+                console.log("Path does not exist, creating: " + dir);
+            }
+        });
+
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname.split("/").pop().trim());
+        let id = req.session.userid;
+        
+        let input = file.originalname;
+        let extensionIndex = input.lastIndexOf(".");
+        let extension = input.substring(extensionIndex);
+
+        let fileString = `UserID-${id}-UploadedAt-${Date.now()}${extension}` 
+        
+        cb(null, fileString);
     }
 });
 const upload = multer({ storage: storage });
@@ -440,7 +456,9 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    res.send({ url: req.file.filename });
+    let truncatedPath = req.file.path.replace("root/img/uploads/", "");
+    console.log(truncatedPath);
+    res.send({ url: truncatedPath });
 });
 
 app.delete("/delete", async (req, res) => {
