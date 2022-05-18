@@ -465,7 +465,7 @@ app.post("/getUserInfo", (req, res) => {
     res.setHeader("content-type", "application/json");
     let userid = req.body.userid;
 
-    connection.query(`SELECT username, firstname, lastname, email FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
+    connection.query(`SELECT username, firstname, lastname, email, is_caretaker FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
         res.send(data);
     });
 });
