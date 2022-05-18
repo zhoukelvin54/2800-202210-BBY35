@@ -1,62 +1,41 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>pp</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/pet_details_form.css">
-    </head>
-    <body>
-        <div id="add_pet_modal">
-            <!--modal button-->
-            <button onclick="showModal()" id="add_pet">Add Pet</button>
+<div id="add_pet_modal">
+    <!--modal button-->
+    <button onclick="showModal()" id="add_pet">Add Pet</button>
 
-            <!--modal content-->
+    <!--modal content-->
 
-            <form id="pet_details_form" hidden>
+    <form id="pet_details_form" hidden>
 
-                <fieldset class="form_panel">
-                    <legend>Pet Details <span class="cancel">&#10006;</span></legend>
+        <fieldset class="form_panel">
+            <legend>Pet Details <span class="cancel">&#10006;</span></legend>
 
-                    <div class="inline_form_group">
-                        <label for="pet_name">Name:</label>
-                        <input type="text" id="pet_name" required>
-                    </div>
-                    <div class="inline_form_group">
-                        <label>Sex:</label>
-                        <div class="radio_button">
-                            <label class="radio_label" for="male">Male</label>
-                            <input type="radio" value="M" id="male" name="pet_sex" required>
-                            <label class="radio_label" for="female">Female</label>
-                            <input type="radio" value="F" id="female" name="pet_sex">
-                        </div>
-                    </div>
-                    <div class="inline_form_group">
-                        <label for="pet_species">Species:</label>
-                        <input type="text" name="pet_species" id="pet_species" required>
-                    </div>
-                    <div class="form_group">
-                        <label for="pet_description">Description:</label>
-                        <textarea class="text_area" name="pet_description" id="pet_description" required></textarea>
-                    </div>
-                    <div class="form_group">
-                        <label for="upload_pet_picture">Upload Pet Picture:</label>
-                        <input type="file" name="upload_pet_picture" id="upload_pet_picture" required />
-                    </div>
+            <div class="inline_form_group">
+                <label for="pet_name">Name:</label>
+                <input type="text" id="pet_name" required>
+            </div>
+            <div class="inline_form_group">
+                <label>Sex:</label>
+                <div class="radio_button">
+                    <label class="radio_label" for="male">Male</label>
+                    <input type="radio" value="M" id="male" name="pet_sex" required>
+                    <label class="radio_label" for="female">Female</label>
+                    <input type="radio" value="F" id="female" name="pet_sex">
+                </div>
+            </div>
+            <div class="inline_form_group">
+                <label for="pet_species">Species:</label>
+                <input type="text" name="pet_species" id="pet_species" required>
+            </div>
+            <div class="form_group">
+                <label for="pet_description">Description:</label>
+                <textarea class="text_area" name="pet_description" id="pet_description" required></textarea>
+            </div>
+            <div class="form_group">
+                <label for="upload_pet_picture">Upload Pet Picture:</label>
+                <input type="file" name="upload_pet_picture" id="upload_pet_picture" required />
+            </div>
 
-                    <input class="submit_button" type="submit" value="Submit" />
-                </fieldset>
-            </form>
-        </div>
-
-        <script>
-            function showModal() {
-                document.getElementById("pet_details_form").style.display="block";
-            }
-
-            document.querySelector(".cancel").onclick = function hideModal() {
-                document.getElementById("pet_details_form").style.display="none";
-            }
-        </script>
-    </body>
-</html>
+            <input class="submit_button" type="submit" value="Submit" />
+        </fieldset>
+    </form>
+</div>

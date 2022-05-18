@@ -303,19 +303,24 @@ app.get("/home", (req, res) => {
     }
 });
 
-function getUserView(req) {
+async function getUserView(req) {
     if (req.session.admin) {
         return fs.readFileSync("./root/user_management.html", "utf-8");
     } else {
         // TODO Get individual account view
+        var index;
         let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
         if (!req.session.caretaker){
             //update path 
-            pageDOM = await helpers.injectModal(baseDOM);
-            pageDOM.window.document.header.appendChild("<link rel='stylesheet' href='css/pet_details_form.css'>");
+            let link = pageDOM.window.document.createElement("link");
+            link.setAttribute("rel","stylesheet");
+            link.setAttribute("href", "css/pet_details_form.css");
+            console.log(link);
+            pageDOM.window.document.head.appendChild(link);
+            index = await helpers.injectModal(pageDOM);
         }
         return pageDOM.serialize();
     }

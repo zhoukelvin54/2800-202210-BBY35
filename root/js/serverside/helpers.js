@@ -40,8 +40,6 @@ async function injectModal(baseDOM) {
   // baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/caretaker_modal.html")
   baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/pets_modal.html");
 
-  // Inject scrip component
-  baseDOM = await loadHTMLComponent(baseDOM, modalScript, modalScript, "./root/common/pets_modal.html");
   return baseDOM;
 }
 

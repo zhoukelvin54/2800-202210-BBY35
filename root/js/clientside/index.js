@@ -19,3 +19,11 @@ if(sawWelcome = "true") {
     hidehero();
     console.log("you already saw this!")
 }
+
+function showModal() {
+    document.getElementById("pet_details_form").style.display="block";
+}
+
+document.querySelector(".cancel").onclick = function hideModal() {
+    document.getElementById("pet_details_form").style.display="none";
+}
