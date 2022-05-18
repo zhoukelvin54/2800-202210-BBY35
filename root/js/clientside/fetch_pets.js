@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (pet[field] == null) {
                         innerText = "None";
                     } else {
-                        let data = await getCaretaker(pet[field]);
+                        let data = await getAccountInfo(pet[field]);
                         innerText = 
                         `
                             ${data[0]["lastname"]}, ${data[0]["firstname"]}
@@ -89,7 +89,24 @@ async function getPets() {
     }
 }
 
-async function getCaretaker(id) {
+async function getRequests() {
+    try {
+        let response = await fetch("/petRequests", {
+            method: "GET",
+        });
+
+        if (response.status == 200) {
+            let data = await response.text();
+            return JSON.parse(data);
+        } else {
+            console.error(response.status, response.statusText)
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function getAccountInfo(id) {
     let request = { 
         method: "POST",
         headers: {"content-type": "application/json"},
