@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         allowChange = true;
                     }
                     
-                    let button = allowChange ? `<button onclick="changePetState(${pet["id"]})">Change</button>` : `<button disabled>Disabled</button>`
+                    let button = allowChange ? `<button onclick="acceptPet(${pet["id"]})">Accept Pet</button>` : `<button disabled>Disabled</button>`
                     
                     innerText = 
                     `
