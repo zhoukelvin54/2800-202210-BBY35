@@ -98,3 +98,24 @@ async function getCaretaker(id) {
         console.error(error);
     }
 }
+
+async function changePetState(id) {
+    let request = { 
+        method: "PUT",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify({
+            petid: id
+        })
+    }; try {
+        let response = await fetch("/requestHousing", request);
+
+        if (response.status == 200) {
+            response.json().then(response => {window.confirm(response.msg)});
+            location.reload();
+        } else {
+            console.error(response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
