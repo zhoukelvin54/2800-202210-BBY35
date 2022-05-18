@@ -1,0 +1,92 @@
+/* This contains code that should be relevant to ALL pages! */
+:root {
+  --primary: #CCC;
+  --secondary: #777;
+  --black: #222;
+  --white: #EEE;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  position: sticky;
+  top: 0;
+}
+
+main {
+  flex-grow: 1;
+  margin-bottom: auto;
+}
+
+footer {
+  justify-content: center;
+  position: sticky;
+  bottom: 0;
+}
+
+.navbar {
+  box-sizing: border-box;
+  display: flex;
+  min-width: 100vw;
+  padding: 0.5rem;
+  background-color: var(--primary);
+}
+
+.navbar a.menu_item {
+  text-decoration: none;
+  color: var(--black);
+}
+
+.nav_icon {
+  font-size: 6rem!important;
+}
+
+.hidden {
+  display: none;
+}
+
+.nav_link {
+  display: block;
+  text-decoration: none;
+  color: var(--black);
+  padding-left: 5vw;
+  margin-bottom: 0.5rem;
+}
+
+.nav_link:hover {
+  background-color: var(--primary);
+}
+
+#bottom_navigation {
+  position: sticky;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+#top_navigation {
+  display: grid;
+  justify-items: right;
+}
+
+#top_navigation .nav_links_group {
+  width: 100%;
+  font-family: "Lato", sans-serif;
+  font-size: 3rem;
+}
+
+#main_button {
+  border: 5px var(--black) solid;
+  border-radius: 50%;
+  background-color: var(--primary);
+  padding: 0.25rem;
+  transform: scale(1.25);
+  position: relative;
+  top: -25%;
+}
