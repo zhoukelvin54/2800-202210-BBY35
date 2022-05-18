@@ -1,0 +1,52 @@
+/* This contains code that should be relevant to ALL pages! */
+:root {
+  --primary: #000000;
+  --secondary: #000000;
+  --black: #222;
+  --white: #DDD;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+footer {
+  justify-content: center;
+}
+
+.navbar {
+  box-sizing: border-box;
+  display: flex;
+  min-width: 100vw;
+  padding: 0.5rem;
+}
+
+.navbar a.menu_item {
+  text-decoration: none;
+  color: var(--black);
+}
+
+.nav_icon {
+  font-size: 6rem!important;
+}
+
+#bottom_navigation {
+  position: sticky;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+}
+
+#top_navigation {
+  position: sticky;
+  display: grid;
+  justify-items: right;
+}
+
+#main_button {
+  border: 5px var(--black) solid;
+  border-radius: 50%;
+  position: relative;
+  top: -25%;
+}
