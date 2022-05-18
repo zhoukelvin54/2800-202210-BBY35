@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     petData.forEach( (pet) => {
         let row = document.createElement("tr");
-        let tableFields = ["photo_url", "name", "species", "gender", "description", "caretaker_id"];
+        let tableFields = ["photo_url", "name", "species", "gender", "description", "status", "caretaker_id"];
 
         tableFields.forEach( (field) => {
             let currentEntry = document.createElement("td");
