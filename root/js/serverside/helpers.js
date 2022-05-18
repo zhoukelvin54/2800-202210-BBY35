@@ -54,13 +54,18 @@ async function loadHTMLComponent(baseDOM, templateSelector, componentSelector, t
 
 /**
  * Injects a provided script into the given DOM's head.
- * @param { JSDOM } baseDOM 
- * @param { String } scriptLocation
+ * @param { JSDOM } baseDOM - DOM to inject script into
+ * @param { String } scriptLocation - Location of script resource
+ * @param { String } type - Sets whether the script should be deferred or loaded asynchronously
  */
-function injectScript(baseDOM, scriptLocation) {
+function injectScript(baseDOM, scriptLocation, type) {
   const doc = baseDOM.window.document;
   let script = doc.createElement("script");
   script.setAttribute("src", scriptLocation);
+  if (type) {
+    // Default to using async loading if type isn't defined properly.
+    script.toggleAttribute(type.toLowerCase == "defer" ? "defer" : "async");
+  }
 
   doc.head.appendChild(script);
 }

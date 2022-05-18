@@ -8,7 +8,7 @@ onReady(() => {
 async function getOwnerPets() {
   fetch("/petData", {
     method: "GET"
-  }).then(response => {
+  }).then(async response => {
     if (response.status == 200) {
       let data = await response.text();
       return JSON.parse(data);
@@ -27,7 +27,7 @@ async function getOwnerPets() {
  async function getCaretakerPets() {
   fetch("/petData", {
     method: "GET"
-  }).then(response => {
+  }).then(async response => {
     if (response.status == 200) {
       let data = await response.text();
       return JSON.parse(data);
