@@ -243,6 +243,23 @@ async function getRequests() {
     }
 }
 
+async function getInCare() {
+    try {
+        let response = await fetch("/petsInCare", {
+            method: "GET",
+        });
+
+        if (response.status == 200) {
+            let data = await response.text();
+            return JSON.parse(data);
+        } else {
+            console.error(response.status, response.statusText)
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 async function getAccountInfo(id) {
     let request = { 
         method: "POST",
@@ -274,6 +291,71 @@ async function changePetState(id) {
         })
     }; try {
         let response = await fetch("/requestHousing", request);
+
+        if (response.status == 200) {
+            response.json().then(response => {window.confirm(response.msg)});
+            location.reload();
+        } else {
+            console.error(response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function acceptPet(id) {
+    let request = { 
+        method: "PUT",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify({
+            petid: id
+        })
+    }; try {
+        let response = await fetch("/acceptPet", request);
+
+        if (response.status == 200) {
+            response.json().then(response => {window.confirm(response.msg)});
+            location.reload();
+        } else {
+            console.error(response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function returnPet(id) {
+    let request = { 
+        method: "PUT",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify({
+            petid: id,
+            status: 0
+        })
+    }; try {
+        let response = await fetch("/releasePet", request);
+
+        if (response.status == 200) {
+            response.json().then(response => {window.confirm(response.msg)});
+            location.reload();
+        } else {
+            console.error(response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function rejectPet(id) {
+    let request = { 
+        method: "PUT",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify({
+            petid: id,
+            status: 2
+        })
+    }; try {
+        let response = await fetch("/releasePet", request);
 
         if (response.status == 200) {
             response.json().then(response => {window.confirm(response.msg)});
