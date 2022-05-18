@@ -309,19 +309,22 @@ app.get("/timeline", async (req, res) => {
     let pageDoc = pageDOM.window.document;
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
     pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
+
+    let timelineJS = pageDoc.createElement("script");
+    timelineJS.setAttribute("src", "/js/pet_timelines.js");
+    pageDoc.head.appendChild(timelineJS);
     
     let fontAwesome = pageDoc.createElement("link");
     fontAwesome.setAttribute("rel", "stylesheet");
     fontAwesome.setAttribute("href", "https://use.fontawesome.com/releases/v5.3.1/css/all.css");
     fontAwesome.setAttribute("integrity", "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU");
     fontAwesome.setAttribute("crossorigin", "anonymous");
+    pageDoc.head.appendChild(fontAwesome);
     
     // Why do I need to do this injection instead of using the module???????
     let tiny_editor = pageDoc.createElement("script");
     tiny_editor.setAttribute("src", "https://unpkg.com/tiny-editor/dist/bundle.js")
-    
-    pageDoc.head.appendChild(fontAwesome);
-    pageDoc.head.appendChild(tiny_editor);
+    pageDoc.head.appendChild(tiny_editor);    
 
     return res.send(pageDOM.serialize()); 
 });
