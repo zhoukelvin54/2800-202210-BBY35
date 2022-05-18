@@ -308,13 +308,13 @@ app.get("/", (req, res) => {
     res.redirect("/login");
 });
 
-app.get("/home", (req, res) => {
+app.get("/home", async (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.newAccount) {
         res.redirect("/sign-up");
     } else {
-        let doc = getUserView(req);
+        let doc = await getUserView(req);
         res.send(doc);
     }
 });
@@ -328,15 +328,17 @@ async function getUserView(req) {
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
+
+        
         if (!req.session.caretaker){
             //update path 
             let link = pageDOM.window.document.createElement("link");
             link.setAttribute("rel","stylesheet");
-            link.setAttribute("href", "css/pet_details_form.css");
-            console.log(link);
+            link.setAttribute("href", "css/modals.css");
             pageDOM.window.document.head.appendChild(link);
-            index = await helpers.injectModal(pageDOM);
+            pageDOM = await helpers.injectModal(pageDOM);
         }
+        
         return pageDOM.serialize();
     }
 }
@@ -358,29 +360,38 @@ app.post("/login", (req, res) => {
     if (username) {
         connection.query("SELECT * FROM BBY35_accounts WHERE username = ?", [username], async (err, data, fields) => {
             if (err) throw err;
-            let passwordMatches = await bcrypt.compare(password, data[0].password);
-            if (data.length > 0 && passwordMatches) {
-                req.session.loggedIn = true;
-                req.session.username = data[0].username;
-                req.session.name = data[0].firstname + "," + data[0].lastname;
-                req.session.username = data[0].username;
-                req.session.email = data[0].email;
-                req.session.userid = data[0].id;
-                req.session.admin = data[0].is_admin;
-                req.session.caretaker = data[0].is_caretaker;
-                req.session.profile_photo_url = data[0].profile_photo_url;
-                req.session.save((e) => {
-                    if (e) {
-                        console.log("Error: " + e);
-                    }
-                });
-                res.send({ status: "success", msg: "Log In Successful" });
+            if (data.length > 0) {
+                let passwordMatches = await bcrypt.compare(password, data[0].password);
+                if (passwordMatches) {
+                    req.session.loggedIn = true;
+                    req.session.username = data[0].username;
+                    req.session.name = data[0].firstname + "," + data[0].lastname;
+                    req.session.username = data[0].username;
+                    req.session.email = data[0].email;
+                    req.session.userid = data[0].id;
+                    req.session.admin = data[0].is_admin;
+                    req.session.caretaker = data[0].is_caretaker;
+                    req.session.profile_photo_url = data[0].profile_photo_url;
+                    req.session.save((e) => {
+                        if (e) {
+                            console.log("Error: " + e);
+                        }
+                    });
+                    res.send({
+                        status: "success",
+                        msg: "Log In Successful"
+                    });
+                }
+
             } else {
-                res.send({ status: "failure", msg: "Log In Unsuccessful" });
+                res.send({
+                    status: "failure",
+                    msg: "Log In Unsuccessful"
+                });
             }
         });
     }
-});
+    });
 
 app.get("/sign-up", (req, res) => {
     // To be replaced later by injecting the forms as a modal and their scripts
