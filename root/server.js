@@ -473,6 +473,44 @@ app.get("/petRequests", (req, res) =>{
     }
 });
 
+app.put("/acceptPet", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+    let caretakerid = req.session.userid;
+    if (req.session.caretaker == 1) {
+        connection.query("UPDATE BBY35_pets SET status = 1, caretaker_id = ? WHERE id = ?", [caretakerid, petid], () => {
+            res.send({status: "success", msg: "Pet is now in your care"});
+        })
+    } else {
+        res.send({status: "failue", msg: "You are not a caretaker!"});
+    }
+});
+
+app.put("/releasePet", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+    let status = req.body.status
+    let isOKStatus = (status != 1);
+    if (isOKStatus && req.session.caretaker == 1) {
+        connection.query("UPDATE BBY35_pets SET status = ?, caretaker_id = NULL WHERE id = ?", [status, petid], () => {
+            res.send({status: "success", msg: "Pet is now no longer in your care"});
+        })
+    } else {
+        res.send({status: "failue", msg: "You are not a caretaker or status is invalid!"});
+    }
+})
+
+app.get("/petsInCare", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 1) {
+        connection.query("SELECT id, owner_id, photo_url, name, species, gender, description, status FROM BBY35_pets WHERE status = 1 AND caretaker_id = ?", [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not caretaker!" });
+    }
+});
+
 app.post("/getUserInfo", (req, res) => {
     res.setHeader("content-type", "application/json");
     let userid = req.body.userid;
