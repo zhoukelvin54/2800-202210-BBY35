@@ -4,6 +4,17 @@
 
 "use strict";
 
+// miscellanous code snippets that can be useful
+// function extractDateFromFileName(string) {
+//     let indexOfStart= (string.lastIndexOf("-")) + 1;
+//     let indexOfEnd = string.lastIndexOf(".");
+
+//     let out = parseInt(string.substring(indexOfStart, indexOfEnd));
+
+//     console.log(out);
+//     return new Date(out);
+// }
+
 // Constant Variables
 const SALT_ROUNDS = 10;
 
