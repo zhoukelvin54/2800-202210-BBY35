@@ -48,6 +48,7 @@ CREATE TABLE `BBY35_pets` (
   `species` varchar(45) DEFAULT NULL,
   `gender` varchar(45) DEFAULT NULL,
   `description` varchar(255) NOT NULL,
+  `status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `owner_id_idx` (`owner_id`),
   KEY `caretaker_id_idx` (`caretaker_id`),
