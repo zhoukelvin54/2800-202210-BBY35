@@ -449,6 +449,15 @@ app.get("/petData", (req, res) => {
     }
 });
 
+app.post("/getUserInfo", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let userid = req.body.userid;
+
+    connection.query(`SELECT username, firstname, lastname, email FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
+        res.send(data);
+    });
+});
+
 // this route is for testing and example purposes only and should be cleaned up once the forms requiring image upload are completed
 app.get("/addPhoto", (req, res) => {
     let doc = fs.readFileSync("./root/addphoto.html", "utf-8");
