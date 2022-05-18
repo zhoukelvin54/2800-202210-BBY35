@@ -51,6 +51,28 @@ body {
   font-family: "Satisfy", sans-serif;
 }
 
+/*MODAL STUFF BELOW*/
+#edit_caretaker{
+  padding: 0 0.55rem 0 0.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(122, 118, 118);
+  color:#DDD;
+  font-family: "Satisfy", sans-serif;
+}
+#edit_caretaker:hover {
+  cursor:pointer;
+  background-color: rgb(91, 89, 89);
+}
+.cancel {
+  float:right;
+  color:rgba(199, 149, 79, 0.496)
+}
+.cancel:hover {
+  cursor:pointer;
+  color:rgba(152, 114, 62, 0.464)
+}
+/*MODAL STUFF ABOVE*/
+
 .legend_hr {
   width: 100%;
   margin-top: 0;

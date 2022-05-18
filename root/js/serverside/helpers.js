@@ -32,6 +32,20 @@ async function injectHeaderFooter(baseDOM) {
 }
 
 /**
+ * 
+ * @param {*} baseDom 
+ * @returns 
+ */
+async function injectModal(baseDOM) {
+  const modalSelector = ".modal"
+
+  // Injects the modal html component
+  baseDOM = await loadHTMLComponent(basedom, modalSelector, modalSelector, "./root/common/caretaker_modal.html")
+  baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/pets_modal.html");
+  return baseDom;
+}
+
+/**
  * Loads an HTML component's innerHTML from the filesystem into a DOM object using a selector.
  * @param { JSDOM } baseDOM - DOM object to modify.
  * @param { String } templateSelector - CSS selector of the template element.
@@ -116,5 +130,6 @@ export {
   injectHeaderFooter,
   loadHTMLComponent,
   craftInsertUpdateQueryFromRequest,
-  redirectToLogin
+  redirectToLogin,
+  injectModal
 };
