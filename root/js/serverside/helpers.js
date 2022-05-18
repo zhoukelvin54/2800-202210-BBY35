@@ -72,6 +72,20 @@ function injectScript(baseDOM, scriptLocation, type) {
 }
 
 /**
+ * Injects a stylesheet into the provided DOM.
+ * @param { JSDOM } baseDOM - DOM to modify
+ * @param { String } stylesheetLocation - Location of stylesheet
+ */
+function injectStylesheet(baseDOM, stylesheetLocation) {
+  const doc = baseDOM.window.document;
+  let style = doc.createElement("link");
+  style.setAttribute("rel", "stylesheet");
+  style.setAttribute("href", stylesheetLocation);
+
+  doc.head.appendChild(style);
+}
+
+/**
  * Crafts an SQL query in the format of 
  * "INSERT INTO table (`key_column`, `Recieved fields`, [...]) VALUES (?, [...])
  * ON DUPLICATE KEY UPDATE `recievedFields`}=VALUES(`recievedFields`), [...]"
@@ -133,8 +147,9 @@ function getFieldsFromRequest(req, expectedFields) {
 // Functions to export out
 export {
   injectHeaderFooter,
+  injectScript,
+  injectStylesheet,
   loadHTMLComponent,
   craftInsertUpdateQueryFromRequest,
-  redirectToLogin,
-  injectScript
+  redirectToLogin
 };
