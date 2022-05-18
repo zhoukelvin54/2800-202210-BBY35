@@ -11,6 +11,7 @@ SET FOREIGN_KEY_CHECKS=0; -- to disable them
 DROP TABLE IF EXISTS `BBY35_caretaker_info`;
 DROP TABLE IF EXISTS `BBY35_pets`;
 DROP TABLE IF EXISTS `BBY35_images`;
+DROP TABLE IF EXISTS `BBY35_pet_timeline`;
 DROP TABLE IF EXISTS `BBY35_accounts`;
 
 SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
@@ -79,14 +80,15 @@ CREATE TABLE `BBY35_caretaker_info` (
 -- Table structure for table BBY35_images
 --
 
-CREATE TABLE `BBY35_images` (
-  `uploader_id` int NOT NULL,
-  `uploader_username`varchar(20) NOT NULL,
-  `img_name` varchar(255) NOT NULL,
-  `upload_time` varchar(255) DEFAULT NULL,
-  `img_type` varchar(20) DEFAULT NULL,
-  KEY `uploader_id_idx` (`uploader_id`),
-  CONSTRAINT `uploader_id` FOREIGN KEY (`uploader_id`) REFERENCES `BBY35_accounts` (`id`)
+CREATE TABLE `BBY35_pet_timeline` (
+  `timeline_id` int NOT NULL AUTO_INCREMENT,
+  `pet_id` int NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `location` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (timeline_id),
+  KEY `pet_id_idx` (`pet_id`),
+  CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
@@ -218,7 +220,3 @@ INSERT INTO `BBY35_caretaker_info`
           '', NULL,
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
-
--- 
--- Add data to BBY35_images table
--- 
