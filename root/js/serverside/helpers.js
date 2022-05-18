@@ -53,6 +53,19 @@ async function loadHTMLComponent(baseDOM, templateSelector, componentSelector, t
 }
 
 /**
+ * Injects a provided script into the given DOM's head.
+ * @param { JSDOM } baseDOM 
+ * @param { String } scriptLocation
+ */
+function injectScript(baseDOM, scriptLocation) {
+  const doc = baseDOM.window.document;
+  let script = doc.createElement("script");
+  script.setAttribute("src", scriptLocation);
+
+  doc.head.appendChild(script);
+}
+
+/**
  * Crafts an SQL query in the format of 
  * "INSERT INTO table (`key_column`, `Recieved fields`, [...]) VALUES (?, [...])
  * ON DUPLICATE KEY UPDATE `recievedFields`}=VALUES(`recievedFields`), [...]"
@@ -116,5 +129,6 @@ export {
   injectHeaderFooter,
   loadHTMLComponent,
   craftInsertUpdateQueryFromRequest,
-  redirectToLogin
+  redirectToLogin,
+  injectScript
 };
