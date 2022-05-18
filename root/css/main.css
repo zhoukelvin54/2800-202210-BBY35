@@ -1,14 +1,18 @@
 /* This contains code that should be relevant to ALL pages! */
 :root {
-  --primary: #000000;
-  --secondary: #000000;
+  --primary: #CCC;
+  --secondary: #777;
   --black: #222;
-  --white: #DDD;
+  --white: #EEE;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
+}
+
+main {
+  min-height: 100vh;
 }
 
 footer {
@@ -20,6 +24,7 @@ footer {
   display: flex;
   min-width: 100vw;
   padding: 0.5rem;
+  background-color: var(--primary);
 }
 
 .navbar a.menu_item {
@@ -36,6 +41,7 @@ footer {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
+  align-items: center;
 }
 
 #top_navigation {
@@ -47,6 +53,9 @@ footer {
 #main_button {
   border: 5px var(--black) solid;
   border-radius: 50%;
+  background-color: var(--primary);
+  padding: 0.25rem;
+  transform: scale(1.25);
   position: relative;
   top: -25%;
 }
