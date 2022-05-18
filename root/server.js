@@ -312,6 +312,18 @@ function getUserView(req) {
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
+        let role;
+        let description;
+        if (req.session.caretaker == 1) {
+            role = "caretaker";
+            description = "Here you will see your pets and can request a caretaker to look after them. <br> At the bottom you can see a list of other's pets that currently need caretakers to look after them"
+        } else {
+            role = "pet owner";
+            description = "Here you will see your pets and can request a caretaker to look after them";
+        }
+
+        pageDOM.window.document.getElementById("role").innerHTML = role;
+        pageDOM.window.document.getElementById("role-desc").innerHTML = description;
 
         return pageDOM.serialize();
     }
