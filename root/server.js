@@ -462,6 +462,17 @@ app.get("/petData", (req, res) => {
     }
 });
 
+app.get("/petRequests", (req, res) =>{
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 1) {
+        connection.query("SELECT id, owner_id, photo_url, name, species, gender, description, status FROM BBY35_pets WHERE status = 2 AND owner_id <> ?", [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not caretaker!" });
+    }
+});
+
 app.post("/getUserInfo", (req, res) => {
     res.setHeader("content-type", "application/json");
     let userid = req.body.userid;
