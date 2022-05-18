@@ -31,25 +31,25 @@ async function injectHeaderFooter(baseDOM) {
   return baseDOM;
 }
 
-/**
- * 
- * @param {*} baseDom 
- * @returns 
- */
+
 async function injectModal(baseDOM) {
-  const modalSelector = ".modal"
+  const modalSelector = "#add_pet_modal"
+  const modalScript = "script"
 
   // Injects the modal html component
-  baseDOM = await loadHTMLComponent(basedom, modalSelector, modalSelector, "./root/common/caretaker_modal.html")
+  // baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/caretaker_modal.html")
   baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/pets_modal.html");
-  return baseDom;
+
+  // Inject scrip component
+  baseDOM = await loadHTMLComponent(baseDOM, modalScript, modalScript, "./root/common/pets_modal.html");
+  return baseDOM;
 }
 
 /**
  * Loads an HTML component's innerHTML from the filesystem into a DOM object using a selector.
  * @param { JSDOM } baseDOM - DOM object to modify.
  * @param { String } templateSelector - CSS selector of the template element.
- * @param { String } templateSelector - CSS selector of the component element.
+ * @param { String } componentSelector - CSS selector of the component element.
  * @param { String } templateLocation - File path to template element location.
  * @returns { JSDOM } The original DOM object, modified.
  */

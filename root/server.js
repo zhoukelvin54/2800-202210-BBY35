@@ -312,7 +312,11 @@ function getUserView(req) {
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
-
+        if (!req.session.caretaker){
+            //update path 
+            pageDOM = await helpers.injectModal(baseDOM);
+            pageDOM.window.document.header.appendChild("<link rel='stylesheet' href='css/pet_details_form.css'>");
+        }
         return pageDOM.serialize();
     }
 }
@@ -391,11 +395,14 @@ app.get("/logout", (req, res) => {
     }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", async (req, res) => {
     if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
 
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
-    res.send(doc);
+    let baseDOM = new JSDOM(doc);
+    let editCaretaker =  await helpers.injectModal(baseDOM);
+    
+    res.send(editCaretaker.serialize());
 });
 
 app.get("/userData", (req, res) => {
