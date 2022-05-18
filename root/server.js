@@ -317,6 +317,7 @@ function getUserView(req) {
         if (req.session.caretaker == 1) {
             role = "caretaker";
             description = "Here you will see your pets and can request a caretaker to look after them. <br> At the bottom you can see a list of other's pets that currently need caretakers to look after them"
+            pageDOM.window.document.getElementById("caretaker-panel").hidden = false;
         } else {
             role = "pet owner";
             description = "Here you will see your pets and can request a caretaker to look after them";
