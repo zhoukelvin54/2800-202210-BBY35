@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 
-#add_pet_modal {
+#add_pet_modal, #edit_caretaker_modal {
     display: none;
     position: fixed;
     z-index: 1;
@@ -14,7 +14,7 @@
 }
 
 
-#pet_details_form {
+#pet_details_form, #caretaker_details_form {
     box-sizing: border-box;
     margin: 0 auto;
     max-width: min(90vw, 475px);
@@ -22,7 +22,7 @@
     padding-bottom: 5vh;
 }
 
-#pet_details_form * {
+#pet_details_form *, #caretaker_details_form * {
     box-sizing: border-box;
 }
 
@@ -53,7 +53,7 @@
 }
 
 /*MODAL STUFF BELOW*/
-#add_pet {
+#add_pet, #edit_caretaker {
     display: block;
     padding: 0 0.55rem 0 0.5rem;
     border-radius: 0.5rem;
@@ -62,7 +62,7 @@
     font-family: "Satisfy", sans-serif;
 }
 
-#add_pet:hover {
+#add_pet:hover, #edit_caretaker:hover {
     cursor: pointer;
     background-color: rgb(91, 89, 89);
 }

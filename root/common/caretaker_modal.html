@@ -1,105 +1,90 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>ppp</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../css/caretaker_form.css">
-    </head>
-    <body>
-        <!--modal button-->
-        <button onclick="showModal()" id="edit_caretaker">Edit Caretaker Profile</button>
-        
-        <!--modal content-->
-        <form  id="user_creation_form" hidden>
-            <fieldset class="form_panel">
-                <legend>Caretaking Experience and Accomodations<span class="cancel">&#10006;</span></legend>
-                <hr class="legend_hr"/>
-              
-                <div class="inline_form_group">
-                    <label for="animal_affection">How much do you like animals? (1-10)</label>
-                    <input class="input" type="number" name="animal_affection" id="animal_affection" min="1" max="10" value="5"/>
-                </div>
-              
-                <div class="form_group">
-                    <label for="experience">Any past experience with animals?</label>
-                    <textarea class="input" name="experience" id="experience" rows="3"></textarea>
-                </div>
-              
-                <div class="form_group">
-                    <label for="allergies">Any allergies to specific animals?</label>
-                    <textarea class="input" name="allergies" id="allergies" rows="3"></textarea>
-                </div>
-              
-                <div class="form_group">
-                    <label for="other_pets">List any other animals at your house:</label>
-                    <textarea class="input" name="other_pets" id="other_pets" rows="3"></textarea>
-                </div>
-              
-                <div class="form_group">
-                    <label for="busy_hours">What are your working / busy hours?</label>
-                    <textarea class="input" name="busy_hours" id="busy_hours" rows="3"></textarea>
-                </div>
-              
-                <div class="inline_form_group">
-                    <label for="house_type">What type of home do you live in?</label>
-                    <select class="input" name="house_type" id="house_type">
-                        <option value="house">House</option>
-                        <option value="barn">Barn</option>
-                        <option value="trailer">Trailer</option>
-                        <option value="condo">Condo</option>
-                        <option value="apartment">Apartment</option>
-                        <option value="apartment">Other</option>
-                    </select>
-                </div>
-              
-                <div class="inline_form_group">
-                    <label for="house_active_level">How active is your household?</label>
-                    <select class="input" name="house_active_level" id="house_active_level">
-                        <option value="low" selected>Low</option>
-                        <option value="med">Medium</option>
-                        <option value="high">High</option>
-                    </select>
-                </div>
-              
-                <div class="inline_form_group">
-                    <label for="people_in_home">How many people live in your house?</label>
-                    <input class="input" type="number" name="people_in_home" id="people_in_home" min="1" max="20" value="1"/>
-                </div>
-              
-                <div class="inline_form_group">
-                    <label for="children_in_home">Are there children in your house?</label>
-                    <select class="input" name="children_in_home" id="children_in_home">
-                        <option value="no" selected>No</option>
-                        <option value="yes">Yes</option>
-                    </select>
-                </div>
-              
-                <div class="inline_form_group">
-                    <label for="yard_type">Is your yard enclosed?</label>
-                    <select class="input" name="yard_type" id="yard_type">
-                        <option value="enclosed" selected>Enclosed</option>
-                        <option value="partial">Partially Enclosed</option>
-                        <option value="none">Not Enclosed</option>
-                    </select>
-                </div>
-              
-                <div class="form_group">
-                    <label for="accomodation_picture">Upload Accomodation Photos:</label>
-                    <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture"/>
-                </div>
-              
-                <input class="form_button" type="submit" value="Submit"/>
-              </fieldset>
-        </form>
-        <script>
-            function showModal() {
-                document.getElementById("user_creation_form").style.display="block";
-            }
+<!--modal button-->
+<div id="edit_caretaker_button">
+    <button onclick="showModal()" id="edit_caretaker">Edit Caretaker Profile</button>
+</div>
+<!--modal content-->
+<div id="edit_caretaker_modal">
+    <form id="caretaker_details_form">
+        <fieldset class="form_panel">
+            <legend>Caretaking Experience and Accomodations<span class="cancel">&#10006;</span></legend>
+            <hr class="legend_hr" />
 
-            document.querySelector(".cancel").onclick = function hideModal() {
-                document.getElementById("user_creation_form").style.display="none";
-            }
-        </script>
-    </body>
-</html>
+            <div class="inline_form_group">
+                <label for="animal_affection">How much do you like animals? (1-10)</label>
+                <input class="input" type="number" name="animal_affection" id="animal_affection" min="1" max="10"
+                    value="5" />
+            </div>
+
+            <div class="form_group">
+                <label for="experience">Any past experience with animals?</label>
+                <textarea class="input" name="experience" id="experience" rows="3"></textarea>
+            </div>
+
+            <div class="form_group">
+                <label for="allergies">Any allergies to specific animals?</label>
+                <textarea class="input" name="allergies" id="allergies" rows="3"></textarea>
+            </div>
+
+            <div class="form_group">
+                <label for="other_pets">List any other animals at your house:</label>
+                <textarea class="input" name="other_pets" id="other_pets" rows="3"></textarea>
+            </div>
+
+            <div class="form_group">
+                <label for="busy_hours">What are your working / busy hours?</label>
+                <textarea class="input" name="busy_hours" id="busy_hours" rows="3"></textarea>
+            </div>
+
+            <div class="inline_form_group">
+                <label for="house_type">What type of home do you live in?</label>
+                <select class="input" name="house_type" id="house_type">
+                    <option value="house">House</option>
+                    <option value="barn">Barn</option>
+                    <option value="trailer">Trailer</option>
+                    <option value="condo">Condo</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="apartment">Other</option>
+                </select>
+            </div>
+
+            <div class="inline_form_group">
+                <label for="house_active_level">How active is your household?</label>
+                <select class="input" name="house_active_level" id="house_active_level">
+                    <option value="low" selected>Low</option>
+                    <option value="med">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+
+            <div class="inline_form_group">
+                <label for="people_in_home">How many people live in your house?</label>
+                <input class="input" type="number" name="people_in_home" id="people_in_home" min="1" max="20"
+                    value="1" />
+            </div>
+
+            <div class="inline_form_group">
+                <label for="children_in_home">Are there children in your house?</label>
+                <select class="input" name="children_in_home" id="children_in_home">
+                    <option value="no" selected>No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+
+            <div class="inline_form_group">
+                <label for="yard_type">Is your yard enclosed?</label>
+                <select class="input" name="yard_type" id="yard_type">
+                    <option value="enclosed" selected>Enclosed</option>
+                    <option value="partial">Partially Enclosed</option>
+                    <option value="none">Not Enclosed</option>
+                </select>
+            </div>
+
+            <div class="form_group">
+                <label for="accomodation_picture">Upload Accomodation Photos:</label>
+                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" />
+            </div>
+
+            <input class="submit_button" type="submit" value="Submit" />
+        </fieldset>
+    </form>
+</div>

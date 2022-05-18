@@ -31,14 +31,18 @@ async function injectHeaderFooter(baseDOM) {
   return baseDOM;
 }
 
-
-async function injectModal(baseDOM) {
-  const modalSelector = "#add_pet_modal"
-  const modalScript = "script"
+/**
+ * 
+ * @param {*} baseDOM basedom
+ * @param {*} modalButton id for button
+ * @param {*} modalSelector id for modal selector
+ * @returns 
+ */
+async function injectModal(baseDOM, modalButton, modalSelector, templateLocation) {
 
   // Injects the modal html component
-  // baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/caretaker_modal.html")
-  baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/pets_modal.html");
+  baseDOM = await loadHTMLComponent(baseDOM, modalButton, modalButton, "./root/common/" + templateLocation);
+  baseDOM = await loadHTMLComponent(baseDOM, modalSelector, modalSelector, "./root/common/" + templateLocation);
 
   return baseDOM;
 }

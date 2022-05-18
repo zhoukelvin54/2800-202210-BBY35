@@ -336,7 +336,7 @@ async function getUserView(req) {
             link.setAttribute("rel","stylesheet");
             link.setAttribute("href", "css/modals.css");
             pageDOM.window.document.head.appendChild(link);
-            pageDOM = await helpers.injectModal(pageDOM);
+            pageDOM = await helpers.injectModal(pageDOM, "#add_pet_button", "#add_pet_modal", "pets_modal.html");
         }
         
         return pageDOM.serialize();
@@ -430,10 +430,17 @@ app.get("/profile", async (req, res) => {
     if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
 
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
-    let baseDOM = new JSDOM(doc);
-    let editCaretaker =  await helpers.injectModal(baseDOM);
+    let pageDOM = new JSDOM(doc);
+    if (req.session.caretaker){
+        //update path 
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/modals.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectModal(pageDOM, "#edit_caretaker_button", "#edit_caretaker_modal", "caretaker_modal.html");
+    }
     
-    res.send(editCaretaker.serialize());
+    res.send(pageDOM.serialize());
 });
 
 app.get("/userData", (req, res) => {
