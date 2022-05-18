@@ -13,10 +13,10 @@ onReady(async () => {
 
 /**
  * Gets the pet data for the currently logged in pet owner.
- * @throws Status of server response (success, failure)
+ * @throws Status of server response
  */
 async function getOwnerPets() {
-  fetch("/petData", {
+  return fetch("/petData", {
     method: "GET"
   }).then(async response => {
     if (response.status == 200) {
@@ -26,15 +26,15 @@ async function getOwnerPets() {
       console.error(response.status, response.statusText);
       throw response.status;
     }
-  })
+  });
 }
 
 /**
  * Gets the pet data for the currently logged in caretaker.
- * @throws Status of server response (success, failure)
+ * @throws Status of server response
  */
  async function getCaretakerPets() {
-  fetch("/petRequests", {
+  return fetch("/petRequests", {
     method: "GET"
   }).then(async response => {
     if (response.status == 200) {
@@ -44,5 +44,5 @@ async function getOwnerPets() {
       console.error(response.status, response.statusText);
       throw response.status;
     }
-  })
+  });
 }
