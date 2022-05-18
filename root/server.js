@@ -334,6 +334,19 @@ function getUserView(req) {
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
+        let role;
+        let description;
+        if (req.session.caretaker == 1) {
+            role = "caretaker";
+            description = "Here you will see your pets and can request a caretaker to look after them. <br> At the bottom you can see a list of other's pets that currently need caretakers to look after them"
+            pageDOM.window.document.getElementById("caretaker-panel").hidden = false;
+        } else {
+            role = "pet owner";
+            description = "Here you will see your pets and can request a caretaker to look after them";
+        }
+
+        pageDOM.window.document.getElementById("role").innerHTML = role;
+        pageDOM.window.document.getElementById("role-desc").innerHTML = description;
 
         return pageDOM.serialize();
     }
@@ -462,13 +475,55 @@ app.get("/userData", (req, res) => {
 
 app.get("/petData", (req, res) => {
     res.setHeader("content-type", "application/json");
-    if (req.session.caretaker == 0) {
-        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description FROM BBY35_pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
+    if (req.session.loggedIn) {
+        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description, status  FROM BBY35_pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
             res.send(data);
         });
     } else {
         res.send({ status: "failure", msg: "User not logged in!" });
     }
+});
+
+app.get("/petRequests", (req, res) =>{
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 1) {
+        connection.query("SELECT id, owner_id, photo_url, name, species, gender, description, status FROM BBY35_pets WHERE status = 2 AND owner_id <> ?", [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not caretaker!" });
+    }
+});
+
+app.post("/getUserInfo", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let userid = req.body.userid;
+
+    connection.query(`SELECT username, firstname, lastname, email, is_caretaker FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
+        res.send(data);
+    });
+});
+
+app.put("/requestHousing", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+
+    connection.query(`SELECT status FROM BBY35_pets WHERE id = ?`, [petid], async (err, data, fields) => {
+        let status = data[0]['status'];
+        if (status == 1) {
+            res.send({status: "failure", msg: "Pet is away."});
+        } else {
+            if (status == 0) {
+                connection.query(`UPDATE BBY35_pets SET status = 2 WHERE id = ?`, [petid], () => {
+                    res.send({status: "success", msg: "Pet is now pending caretaker."});
+                });
+            } else {
+                connection.query(`UPDATE BBY35_pets SET status = 0 WHERE id = ?`, [petid], () => {
+                    res.send({status: "success", msg: "Pet is now returned home."});
+                });
+            }
+        }
+    });
 });
 
 // this route is for testing and example purposes only and should be cleaned up once the forms requiring image upload are completed

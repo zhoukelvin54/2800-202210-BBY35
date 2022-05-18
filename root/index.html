@@ -9,6 +9,10 @@
     <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/index.css">
+
+    <style>
+         .panel {background-color: rgb(124, 124, 126);}
+      </style>
 </head>
 
 <body>
@@ -37,7 +41,9 @@
                 Welcome to PetPals.
             </h1>
             <p>
-                You are a (caretaker or pet owner), *details of role*
+                You are a <span id="role">role</span>.
+                <br/>
+                <span id="role-desc">Details</span>.
             </p>
             <button id="hiderhero" onclick="hidehero()">I understand</button>
         </div>
@@ -62,7 +68,28 @@
                                     <th>Species</th>
                                     <th>Gender</th>
                                     <th>Description</th>
+                                    <th>Status</th>
                                     <th>Caretaker</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel" id="caretaker-panel" hidden>
+                        <h2>Pets in need:</h2>
+                        <hr>
+                        <table id="pet-table2">
+                            <thead>
+                                <tr>
+                                    <th>Picture</th>
+                                    <th>Name</th>
+                                    <th>Species</th>
+                                    <th>Gender</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Owner</th>
                                 </tr>
                             </thead>
                             <tbody>
