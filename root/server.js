@@ -308,7 +308,6 @@ async function getUserView(req) {
         return fs.readFileSync("./root/user_management.html", "utf-8");
     } else {
         // TODO Get individual account view
-        var index;
         let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
