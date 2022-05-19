@@ -31,3 +31,28 @@ body {
     margin: 0 auto 20px auto;
     display: block;
 }
+
+.ct_name {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.ct_description {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.accomadation,
+.reviews {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.ct_accomadation {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
