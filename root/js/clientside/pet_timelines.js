@@ -20,8 +20,9 @@ async function getOwnerPets() {
     method: "GET"
   }).then(async response => {
     if (response.status == 200) {
-      let data = await response.text();
-      return JSON.parse(data);
+      let data = JSON.parse(await response.text());
+      if(data.status == "failure") throw "Not an owner!";
+      else return data;
     } else {
       console.error(response.status, response.statusText);
       throw response.status;
@@ -38,8 +39,9 @@ async function getOwnerPets() {
     method: "GET"
   }).then(async response => {
     if (response.status == 200) {
-      let data = await response.text();
-      return JSON.parse(data);
+      let data = JSON.parse(await response.text());
+      if(data.status == "failure") throw "Not a caretaker!";
+      else return data;
     } else {
       console.error(response.status, response.statusText);
       throw response.status;
