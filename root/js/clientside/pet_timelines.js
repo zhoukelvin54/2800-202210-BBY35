@@ -1,10 +1,23 @@
+var pets;
+
 onReady(async () => {
-  // Get the data for specific type of user?
+  // Try getting owner data
   try {
-    console.log(await getOwnerPets());
+    pets = await getOwnerPets();
+    if(pets.length > 0) {
+      pets.forEach(pet => {
+        document.querySelector("main").appendChild(createTimeline(pet));
+      });
+    }
   } catch (error) {
+    // Not pet owner, get caretaker data
     try {
-      console.log(await getCaretakerPets());
+      pets = await getCaretakerPets();
+      if(pets.length > 0) {
+        pets.forEach(pet => {
+          document.querySelector("main").appendChild(createTimeline(pet));
+        });
+      }
     } catch (error) {
       console.error("Could not get owner or caretaker pets!");
     }
