@@ -45,10 +45,26 @@ const is_Heroku = process.env.is_Heroku || false;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "./root/img/uploads");
+        let id = req.session.userid;
+        let dir = `./root/img/uploads/${id}/`;
+        fs.mkdir(dir, (exists) => {
+            if (!exists) {
+                console.log("Path does not exist, creating: " + dir);
+            }
+        });
+
+        cb(null, dir);
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname.split("/").pop().trim());
+        let id = req.session.userid;
+        
+        let input = file.originalname;
+        let extensionIndex = input.lastIndexOf(".");
+        let extension = input.substring(extensionIndex);
+
+        let fileString = `UserID-${id}-UploadedAt-${Date.now()}${extension}` 
+        
+        cb(null, fileString);
     }
 });
 const upload = multer({ storage: storage });
@@ -369,29 +385,38 @@ app.post("/login", (req, res) => {
     if (username) {
         connection.query("SELECT * FROM BBY35_accounts WHERE username = ?", [username], async (err, data, fields) => {
             if (err) throw err;
-            let passwordMatches = await bcrypt.compare(password, data[0].password);
-            if (data.length > 0 && passwordMatches) {
-                req.session.loggedIn = true;
-                req.session.username = data[0].username;
-                req.session.name = data[0].firstname + "," + data[0].lastname;
-                req.session.username = data[0].username;
-                req.session.email = data[0].email;
-                req.session.userid = data[0].id;
-                req.session.admin = data[0].is_admin;
-                req.session.caretaker = data[0].is_caretaker;
-                req.session.profile_photo_url = data[0].profile_photo_url;
-                req.session.save((e) => {
-                    if (e) {
-                        console.log("Error: " + e);
-                    }
-                });
-                res.send({ status: "success", msg: "Log In Successful" });
+            if (data.length > 0) {
+                let passwordMatches = await bcrypt.compare(password, data[0].password);
+                if (passwordMatches) {
+                    req.session.loggedIn = true;
+                    req.session.username = data[0].username;
+                    req.session.name = data[0].firstname + "," + data[0].lastname;
+                    req.session.username = data[0].username;
+                    req.session.email = data[0].email;
+                    req.session.userid = data[0].id;
+                    req.session.admin = data[0].is_admin;
+                    req.session.caretaker = data[0].is_caretaker;
+                    req.session.profile_photo_url = data[0].profile_photo_url;
+                    req.session.save((e) => {
+                        if (e) {
+                            console.log("Error: " + e);
+                        }
+                    });
+                    res.send({
+                        status: "success",
+                        msg: "Log In Successful"
+                    });
+                }
+
             } else {
-                res.send({ status: "failure", msg: "Log In Unsuccessful" });
+                res.send({
+                    status: "failure",
+                    msg: "Log In Unsuccessful"
+                });
             }
         });
     }
-});
+    });
 
 app.get("/sign-up", (req, res) => {
     // To be replaced later by injecting the forms as a modal and their scripts
@@ -495,6 +520,44 @@ app.get("/petRequests", (req, res) =>{
     }
 });
 
+app.put("/acceptPet", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+    let caretakerid = req.session.userid;
+    if (req.session.caretaker == 1) {
+        connection.query("UPDATE BBY35_pets SET status = 1, caretaker_id = ? WHERE id = ?", [caretakerid, petid], () => {
+            res.send({status: "success", msg: "Pet is now in your care"});
+        })
+    } else {
+        res.send({status: "failue", msg: "You are not a caretaker!"});
+    }
+});
+
+app.put("/releasePet", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+    let status = req.body.status
+    let isOKStatus = (status != 1);
+    if (isOKStatus && req.session.caretaker == 1) {
+        connection.query("UPDATE BBY35_pets SET status = ?, caretaker_id = NULL WHERE id = ?", [status, petid], () => {
+            res.send({status: "success", msg: "Pet is now no longer in your care"});
+        })
+    } else {
+        res.send({status: "failue", msg: "You are not a caretaker or status is invalid!"});
+    }
+})
+
+app.get("/petsInCare", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 1) {
+        connection.query("SELECT id, owner_id, photo_url, name, species, gender, description, status FROM BBY35_pets WHERE status = 1 AND caretaker_id = ?", [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not caretaker!" });
+    }
+});
+
 app.post("/getUserInfo", (req, res) => {
     res.setHeader("content-type", "application/json");
     let userid = req.body.userid;
@@ -535,7 +598,9 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    res.send({ url: req.file.filename });
+    let truncatedPath = req.file.path.replace("root/img/uploads/", "");
+    console.log(truncatedPath);
+    res.send({ url: truncatedPath });
 });
 
 app.delete("/delete", async (req, res) => {
