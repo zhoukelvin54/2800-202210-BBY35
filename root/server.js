@@ -171,8 +171,7 @@ app.put("/update-profile", (req, res) => {
         [username, email],
         (error, results, fields) => {
             if (results.length > 0) {
-                res.status(400);
-                return res.send({ status: "failure", msg: "Username or email already taken!" });
+                res.status(409).send({ status: "failure", msg: "Username or email already taken!" });
             } else {
                 let expectedFields = ["firstname", "lastname", "email", "username", "password", "profile_photo_url", "telephone", "address"];
                 let recievedFields = [];

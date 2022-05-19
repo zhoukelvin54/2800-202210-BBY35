@@ -132,8 +132,11 @@ function getDatabaseData() {
       document.getElementById("first_name").innerText=neededProfileData.firstname
       document.getElementById("last_name").innerText=neededProfileData.lastname
       document.getElementById("email").innerText=neededProfileData.email
-      document.getElementById("round_img").style.backgroundImage = "url(\"img/uploads/" + neededProfileData.profile_photo_url + "\")";
-      
+      if(!neededProfileData.profile_photo_url) {
+        document.getElementById("round_img").style.backgroundImage = "url(\"img/body.png\")";
+      } else {
+        document.getElementById("round_img").style.backgroundImage = "url(\"img/uploads/" + neededProfileData.profile_photo_url + "\")";
+      }
     } else {
       console.log("failure");
     }
@@ -189,6 +192,9 @@ async function updateProfile() {
           let parsed = JSON.parse(data);
           
           if (parsed.status == "failure") {
+            document.querySelectorAll("input.editable").forEach(element => {
+              swapInputToSpan(element); 
+            });
             document.getElementById("response_message").innerText = parsed.msg;
           } else {
             document.getElementById("response_message").innerText = "Profile Updated.";
@@ -215,7 +221,5 @@ function getProfileData() {
     lastname: data.last_name,
     email: data.email,
     profile_photo_url: server_url
-    
-    // password: data.new_password
   }
 }
