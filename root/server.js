@@ -340,7 +340,7 @@ app.get("/timeline", async (req, res) => {
     return res.send(pageDOM.serialize()); 
 });
 
-function getUserView(req) {
+async function getUserView(req) {
     if (req.session.admin) {
         let doc = fs.readFileSync("./root/user_management.html", "utf-8");
         let pageDOM = new JSDOM(doc);
