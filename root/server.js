@@ -390,6 +390,34 @@ app.post("/addPost", (req, res) => {
     }
 });
 
+app.delete("/deletePost", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.body.post_id) {
+        res.status(202);
+        connection.query("SELECT `BBY35_pet_timeline_posts`.`post_id`, `BBY35_pet_timeline_posts`.`timeline_id`, `BBY35_pet_timeline`.`caretaker_id_fk` " +
+        "FROM `BBY35_pet_timeline_posts` INNER JOIN `BBY35_pet_timeline` ON `BBY35_pet_timeline`.`timeline_id` = `BBY35_pet_timeline_posts`.`timeline_id` WHERE `post_id` = ?;", [req.body.post_id],
+            async (error, results, fields) => {
+                if (error) {
+                    return res.status(404).send({ status: "failure", msg: "Unable to find post!" });
+                } else if (results.length == 1 && (results[0].caretaker_id_fk == req.session.userid || req.session.admin)) {
+                    await connection.promise().query("DELETE FROM `BBY35_pet_timeline_posts` WHERE `post_id` = ?", [results[0].post_id],
+                        (error, results, fields) => {
+                            if (error) {
+                                console.error(error);
+                            }
+                            else {
+                                return res.send({ status: "success", msg: "Post deleted"});
+                            }
+                        });
+                } else {
+                    return res.status(401).send({ status: "failure", msg: "Unauthorized" });
+                }
+            });
+    } else {
+        return res.status(204);
+    }
+});
+
 
 app.get("/login", (req, res) => {
     if (req.session.loggedIn) {
