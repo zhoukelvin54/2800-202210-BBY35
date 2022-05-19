@@ -46,3 +46,15 @@ async function getOwnerPets() {
     }
   });
 }
+
+/**
+ * Creates a timeline from a provided pets data.
+ * @returns Node containing the timeline elements for a specific pet.
+ */
+function createTimeline(pet) {
+  let rowTemplate = document.getElementById("timeline_row_template"); // Change to template.timeline_row eventually
+  let row = rowTemplate.content.cloneNode(true);
+  row.querySelector("#PET_ID").id = pet.id;
+  row.querySelector(".pet_name").innerText = pet.name.charAt(0).toUpperCase() + pet.name.substring(1);
+  return row;
+}
