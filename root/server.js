@@ -115,8 +115,7 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
-app.get("/pet/:petId/timeline", (req, res) => {
-    let data;
+app.get("/timeline/pet/:petId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
     connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `pet_id` = ?", [req.params.petId],
@@ -131,9 +130,19 @@ app.get("/pet/:petId/timeline", (req, res) => {
         });
 });
 
-app.get("/caretaker/:caretakerid/timeline", (req, res) => {
-    // Get each timeline for each pet in the caretakers care
-    res.status(200).send(req.params.caretakerid);
+app.get("/timeline/caretaker/:caretakerId", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    
+    connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `caretaker_id_fk` = ?", [req.params.caretakerId],
+        (error, results, fields) => {
+            if (error) {
+                console.error(error);
+            } else if (results) {
+                res.status(200).send(results);
+            } else {
+                return res.status(404).send({ status: "failure", msg: "No timelines with that caretaker ID!" });
+            }
+        });
 });
 
 app.post("/add-account", (req, res) => {
