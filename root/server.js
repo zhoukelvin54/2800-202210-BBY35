@@ -368,6 +368,29 @@ function getUserView(req) {
     }
 }
 
+app.get("/timelineData", async (req, res) => {
+    connection.query("select bby35_pet_timeline_posts.`timeline_id` from bby35_pet_timeline_posts " +
+    "INNER JOIN bby35_pet_timeline ON bby35_pet_timeline_posts.`timeline_id` = bby35_pet_timeline.`timeline_id`;",
+    (error, results, fields) => {
+        // TODO Update query to get timeline_id, and post details columns
+    });
+});
+
+app.post("/addPost", (req, res) => {
+    if(req.body.timeline_id) {
+        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`timeline_id`, `post_date`, `photo_url`, `contents`) " +
+        "VALUES (?, ?, ?, ?);", [req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
+        (error, results, fields) => {
+            if (error) {
+                res.send({ status: "failure", msg: "Internal Server Error" });
+            } else {
+                res.status(201).send({ status: "success", msg: "Post created" });
+            }
+        });
+    }
+});
+
+
 app.get("/login", (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/home");
