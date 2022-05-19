@@ -92,6 +92,16 @@ CREATE TABLE `BBY35_pet_timeline` (
   CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE `BBY35_pet_timeline_posts` (
+  `post_id` int NOT NULL AUTO_INCREMENT,
+  `timeline_id` int NOT NULL,
+  `post_date` date NOT NULL,
+  `photo_url` varchar(255) DEFAULT NULL,
+  `contents` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (post_id),
+  KEY `timeline_id_idx` (`timeline_id`),
+  CONSTRAINT `timeline_id` FOREIGN KEY (`timeline_id`) REFERENCES `BBY35_pet_timeline` (`timeline_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Add data to BBY35_accounts table (All passwords '12345')
