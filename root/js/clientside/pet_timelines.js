@@ -76,3 +76,32 @@ function createTimeline(pet) {
   
   return row;
 }
+
+/**
+ * Adds the targeted editor post to the relevant timeline.
+ * @param {*} e TODO use event target to find injected timeline id.
+ */
+function createPost(e) {
+  // Get post contents and other variables
+  let data = {
+    "timeline_id": 6,                   // Get timeline id from post row?
+    "post_date": Date("18/05/2022"),    // Figure out date to SQL date conversion
+    "photo_url": null,                  // Get uploaded photo url from page
+    "contents": "Aha a new post!"
+  }
+
+  fetch("/addPost", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(data)
+  }).then(async response => {
+    let parsedData = JSON.parse(await response.text());
+    if (parsedData.status == "error") {
+      console.error("Unable to add post!");
+    } else {
+      console.log("Post was added!");
+    }
+  });
+}
