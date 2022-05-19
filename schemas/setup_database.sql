@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS `BBY35_caretaker_info`;
 DROP TABLE IF EXISTS `BBY35_pets`;
 DROP TABLE IF EXISTS `BBY35_images`;
 DROP TABLE IF EXISTS `BBY35_pet_timeline`;
+DROP TABLE IF EXISTS `BBY35_pet_timeline_posts`;
 DROP TABLE IF EXISTS `BBY35_accounts`;
 
 SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
