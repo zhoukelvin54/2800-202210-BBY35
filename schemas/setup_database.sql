@@ -78,19 +78,26 @@ CREATE TABLE `BBY35_caretaker_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Table structure for table BBY35_images
+-- Table structure for table BBY35_pet_timeline
 --
 
 CREATE TABLE `BBY35_pet_timeline` (
   `timeline_id` int NOT NULL AUTO_INCREMENT,
   `pet_id` int NOT NULL,
+  `caretaker_id` int NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   `location` varchar(20) DEFAULT NULL,
   PRIMARY KEY (timeline_id),
   KEY `pet_id_idx` (`pet_id`),
-  CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`)
+  KEY `caretaker_id_idx` (`caretaker_id`),
+  CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`),
+  CONSTRAINT `caretaker_id` FOREIGN KEY (`caretaker_id`) REFERENCES `BBY35_pets` (`caretaker_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Table structure for table BBY35_pet_timeline_posts
+--
 
 CREATE TABLE `BBY35_pet_timeline_posts` (
   `post_id` int NOT NULL AUTO_INCREMENT,
@@ -231,3 +238,18 @@ INSERT INTO `BBY35_caretaker_info`
           '', NULL,
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
+
+--
+-- Add data to BBY35_caretaker_info table
+--
+INSERT INTO `BBY35_pet_timeline_posts`
+  ()
+  VALUES ();
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  ()
+  VALUES ();
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  ()
+  VALUES ();
