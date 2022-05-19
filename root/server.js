@@ -115,12 +115,12 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
-app.get("/pet/:petId/timeline").get((req, res) => {
+app.get("/pet/:petId/timeline", (req, res) => {
     // Get each timeline and it's posts
     res.status(200).send(req.params.petId);
 });
 
-app.get("/caretaker/:caretakerid/timeline").get((req, res) => {
+app.get("/caretaker/:caretakerid/timeline", (req, res) => {
     // Get each timeline for each pet in the caretakers care
     res.status(200).send(req.params.caretakerid);
 });
