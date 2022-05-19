@@ -115,6 +115,16 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
+app.get("/pet/:petId/timeline").get((req, res) => {
+    // Get each timeline and it's posts
+    res.status(200).send(req.params.petId);
+});
+
+app.get("/caretaker/:caretakerid/timeline").get((req, res) => {
+    // Get each timeline for each pet in the caretakers care
+    res.status(200).send(req.params.caretakerid);
+});
+
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
@@ -378,11 +388,12 @@ app.get("/timelineData", async (req, res) => {
 
 app.post("/addPost", (req, res) => {
     if(req.body.timeline_id) {
+        // TODO Query if the current user is caretaker for that timeline
         connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`timeline_id`, `post_date`, `photo_url`, `contents`) " +
         "VALUES (?, ?, ?, ?);", [req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
         (error, results, fields) => {
             if (error) {
-                res.send({ status: "failure", msg: "Internal Server Error" });
+                res.status(500).send({ status: "failure", msg: "Internal Server Error" });
             } else {
                 res.status(201).send({ status: "success", msg: "Post created" });
             }
