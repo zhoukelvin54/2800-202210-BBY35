@@ -1,5 +1,5 @@
 // used for validating the code with https://jshint.com/
-/* jshint esversion: 6 */
+/* jshint esversion: 8 */
 /* jshint node: true */
 
 "use strict";
@@ -62,7 +62,7 @@ const storage = multer.diskStorage({
         let extensionIndex = input.lastIndexOf(".");
         let extension = input.substring(extensionIndex);
 
-        let fileString = `UserID-${id}-UploadedAt-${Date.now()}${extension}` 
+        let fileString = `UserID-${id}-UploadedAt-${Date.now()}${extension}`; 
         
         cb(null, fileString);
     }
@@ -115,6 +115,51 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
+app.get("/timeline/pet/:petId", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    
+    connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `pet_id` = ?", [req.params.petId],
+        (error, results, fields) => {
+            if (error) {
+                console.error(error);
+            } else if (results) {
+                res.status(200).send(results);
+            } else {
+                return res.status(404).send({ status: "failure", msg: "No timelines with that pet ID!" });
+            }
+        });
+});
+
+app.get("/timeline/caretaker/:caretakerId", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    
+    connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `caretaker_id_fk` = ?", [req.params.caretakerId],
+        (error, results, fields) => {
+            if (error) {
+                console.error(error);
+            } else if (results) {
+                res.status(200).send(results);
+            } else {
+                return res.status(404).send({ status: "failure", msg: "No timelines with that caretaker ID!" });
+            }
+        });
+});
+
+app.get("/timeline/posts/:timelineId", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    
+    connection.query("SELECT * FROM `BBY35_pet_timeline_posts` WHERE `timeline_id` = ?", [req.params.timelineId],
+        (error, results, fields) => {
+            if (error) {
+                console.error(error);
+            } else if (results.length > 0) {
+                return res.status(200).send(results);
+            } else {
+                return res.status(404).send({ status: "failure", msg: "No posts with that timeline ID!" });
+            }
+        });
+});
+
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
@@ -146,18 +191,18 @@ app.post("/add-account", (req, res) => {
 app.get("/get-profile", (req, res) => {
     res.setHeader("Content-type", "application/json");
     let actualFields = [req.session.userid];
-    let query = "SELECT username, firstname, lastname, email, profile_photo_url"
+    let query = "SELECT username, firstname, lastname, email, profile_photo_url";
         
-    query += " FROM BBY35_accounts WHERE id = ?"
+    query += " FROM BBY35_accounts WHERE id = ?";
     
     connection.query(query, actualFields, (error, results, fields) => {
         if (error) {
-            res.send({status: "failure", msg: "Server error"})
+            res.send({status: "failure", msg: "Server error"});
         } else {
-            res.send({status: "success", information: results})
+            res.send({status: "success", information: results});
         }
-    })
-}) 
+    });
+});
 
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
@@ -183,7 +228,7 @@ app.put("/update-profile", (req, res) => {
                     loops += 1;
                     if (expectedFields.includes(prop)) {
                         if (Object.keys(req.body).length == loops) {
-                            query += prop + " = ? "
+                            query += prop + " = ? ";
                             actualFields.push(req.body[prop]);
                             recievedFields.push(prop);
                         } else {
@@ -256,7 +301,7 @@ app.put("/update-pet", (req, res) => {
             res.send({ status: "success", msg: "Pet details updated." });
         }
     });
-})
+});
 
 app.put("/update-caretaker-info", (req, res) => {
     res.setHeader("Content-Type", "application/json");
@@ -363,7 +408,7 @@ async function getUserView(req) {
         let description;
         if (req.session.caretaker == 1) {
             role = "caretaker";
-            description = "Here you will see your pets and can request a caretaker to look after them. <br> At the bottom you can see a list of other's pets that currently need caretakers to look after them"
+            description = "Here you will see your pets and can request a caretaker to look after them. <br> At the bottom you can see a list of other's pets that currently need caretakers to look after them";
             pageDOM.window.document.getElementById("caretaker-panel").hidden = false;
         } else {
             role = "pet owner";
@@ -575,7 +620,7 @@ app.put("/acceptPet", (req, res) => {
     if (req.session.caretaker == 1) {
         connection.query("UPDATE BBY35_pets SET status = 1, caretaker_id = ? WHERE id = ?", [caretakerid, petid], () => {
             res.send({status: "success", msg: "Pet is now in your care"});
-        })
+        });
     } else {
         res.send({status: "failue", msg: "You are not a caretaker!"});
     }
@@ -584,16 +629,16 @@ app.put("/acceptPet", (req, res) => {
 app.put("/releasePet", (req, res) => {
     res.setHeader("content-type", "application/json");
     let petid = req.body.petid;
-    let status = req.body.status
+    let status = req.body.status;
     let isOKStatus = (status != 1);
     if (isOKStatus && req.session.caretaker == 1) {
         connection.query("UPDATE BBY35_pets SET status = ?, caretaker_id = NULL WHERE id = ?", [status, petid], () => {
             res.send({status: "success", msg: "Pet is now no longer in your care"});
-        })
+        });
     } else {
         res.send({status: "failue", msg: "You are not a caretaker or status is invalid!"});
     }
-})
+});
 
 app.get("/petsInCare", (req, res) => {
     res.setHeader("content-type", "application/json");
@@ -732,7 +777,7 @@ app.put("/grant", async (req, res) => {
 
     if (isRequesterAdmin && !isTargetAdmin) {
         connection.query('UPDATE BBY35_accounts SET is_admin = 1 WHERE id = ?', [accountID], async () => {
-            res.send({ status: "success", msg: `User ${targetName} was granted admin privileges` })
+            res.send({ status: "success", msg: `User ${targetName} was granted admin privileges` });
         });
     } else {
         res.send({ status: "failure", msg: `User ${targetName} could not be granted admin privileges` });
