@@ -7,14 +7,15 @@
 }
 
 body {
-    background-image: url(../img/dogs.jpg);
+    background-image: linear-gradient(rgb(53, 48, 48), rgb(53, 48, 48)), url(../img/dogs.jpg);
     background-size: cover;
     background-position: center;
-    background-blend-mode: lighten;
+    background-blend-mode: multiply;
     font-family: "Poppins", sans-serif;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    color: aliceblue;
 }
 
 .profile {
