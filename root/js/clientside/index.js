@@ -1,4 +1,6 @@
 "use strict";
+let sawWelcome = getCookie("sawWelcome")
+
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -12,10 +14,14 @@ function hidehero() {
         document.cookie = "sawWelcome=true"
     }
 };
-
-let sawWelcome = getCookie("sawWelcome")
-console.log("sawwelcome");
 if(sawWelcome = "true") {
     hidehero();
-    console.log("you already saw this!")
 }
+
+window.addEventListener('load', () => {
+    
+});
+
+
+
+
