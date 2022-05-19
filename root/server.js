@@ -116,8 +116,19 @@ app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
 app.get("/pet/:petId/timeline", (req, res) => {
-    // Get each timeline and it's posts
-    res.status(200).send(req.params.petId);
+    let data;
+    res.setHeader("content-type", "application/json");
+    
+    connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `pet_id` = ?", [req.params.petId],
+        (error, results, fields) => {
+            if (error) {
+                console.error(error);
+            } else if (results) {
+                res.status(200).send(results);
+            } else {
+                return res.status(404).send({ status: "failure", msg: "No timelines with that pet ID!" });
+            }
+        });
 });
 
 app.get("/caretaker/:caretakerid/timeline", (req, res) => {
@@ -181,8 +192,7 @@ app.put("/update-profile", (req, res) => {
         [username, email],
         (error, results, fields) => {
             if (results.length > 0) {
-                res.status(400);
-                return res.send({ status: "failure", msg: "Username or email already taken!" });
+                res.status(409).send({ status: "failure", msg: "Username or email already taken!" });
             } else {
                 let expectedFields = ["firstname", "lastname", "email", "username", "password", "profile_photo_url", "telephone", "address"];
                 let recievedFields = [];
@@ -318,42 +328,30 @@ app.get("/", (req, res) => {
     res.redirect("/login");
 });
 
-app.get("/home", (req, res) => {
+app.get("/home", async (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.newAccount) {
         res.redirect("/sign-up");
     } else {
-        let doc = getUserView(req);
+        let doc = await getUserView(req);
         res.send(doc);
     }
 });
 
-app.get("/timeline", async (req, res) => {
-    // TODO: Move this route to main page once completed.
-    let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
-    let pageDoc = pageDOM.window.document;
-    pageDOM = await helpers.injectHeaderFooter(pageDOM);
-    pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
-
-    helpers.injectScript(pageDOM, "/js/pet_timelines.js", "defer");
-    
-    let fontAwesome = pageDoc.createElement("link");
-    fontAwesome.setAttribute("rel", "stylesheet");
-    fontAwesome.setAttribute("href", "https://use.fontawesome.com/releases/v5.3.1/css/all.css");
-    fontAwesome.setAttribute("integrity", "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU");
-    fontAwesome.setAttribute("crossorigin", "anonymous");
-    pageDoc.head.appendChild(fontAwesome);
-    
-    // Why do I need to do this injection instead of using the module???????
-    helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");    
-
-    return res.send(pageDOM.serialize()); 
-});
-
-function getUserView(req) {
+async function getUserView(req) {
     if (req.session.admin) {
-        return fs.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+        let pageDOM = new JSDOM(doc);
+
+        // header & footer
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/main.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectHeaderFooter(pageDOM);
+
+        return pageDOM.serialize();
     } else {
         // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
@@ -374,63 +372,18 @@ function getUserView(req) {
         pageDOM.window.document.getElementById("role").innerHTML = role;
         pageDOM.window.document.getElementById("role-desc").innerHTML = description;
 
+        // header & footer
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/main.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectHeaderFooter(pageDOM);
+
         return pageDOM.serialize();
     }
 }
 
-app.get("/timelineData", async (req, res) => {
-    connection.query("select bby35_pet_timeline_posts.`timeline_id` from bby35_pet_timeline_posts " +
-    "INNER JOIN bby35_pet_timeline ON bby35_pet_timeline_posts.`timeline_id` = bby35_pet_timeline.`timeline_id`;",
-    (error, results, fields) => {
-        // TODO Update query to get timeline_id, and post details columns
-    });
-});
-
-app.post("/addPost", (req, res) => {
-    if(req.body.timeline_id) {
-        // TODO Query if the current user is caretaker for that timeline
-        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`timeline_id`, `post_date`, `photo_url`, `contents`) " +
-        "VALUES (?, ?, ?, ?);", [req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
-        (error, results, fields) => {
-            if (error) {
-                res.status(500).send({ status: "failure", msg: "Internal Server Error" });
-            } else {
-                res.status(201).send({ status: "success", msg: "Post created" });
-            }
-        });
-    }
-});
-
-app.delete("/deletePost", (req, res) => {
-    res.setHeader("content-type", "application/json");
-    if (req.body.post_id) {
-        res.status(202);
-        connection.query("SELECT `BBY35_pet_timeline_posts`.`post_id`, `BBY35_pet_timeline_posts`.`timeline_id`, `BBY35_pet_timeline`.`caretaker_id_fk` " +
-        "FROM `BBY35_pet_timeline_posts` INNER JOIN `BBY35_pet_timeline` ON `BBY35_pet_timeline`.`timeline_id` = `BBY35_pet_timeline_posts`.`timeline_id` WHERE `post_id` = ?;", [req.body.post_id],
-            async (error, results, fields) => {
-                if (error) {
-                    return res.status(404).send({ status: "failure", msg: "Unable to find post!" });
-                } else if (results.length == 1 && (results[0].caretaker_id_fk == req.session.userid || req.session.admin)) {
-                    await connection.promise().query("DELETE FROM `BBY35_pet_timeline_posts` WHERE `post_id` = ?", [results[0].post_id],
-                        (error, results, fields) => {
-                            if (error) {
-                                console.error(error);
-                            }
-                            else {
-                                return res.send({ status: "success", msg: "Post deleted"});
-                            }
-                        });
-                } else {
-                    return res.status(401).send({ status: "failure", msg: "Unauthorized" });
-                }
-            });
-    } else {
-        return res.status(204);
-    }
-});
-
-
-app.get("/login", (req, res) => {
+app.get("/login", async (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/home");
     } else {
@@ -513,41 +466,22 @@ app.get("/logout", (req, res) => {
     }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", async (req, res) => {
     if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
 
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
-    res.send(doc);
-    /*
-    let pageDOM = new jsdom.JSDOM(doc);
-    let pageDocument = pageDOM.window.document;
-    let first_last_name = req.session.name.split(',');
+    let pageDOM = new JSDOM(doc);
 
-    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.session.profile_photo_url});`;
-    pageDocument.getElementById("username").textContent = req.body.username;
-    pageDocument.getElementById("first_name").textContent = first_last_name[0];
-    pageDocument.getElementById("last_name").textContent = first_last_name[1];
-    pageDocument.getElementById("email").textContent = req.session.email;
-    
+    // header & footer
+    let link = pageDOM.window.document.createElement("link");
+    link.setAttribute("rel","stylesheet");
+    link.setAttribute("href", "css/main.css");
+    pageDOM.window.document.head.appendChild(link);
+    pageDOM = await helpers.injectHeaderFooter(pageDOM);
+   
     res.send(pageDOM.serialize());
-    */
+   
 });
-
-/*
-app.put("/password-update", (req,res) => {
-    res.setHeader("Content-type", "application/json");
-    
-    connection.query("UPDATE BBY35_accounts SET password = ? WHERE id = ?", 
-    [req.body.password, req.session.userid],
-    (error, results, fields) => {
-        if (error) {
-            res.send({ status: "failure", msg: "Serverside error"});
-        } else {
-            res.send({ status: "success", msg: "Password changed"});
-        }
-    })
-})
-*/
 
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
@@ -620,9 +554,9 @@ app.get("/petsInCare", (req, res) => {
     }
 });
 
-app.post("/getUserInfo", (req, res) => {
+app.get("/getUserInfo/:userid", (req, res) => {
     res.setHeader("content-type", "application/json");
-    let userid = req.body.userid;
+    let userid = req.params.userid;
 
     connection.query(`SELECT username, firstname, lastname, email, is_caretaker FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
         res.send(data);

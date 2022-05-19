@@ -262,14 +262,11 @@ async function getInCare() {
 
 async function getAccountInfo(id) {
     let request = { 
-        method: "POST",
+        method: "GET",
         headers: {"content-type": "application/json"},
-        body: JSON.stringify({
-            userid: id
-        })
     };
     try {
-        let response = await fetch("/getUserInfo", request);
+        let response = await fetch(`/getUserInfo/${id}`, request);
 
         if (response.status == 200) {
             let data = await response.text();

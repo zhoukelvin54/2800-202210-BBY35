@@ -6,34 +6,6 @@
     font-family: 'Bitter', serif;
 }
 
-.navbar {
-    background-color: #343a40;
-    overflow: hidden;
-    text-transform: capitalize;
-}
-
-.navbar a {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
-}
-
-.logo {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding-top: 0.5rem;
-    width: 10%;
-}
-
-.navbar .icon {
-    display: none;
-}
-
 body {
     background-image: url(../img/dogs.jpg);
     background-size: cover;
@@ -43,14 +15,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
-
-.container {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    width: 70vw;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .login {
@@ -123,6 +87,7 @@ body {
     transition: background-color 0.2s;
 }
 
+
 footer {
     background-color: #343a40;
     overflow: hidden;
@@ -150,18 +115,4 @@ footer a {
 }
 
 @media only screen and (max-width: 768px) {
-    nav {
-        display: grid;
-    }
-    .navbar a {
-        font-size: 13px;
-        padding: 7px 9px;
-    }
-    .sm_hidden {
-        display: none;
-    }
-    .logo {
-        width: 35vw;
-        height: 25vh;
-    }
 }
