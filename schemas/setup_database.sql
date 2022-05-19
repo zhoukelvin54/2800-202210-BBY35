@@ -310,13 +310,57 @@ INSERT INTO `BBY35_pet_timeline`
 -- Add data to BBY35_caretaker_info table
 --
 INSERT INTO `BBY35_pet_timeline_posts`
-  ()
-  VALUES ();
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Your pet is fine!');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  ()
-  VALUES ();
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, STR_TO_DATE('22/04/2022', '%d/%m/%Y'), NULL, 'Rowdy times!');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  ()
-  VALUES ();
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (2, STR_TO_DATE('14/04/2022', '%d/%m/%Y'), NULL, 'Sleeping in vibes ahaha');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (2, STR_TO_DATE('03/05/2022', '%d/%m/%Y'), NULL, 'Almost ready to see their owner!');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (3, STR_TO_DATE('12/01/2022', '%d/%m/%Y'), NULL, 'Your pet has arrived!');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (4, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Not eating too much');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (5, STR_TO_DATE('02/07/2022', '%d/%m/%Y'), NULL, 'Where is your pet?');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (6, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
