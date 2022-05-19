@@ -248,7 +248,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (1, 1, STR_TO_DATE('18/04/2022', '%d/%m/%y'), STR_TO_DATE('18/05/2022', '%d/%m/%y'), 'Vancouver');
+  VALUES (1, 1, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), STR_TO_DATE('18/05/2022', '%d/%m/%Y'), 'Vancouver');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -256,7 +256,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (2, 1, STR_TO_DATE('13/04/2022', '%d/%m/%y'), STR_TO_DATE('06/05/2022', '%d/%m/%y'), 'Vancouver');
+  VALUES (2, 1, STR_TO_DATE('13/04/2022', '%d/%m/%Y'), STR_TO_DATE('06/05/2022', '%d/%m/%Y'), 'Vancouver');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -264,7 +264,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (1, 2, STR_TO_DATE('12/01/2022', '%d/%m/%y'), STR_TO_DATE('20/02/2022', '%d/%m/%y'), 'Abbotsford');
+  VALUES (1, 2, STR_TO_DATE('12/01/2022', '%d/%m/%Y'), STR_TO_DATE('20/02/2022', '%d/%m/%Y'), 'Abbotsford');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -272,7 +272,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (3, 2, STR_TO_DATE('13/04/2022', '%d/%m/%y'), STR_TO_DATE('06/05/2022', '%d/%m/%y'), 'Abbotsford');
+  VALUES (3, 2, STR_TO_DATE('13/04/2022', '%d/%m/%Y'), STR_TO_DATE('06/05/2022', '%d/%m/%Y'), 'Abbotsford');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -280,7 +280,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (3, 3, STR_TO_DATE('01/07/2022', '%d/%m/%y'), STR_TO_DATE('15/08/2022', '%d/%m/%y'), 'Seattle');
+  VALUES (3, 3, STR_TO_DATE('01/07/2022', '%d/%m/%Y'), STR_TO_DATE('15/08/2022', '%d/%m/%Y'), 'Seattle');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -288,7 +288,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (4, 3, STR_TO_DATE('22/02/2022', '%d/%m/%y'), STR_TO_DATE('06/03/2022', '%d/%m/%y'), 'Seattle');
+  VALUES (4, 3, STR_TO_DATE('22/02/2022', '%d/%m/%Y'), STR_TO_DATE('06/03/2022', '%d/%m/%Y'), 'Seattle');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -296,7 +296,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (5, 4, STR_TO_DATE('01/06/2022', '%d/%m/%y'), STR_TO_DATE('01/08/2022', '%d/%m/%y'), 'Prince George');
+  VALUES (5, 4, STR_TO_DATE('01/06/2022', '%d/%m/%Y'), STR_TO_DATE('01/08/2022', '%d/%m/%Y'), 'Prince George');
 
 INSERT INTO `BBY35_pet_timeline`
   (`pet_id`,
@@ -304,7 +304,7 @@ INSERT INTO `BBY35_pet_timeline`
   `start_date`,
   `end_date`,
   `location`)
-  VALUES (6, 4, STR_TO_DATE('22/06/2022', '%d/%m/%y'), STR_TO_DATE('15/07/2022', '%d/%m/%y'), 'Prince George');
+  VALUES (6, 4, STR_TO_DATE('22/06/2022', '%d/%m/%Y'), STR_TO_DATE('15/07/2022', '%d/%m/%Y'), 'Prince George');
 
 --
 -- Add data to BBY35_caretaker_info table
