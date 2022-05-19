@@ -1,24 +1,32 @@
 <!-- This contains the display for both caretakers and pet owners -->
 <main>
-  <div class="timeline_row" id="PET_ID">
-    <!-- Card for displaying a pet -->
-    <div class="card">
-      <div class="pet">
-        <em class="pet_name">Pet_Name</em>
-        <span clas="species"></span>
+  <template id="timeline_row_template">
+    <div class="timeline_row" id="PET_ID">
+      <!-- Card for displaying a pet -->
+      <div class="card">
+        <div class="pet">
+          <strong class="pet_name"></strong>
+          <span class="species"></span>
+        </div>
+      </div>
+  
+      <!-- Card for adding a timeline post -->
+      <div class="card">
+        <div class="create_post" data-tiny-editor data-forecolor="no" data-justifyleft="no" data-justifycenter="no"
+            data-justifyright="no" data-insertunorderedlist="no" data-insertorderedlist="no" data-outdent="no" data-indent="no" data-formatblock="no" data-fontname="no">
+        </div>
+        <div class="add_photo">
+          <span class="material-icons-outlined">add_photo_alternate</span>
+        </div>
+        <div class="upload_post">
+          <span class="material-icons-outlined">send</span>
+        </div>
+      </div>
+  
+      <!-- Editable Status card template -->
+      <div class="card" id="testEditor">
+  
       </div>
     </div>
-
-    <!-- Card for adding a timeline post -->
-    <div class="card">
-      <div class="create_post" data-tiny-editor data-forecolor="no" data-justifyleft="no" data-justifycenter="no"
-          data-justifyright="no" data-insertunorderedlist="no" data-insertorderedlist="no" data-outdent="no" data-indent="no" data-formatblock="no" data-fontname="no">
-      </div>
-    </div>
-
-    <!-- Editable Status card template -->
-    <div class="card" id="testEditor">
-
-    </div>
-  </div>
+  </template>
 </main>
