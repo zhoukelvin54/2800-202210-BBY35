@@ -307,20 +307,30 @@ app.get("/", (req, res) => {
     res.redirect("/login");
 });
 
-app.get("/home", (req, res) => {
+app.get("/home", async (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
     } else if (req.session.newAccount) {
         res.redirect("/sign-up");
     } else {
-        let doc = getUserView(req);
+        let doc = await getUserView(req);
         res.send(doc);
     }
 });
 
-function getUserView(req) {
+async function getUserView(req) {
     if (req.session.admin) {
-        return fs.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+        let pageDOM = new JSDOM(doc);
+
+        // header & footer
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/main.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectHeaderFooter(pageDOM);
+
+        return pageDOM.serialize();
     } else {
         // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
@@ -341,11 +351,18 @@ function getUserView(req) {
         pageDOM.window.document.getElementById("role").innerHTML = role;
         pageDOM.window.document.getElementById("role-desc").innerHTML = description;
 
+        // header & footer
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/main.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectHeaderFooter(pageDOM);
+
         return pageDOM.serialize();
     }
 }
 
-app.get("/login", (req, res) => {
+app.get("/login", async (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/home");
     } else {
@@ -428,41 +445,22 @@ app.get("/logout", (req, res) => {
     }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", async (req, res) => {
     if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
 
     let doc = fs.readFileSync("./root/profile.html", "utf-8");
-    res.send(doc);
-    /*
-    let pageDOM = new jsdom.JSDOM(doc);
-    let pageDocument = pageDOM.window.document;
-    let first_last_name = req.session.name.split(',');
+    let pageDOM = new JSDOM(doc);
 
-    pageDocument.getElementById("profile_picture").style = `background-image: url(/img/uploads/${req.session.profile_photo_url});`;
-    pageDocument.getElementById("username").textContent = req.body.username;
-    pageDocument.getElementById("first_name").textContent = first_last_name[0];
-    pageDocument.getElementById("last_name").textContent = first_last_name[1];
-    pageDocument.getElementById("email").textContent = req.session.email;
-    
+    // header & footer
+    let link = pageDOM.window.document.createElement("link");
+    link.setAttribute("rel","stylesheet");
+    link.setAttribute("href", "css/main.css");
+    pageDOM.window.document.head.appendChild(link);
+    pageDOM = await helpers.injectHeaderFooter(pageDOM);
+   
     res.send(pageDOM.serialize());
-    */
+   
 });
-
-/*
-app.put("/password-update", (req,res) => {
-    res.setHeader("Content-type", "application/json");
-    
-    connection.query("UPDATE BBY35_accounts SET password = ? WHERE id = ?", 
-    [req.body.password, req.session.userid],
-    (error, results, fields) => {
-        if (error) {
-            res.send({ status: "failure", msg: "Serverside error"});
-        } else {
-            res.send({ status: "success", msg: "Password changed"});
-        }
-    })
-})
-*/
 
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
