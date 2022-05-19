@@ -615,6 +615,15 @@ app.get("/getUserInfo/:userid", (req, res) => {
     });
 });
 
+app.get("/getPetInfo/:petid", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.params.petid;
+
+    connection.query(`SELECT * FROM BBY35_pets WHERE id = ?`, [petid], (err, data, fields) => {
+        res.send(data);
+    });
+});
+
 app.put("/requestHousing", (req, res) => {
     res.setHeader("content-type", "application/json");
     let petid = req.body.petid;
