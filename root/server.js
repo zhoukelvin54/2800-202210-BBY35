@@ -145,6 +145,21 @@ app.get("/timeline/caretaker/:caretakerId", (req, res) => {
         });
 });
 
+app.get("/timeline/posts/:timelineId", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    
+    connection.query("SELECT * FROM `BBY35_pet_timeline_posts` WHERE `timeline_id` = ?", [req.params.timelineId],
+        (error, results, fields) => {
+            if (error) {
+                console.error(error);
+            } else if (results.length > 0) {
+                return res.status(200).send(results);
+            } else {
+                return res.status(404).send({ status: "failure", msg: "No posts with that timeline ID!" });
+            }
+        });
+});
+
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
