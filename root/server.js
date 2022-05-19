@@ -171,8 +171,7 @@ app.put("/update-profile", (req, res) => {
         [username, email],
         (error, results, fields) => {
             if (results.length > 0) {
-                res.status(400);
-                return res.send({ status: "failure", msg: "Username or email already taken!" });
+                res.status(409).send({ status: "failure", msg: "Username or email already taken!" });
             } else {
                 let expectedFields = ["firstname", "lastname", "email", "username", "password", "profile_photo_url", "telephone", "address"];
                 let recievedFields = [];
@@ -321,29 +320,58 @@ app.get("/home", async (req, res) => {
 
 async function getUserView(req) {
     if (req.session.admin) {
-        return fs.readFileSync("./root/user_management.html", "utf-8");
+        let doc = fs.readFileSync("./root/user_management.html", "utf-8");
+        let pageDOM = new JSDOM(doc);
+
+        // header & footer
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/main.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectHeaderFooter(pageDOM);
+
+        return pageDOM.serialize();
     } else {
         // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
         let pageDOM = new JSDOM(doc);
         let user = req.session.username;
         pageDOM.window.document.getElementById("username").innerHTML = user;
+        let role;
+        let description;
+        if (req.session.caretaker == 1) {
+            role = "caretaker";
+            description = "Here you will see your pets and can request a caretaker to look after them. <br> At the bottom you can see a list of other's pets that currently need caretakers to look after them"
+            pageDOM.window.document.getElementById("caretaker-panel").hidden = false;
+        } else {
+            role = "pet owner";
+            description = "Here you will see your pets and can request a caretaker to look after them";
 
-        
-        if (!req.session.caretaker){
-            //update path 
             let link = pageDOM.window.document.createElement("link");
             link.setAttribute("rel","stylesheet");
             link.setAttribute("href", "css/modals.css");
             pageDOM.window.document.head.appendChild(link);
-            pageDOM = await helpers.injectModal(pageDOM, "#add_pet_button", "#add_pet_modal", "pets_modal.html");
+            pageDOM = await helpers.loadHTMLComponent(pageDOM, "#add_pet_button", "#add_pet_button", "./root/common/pets_modal.html");
+            pageDOM = await helpers.loadHTMLComponent(pageDOM, "#add_pet_modal", "#add_pet_modal", "./root/common/pets_modal.html");
+            pageDOM = await helpers.loadHTMLComponent(pageDOM, "#add_pet_script", "#add_pet_script", "./root/common/pets_modal.html");
         }
+
+        pageDOM.window.document.getElementById("role").innerHTML = role;
+        pageDOM.window.document.getElementById("role-desc").innerHTML = description;
+
+        // header & footer
+        let link = pageDOM.window.document.createElement("link");
+        link.setAttribute("rel","stylesheet");
+        link.setAttribute("href", "css/main.css");
+        pageDOM.window.document.head.appendChild(link);
+        pageDOM = await helpers.injectHeaderFooter(pageDOM);
+
         
         return pageDOM.serialize();
     }
 }
 
-app.get("/login", (req, res) => {
+app.get("/login", async (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/home");
     } else {
@@ -437,10 +465,20 @@ app.get("/profile", async (req, res) => {
         link.setAttribute("rel","stylesheet");
         link.setAttribute("href", "css/modals.css");
         pageDOM.window.document.head.appendChild(link);
-        pageDOM = await helpers.injectModal(pageDOM, "#edit_caretaker_button", "#edit_caretaker_modal", "caretaker_modal.html");
+        pageDOM = await helpers.loadHTMLComponent(pageDOM, "#edit_caretaker_button", "#edit_caretaker_button", "./root/common/caretaker_modal.html");
+        pageDOM = await helpers.loadHTMLComponent(pageDOM, "#edit_caretaker_modal", "#edit_caretaker_modal", "./root/common/caretaker_modal.html");
+        pageDOM = await helpers.loadHTMLComponent(pageDOM, "#edit_caretaker_script", "#edit_caretaker_script", "./root/common/caretaker_modal.html");
     }
-    
+
+    // header & footer
+    let link = pageDOM.window.document.createElement("link");
+    link.setAttribute("rel","stylesheet");
+    link.setAttribute("href", "css/main.css");
+    pageDOM.window.document.head.appendChild(link);
+    pageDOM = await helpers.injectHeaderFooter(pageDOM);
+   
     res.send(pageDOM.serialize());
+   
 });
 
 app.get("/userData", (req, res) => {
@@ -456,13 +494,93 @@ app.get("/userData", (req, res) => {
 
 app.get("/petData", (req, res) => {
     res.setHeader("content-type", "application/json");
-    if (req.session.caretaker == 0) {
-        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description FROM BBY35_pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
+    if (req.session.loggedIn) {
+        connection.query('SELECT id, caretaker_id, photo_url, name, species, gender, description, status  FROM BBY35_pets WHERE owner_id = ?', [req.session.userid], (err, data, fields) => {
             res.send(data);
         });
     } else {
         res.send({ status: "failure", msg: "User not logged in!" });
     }
+});
+
+app.get("/petRequests", (req, res) =>{
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 1) {
+        connection.query("SELECT id, owner_id, photo_url, name, species, gender, description, status FROM BBY35_pets WHERE status = 2 AND owner_id <> ?", [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not caretaker!" });
+    }
+});
+
+app.put("/acceptPet", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+    let caretakerid = req.session.userid;
+    if (req.session.caretaker == 1) {
+        connection.query("UPDATE BBY35_pets SET status = 1, caretaker_id = ? WHERE id = ?", [caretakerid, petid], () => {
+            res.send({status: "success", msg: "Pet is now in your care"});
+        })
+    } else {
+        res.send({status: "failue", msg: "You are not a caretaker!"});
+    }
+});
+
+app.put("/releasePet", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+    let status = req.body.status
+    let isOKStatus = (status != 1);
+    if (isOKStatus && req.session.caretaker == 1) {
+        connection.query("UPDATE BBY35_pets SET status = ?, caretaker_id = NULL WHERE id = ?", [status, petid], () => {
+            res.send({status: "success", msg: "Pet is now no longer in your care"});
+        })
+    } else {
+        res.send({status: "failue", msg: "You are not a caretaker or status is invalid!"});
+    }
+})
+
+app.get("/petsInCare", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.session.caretaker == 1) {
+        connection.query("SELECT id, owner_id, photo_url, name, species, gender, description, status FROM BBY35_pets WHERE status = 1 AND caretaker_id = ?", [req.session.userid], (err, data, fields) => {
+            res.send(data);
+        });
+    } else {
+        res.send({ status: "failure", msg: "User not caretaker!" });
+    }
+});
+
+app.post("/getUserInfo", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let userid = req.body.userid;
+
+    connection.query(`SELECT username, firstname, lastname, email, is_caretaker FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
+        res.send(data);
+    });
+});
+
+app.put("/requestHousing", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.body.petid;
+
+    connection.query(`SELECT status FROM BBY35_pets WHERE id = ?`, [petid], async (err, data, fields) => {
+        let status = data[0]['status'];
+        if (status == 1) {
+            res.send({status: "failure", msg: "Pet is away."});
+        } else {
+            if (status == 0) {
+                connection.query(`UPDATE BBY35_pets SET status = 2 WHERE id = ?`, [petid], () => {
+                    res.send({status: "success", msg: "Pet is now pending caretaker."});
+                });
+            } else {
+                connection.query(`UPDATE BBY35_pets SET status = 0 WHERE id = ?`, [petid], () => {
+                    res.send({status: "success", msg: "Pet is now returned home."});
+                });
+            }
+        }
+    });
 });
 
 // this route is for testing and example purposes only and should be cleaned up once the forms requiring image upload are completed
