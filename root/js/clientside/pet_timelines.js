@@ -71,5 +71,8 @@ function createTimeline(pet) {
   let row = rowTemplate.content.cloneNode(true);
   row.querySelector("#PET_ID").id = pet.id;
   row.querySelector(".pet_name").innerText = pet.name.charAt(0).toUpperCase() + pet.name.substring(1);
+  row.querySelector(".species").innerText = pet.species;
+  window.__tinyEditor.transformToEditor(row.querySelector(".card .create_post"));
+  
   return row;
 }
