@@ -16,3 +16,18 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
+
+.profile {
+    font-family: sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.ct_image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto 20px auto;
+    display: block;
+}
