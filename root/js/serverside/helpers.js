@@ -3,10 +3,11 @@ import { readFile } from 'node:fs/promises';
 
 /**
  * Redirects non-logged-in users to the `'/login'` route.
- * @param {Response} res - Response object, may get redirected
+ * @param { Request } req - Request object to verify session data
+ * @param { Response } res - Response object, may get redirected
  * @returns `true` if the user was redirected, `false` otherwise.
  */
- function redirectToLogin(req, res) {
+ function redirectIfNotLoggedIn(req, res) {
 	if (!req.session || !req.session.loggedIn) {
 		res.redirect("/login");
 		return true;
@@ -151,5 +152,5 @@ export {
   injectStylesheet,
   loadHTMLComponent,
   craftInsertUpdateQueryFromRequest,
-  redirectToLogin
+  redirectIfNotLoggedIn
 };
