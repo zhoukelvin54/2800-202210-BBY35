@@ -16,5 +16,4 @@ function hidehero() {
 };
 if(sawWelcome = "true") {
     hidehero();
-    console.log("you already saw this!")
 }

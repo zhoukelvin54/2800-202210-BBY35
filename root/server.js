@@ -353,7 +353,9 @@ async function getUserView(req) {
             pageDOM.window.document.head.appendChild(link);
             pageDOM = await helpers.loadHTMLComponent(pageDOM, "#add_pet_button", "#add_pet_button", "./root/common/pets_modal.html");
             pageDOM = await helpers.loadHTMLComponent(pageDOM, "#add_pet_modal", "#add_pet_modal", "./root/common/pets_modal.html");
-            pageDOM = await helpers.loadHTMLComponent(pageDOM, "#add_pet_script", "#add_pet_script", "./root/common/pets_modal.html");
+            let script = pageDOM.window.document.createElement("script");
+            script.setAttribute("src", "js/pets_modal.js");
+            pageDOM.window.document.body.appendChild(script);
         }
 
         pageDOM.window.document.getElementById("role").innerHTML = role;
@@ -467,7 +469,9 @@ app.get("/profile", async (req, res) => {
         pageDOM.window.document.head.appendChild(link);
         pageDOM = await helpers.loadHTMLComponent(pageDOM, "#edit_caretaker_button", "#edit_caretaker_button", "./root/common/caretaker_modal.html");
         pageDOM = await helpers.loadHTMLComponent(pageDOM, "#edit_caretaker_modal", "#edit_caretaker_modal", "./root/common/caretaker_modal.html");
-        pageDOM = await helpers.loadHTMLComponent(pageDOM, "#edit_caretaker_script", "#edit_caretaker_script", "./root/common/caretaker_modal.html");
+        let script = pageDOM.window.document.createElement("script");
+        script.setAttribute("src", "js/caretaker_modal.js");
+        pageDOM.window.document.body.appendChild(script);
     }
 
     // header & footer
