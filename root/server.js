@@ -754,7 +754,8 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    let truncatedPath = req.file.path.replace("root/img/uploads/", "");
+    let path = req.file.path.replaceAll("\\", "/");
+    let truncatedPath = path.replace("root/img/uploads/", "");
     console.log(truncatedPath);
     res.send({ url: truncatedPath });
 });
