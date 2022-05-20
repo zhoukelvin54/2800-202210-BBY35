@@ -2,7 +2,11 @@
 /* jshint browser: true */
 "use strict";
 
-onReady(appendPosts);
+onReady(() => {
+  appendPosts();
+  // Add events for uploading photo and post
+  document.querySelector(".create_post .submit_post").addEventListener("click", submitPost);
+});
 
 /**
  * Fetches the posts then appends each card for each post.
@@ -30,10 +34,57 @@ async function createPostCard(post) {
   let card = newPost.firstElementChild;
   
   card.id = post.post_id;
-  let photo = post.photo_url ? post.poster_id + "/" + post.photo_url : "dog_1.jpg";
+  let photo = post.photo_url ? post.photo_url : "dog_1.jpg";
   card.querySelector(".photo_container").innerHTML = `<img src="/img/uploads/${photo}" alt="Pet photo"/>`;
   card.querySelector(".post_content").innerHTML = post.contents;
   card.querySelector(".date_posted").innerText = post.post_date;
 
   return newPost;
+}
+
+function findCard(element) {
+  if(element.classList.contains("card")) {
+    return element;
+  } else {
+    return findCard(element.parentElement);
+  }
+}
+
+async function submitPost(e) {
+  let editor = document.querySelector("[data-tiny-editor]");
+  fetch("/addPost", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      timeline_id: window.location.href.split("/").pop(),
+      post_date: Date.now(),
+      photo_url: await uploadPhoto(),
+      contents: editor.innerHTML
+    })
+  }).then( () => { console.log("Posted") });
+}
+
+async function uploadPhoto() {
+  let photo = document.getElementById("post_photo").files[0];
+  let photoURL;
+  if (photo != null) {
+    const formData = new FormData();
+
+    formData.append("picture", photo)
+
+    await fetch("/addPhoto", {
+      method: "POST",
+      body: formData
+      }).then(res => res.json())
+      .then(res => {
+        photoURL = res.url;
+      })
+      .catch(err => {
+        console.error(err);
+        throw err;
+      })
+  }
+  return photoURL
 }

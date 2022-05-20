@@ -180,12 +180,15 @@ app.get("/timeline/overview/:timeline_Id", async (req, res) => {
 
     // Setup page
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
+    let pageDoc = pageDOM.window.document;
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
     pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
     helpers.injectStylesheet(pageDOM, "/css/timelines.css");
     helpers.injectScript(pageDOM, "/js/timeline.js", "defer");
     
     if (req.session.caretaker) {
+        let addPostEditor = pageDoc.getElementById("create_post_template").content.cloneNode(true);
+        pageDoc.querySelector("main").prepend(addPostEditor);
         helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");
         let fontAwesome = pageDOM.window.document.createElement("link");
         fontAwesome.setAttribute("rel", "stylesheet");
@@ -481,9 +484,11 @@ async function getUserView(req) {
 
 
 app.post("/addPost", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    console.log(req.body);
     if(req.body.timeline_id) {
-        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`timeline_id`, `post_date`, `photo_url`, `contents`) " +
-        "VALUES (?, ?, ?, ?);", [req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
+        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`poster_id`, `timeline_id`, `post_date`, `photo_url`, `contents`) " +
+        "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
         (error, results, fields) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
@@ -491,6 +496,8 @@ app.post("/addPost", (req, res) => {
                 res.status(201).send({ status: "success", msg: "Post created" });
             }
         });
+    } else {
+        return res.status(404).send({ status: "failure", msg: "No timeline provided!" });
     }
 });
 

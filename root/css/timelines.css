@@ -4,5 +4,32 @@
 
 .card {
   box-sizing: border-box;
-  padding: 2rem;
+  margin: 1.5rem;
+  padding: 0.5rem;
+  background-color: var(--primary);
+}
+
+.__toolbar-separator {
+  display: none;
+}
+
+.card_row {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+}
+
+.card_row > * {
+  flex-grow: 1;
+  display: inherit;
+  align-items: center;
+  justify-content: center;
+}
+
+.input_group i.fas {
+  font-size: 3rem;
+}
+
+.input_group > *:hover {
+  cursor: pointer;
 }
