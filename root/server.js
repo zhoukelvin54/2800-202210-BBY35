@@ -170,6 +170,16 @@ app.get("/timeline", async (req, res) => {
     let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
     helpers.injectScript(pageDOM, userScript, "defer");
     
+    if (req.session.caretaker) {
+        helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");
+        let fontAwesome = pageDOM.window.document.createElement("link");
+        fontAwesome.setAttribute("rel", "stylesheet");
+        fontAwesome.setAttribute("href", "https://use.fontawesome.com/releases/v5.3.1/css/all.css");
+        fontAwesome.setAttribute("integrity", "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU");
+        fontAwesome.setAttribute("crossorigin", "anonymous");
+        pageDOM.window.document.head.appendChild(fontAwesome);
+    }
+    
     return res.send(pageDOM.serialize());
 });
 
