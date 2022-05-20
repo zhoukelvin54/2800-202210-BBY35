@@ -39,7 +39,6 @@ footer {
 
 .navbar a.menu_item {
   text-decoration: none;
-  height: 10vh;
   color: var(--black);
 }
 
