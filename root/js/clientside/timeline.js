@@ -2,7 +2,11 @@
 /* jshint browser: true */
 "use strict";
 
-onReady(appendPosts);
+onReady(() => {
+  appendPosts();
+  // Add events for uploading photo and post
+  document.querySelector(".create_post .submit_post").addEventListener("click", submitPost);
+});
 
 /**
  * Fetches the posts then appends each card for each post.
@@ -36,4 +40,50 @@ async function createPostCard(post) {
   card.querySelector(".date_posted").innerText = post.post_date;
 
   return newPost;
+}
+
+function findCard(element) {
+  if(element.classList.contains("card")) {
+    return element;
+  } else {
+    return findCard(element.parentElement);
+  }
+}
+
+async function submitPost(e) {
+  let card = findCard(e.target);
+  let editor = document.querySelector("[data-tiny-editor]");
+  fetch("/addPost", {
+    method: "POST",
+    "content-type": "application/json",
+    body: JSON.stringify({
+      timeline_id: card.id,
+      post_date: Date.now(),
+      photo_url: await uploadPhoto(),
+      contents: editor.innerHTML
+    })
+  })
+}
+
+async function uploadPhoto() {
+  let photo = document.getElementById("post_photo").files[0];
+  let photoURL;
+  if (photo != null) {
+    const formData = new FormData();
+
+    formData.append("picture", photo)
+
+    await fetch("/addPhoto", {
+      method: "POST",
+      body: formData
+      }).then(res => res.json())
+      .then(res => {
+        photoURL = res.url;
+      })
+      .catch(err => {
+        console.error(err);
+        throw err;
+      })
+  }
+  return photoURL
 }
