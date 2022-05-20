@@ -102,13 +102,16 @@ CREATE TABLE `BBY35_pet_timeline` (
 
 CREATE TABLE `BBY35_pet_timeline_posts` (
   `post_id` int NOT NULL AUTO_INCREMENT,
+  `poster_id` int NOT NULL,
   `timeline_id` int NOT NULL,
   `post_date` date NOT NULL,
   `photo_url` varchar(255) DEFAULT NULL,
   `contents` varchar(255) DEFAULT NULL,
   PRIMARY KEY (post_id),
   KEY `timeline_id_idx` (`timeline_id`),
-  CONSTRAINT `timeline_id` FOREIGN KEY (`timeline_id`) REFERENCES `BBY35_pet_timeline` (`timeline_id`)
+  KEY `poster_id_idx` (`poster_id`),
+  CONSTRAINT `timeline_id` FOREIGN KEY (`timeline_id`) REFERENCES `BBY35_pet_timeline` (`timeline_id`),
+  CONSTRAINT `poster_id` FOREIGN KEY (`poster_id`) REFERENCES `BBY35_pets` (`caretaker_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -311,57 +314,65 @@ INSERT INTO `BBY35_pet_timeline`
 -- Add data to BBY35_caretaker_info table
 --
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (1, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Your pet is fine!');
+  VALUES (1, 1, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Your pet is fine!');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (1, STR_TO_DATE('22/04/2022', '%d/%m/%Y'), NULL, 'Rowdy times!');
+  VALUES (1, 1, STR_TO_DATE('22/04/2022', '%d/%m/%Y'), NULL, 'Rowdy times!');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (2, STR_TO_DATE('14/04/2022', '%d/%m/%Y'), NULL, 'Sleeping in vibes ahaha');
+  VALUES (1, 2, STR_TO_DATE('14/04/2022', '%d/%m/%Y'), NULL, 'Sleeping in vibes ahaha');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (2, STR_TO_DATE('03/05/2022', '%d/%m/%Y'), NULL, 'Almost ready to see their owner!');
+  VALUES (1, 2, STR_TO_DATE('03/05/2022', '%d/%m/%Y'), NULL, 'Almost ready to see their owner!');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (3, STR_TO_DATE('12/01/2022', '%d/%m/%Y'), NULL, 'Your pet has arrived!');
+  VALUES (1, 3, STR_TO_DATE('12/01/2022', '%d/%m/%Y'), NULL, 'Your pet has arrived!');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (4, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Not eating too much');
+  VALUES (1, 4, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Not eating too much');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (5, STR_TO_DATE('02/07/2022', '%d/%m/%Y'), NULL, 'Where is your pet?');
+  VALUES (1, 5, STR_TO_DATE('02/07/2022', '%d/%m/%Y'), NULL, 'Where is your pet?');
 
 INSERT INTO `BBY35_pet_timeline_posts`
-  (`timeline_id`,
+  (`poster_id`,
+  `timeline_id`,
   `post_date`,
   `photo_url`,
   `contents`)
-  VALUES (6, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
+  VALUES (1, 6, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
