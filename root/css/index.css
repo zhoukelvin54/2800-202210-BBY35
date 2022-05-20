@@ -6,6 +6,10 @@
     font-family: 'Bitter', serif;
 }
 
+.panel {
+    background-color: rgb(124, 124, 126);
+}
+
 #content-img {
     background-image: url(../img/body.jpg);
     background-size: cover;
