@@ -1,33 +1,32 @@
-<!-- This contains the display for both caretakers and pet owners -->
+<!-- This contains the display for timelines / stays -->
 <main>
-  <template id="timeline_row_template">
-    <div class="timeline_row" id="PET_ID">
-      <!-- Card for displaying a pet -->
-      <div class="card">
-        <div class="pet">
-          <strong class="pet_name"></strong>
-          <span class="species"></span>
-        </div>
-      </div>
-  
-      <!-- Card for adding a timeline post -->
-      <div class="card">
-        <div class="create_post" data-tiny-editor data-forecolor="no" data-justifyleft="no" data-justifycenter="no"
-            data-justifyright="no" data-insertunorderedlist="no" data-insertorderedlist="no" data-outdent="no" data-indent="no" data-formatblock="no" data-fontname="no">
-        </div>
-        <div class="add_photo">
-          <span class="material-icons">add_photo_alternate</span>
-        </div>
-        <div class="upload_post">
-          <span class="material-icons">send</span>
-        </div>
-      </div>
-  
-      <!-- Editable Status card template -->
-      <div class="card" id="POST_ID" style="background-image: url('/img/uploads/IMG_ID');">
-        <p class="post_content"></p>
-        <p class="date_posted"></p>
-      </div>
+  <template id="timeline_template">
+    <div class="timeline_card" id="PET_ID">
+      <strong class="pet_name"></strong>
+      <span class="status"></span>
+      <div class="timeline_date"></div>
+      <div class="timeline_date"></div>
     </div>
   </template>
 </main>
+
+<!-- OLD Cards
+  Card for adding a timeline post
+  <div class="card">
+    <div class="create_post" data-tiny-editor data-forecolor="no" data-justifyleft="no" data-justifycenter="no"
+        data-justifyright="no" data-insertunorderedlist="no" data-insertorderedlist="no" data-outdent="no" data-indent="no" data-formatblock="no" data-fontname="no">
+    </div>
+    <div class="add_photo">
+      <span class="material-icons">add_photo_alternate</span>
+    </div>
+    <div class="upload_post">
+      <span class="material-icons">send</span>
+    </div>
+  </div>
+
+  Editable Status card template
+  <div class="card" id="POST_ID" style="background-image: url('/img/uploads/IMG_ID');">
+    <p class="post_content"></p>
+    <p class="date_posted"></p>
+  </div>
+ -->
