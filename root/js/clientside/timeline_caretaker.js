@@ -3,7 +3,7 @@ onReady(() => {
 });
 
 async function appendTimelines() {
-  let timelines = await fetch("/timeine/caretaker");
+  let timelines = await fetch("/timeline/caretaker");
   
   for (let i; i < timelines.length; i++) {
     document.querySelector("main").appendChild(createTimelineCard(timelines[i]));
