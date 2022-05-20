@@ -160,8 +160,17 @@ app.get("/API/timeline/posts/:timelineId", (req, res) => {
         });
 });
 
-app.get("/timeline", (req, res) => {
-    // Return page set up for that timeline
+app.get("/timeline", async (req, res) => {
+    helpers.redirectIfNotLoggedIn(req, res);
+
+    // Setup page
+    let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
+    pageDOM = await helpers.injectHeaderFooter(pageDOM);
+    pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
+    let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
+    helpers.injectScript(pageDOM, userScript, "defer");
+    
+    return res.send(pageDOM.serialize());
 });
 
 app.get("/timeline/caretaker", (req, res) => {
