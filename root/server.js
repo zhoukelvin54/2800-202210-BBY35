@@ -115,7 +115,7 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
-app.get("/timeline/pet/:petId", (req, res) => {
+app.get("/API/timeline/pet/:petId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
     connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `pet_id` = ?", [req.params.petId],
@@ -130,7 +130,7 @@ app.get("/timeline/pet/:petId", (req, res) => {
         });
 });
 
-app.get("/timeline/caretaker/:caretakerId", (req, res) => {
+app.get("/API/timeline/caretaker/:caretakerId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
     connection.query("SELECT * FROM `BBY35_pet_timeline` WHERE `caretaker_id_fk` = ?", [req.params.caretakerId],
@@ -145,7 +145,7 @@ app.get("/timeline/caretaker/:caretakerId", (req, res) => {
         });
 });
 
-app.get("/timeline/posts/:timelineId", (req, res) => {
+app.get("/API/timeline/posts/:timelineId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
     connection.query("SELECT * FROM `BBY35_pet_timeline_posts` WHERE `timeline_id` = ?", [req.params.timelineId],
