@@ -28,7 +28,7 @@ async function createPostCard(post) {
   let card = newPost.firstElementChild;
   
   card.id = post.post_id;
-  let photo = post.photo_url ? post.poster_id + post.photo_url : "dog_1.jpg";
+  let photo = post.photo_url ? post.poster_id + "/" + post.photo_url : "dog_1.jpg";
   card.querySelector(".photo_container").innerHTML = `<img src="/img/uploads/${photo}" alt="Pet photo"/>`;
   card.querySelector(".post_content").innerHTML = post.contents;
   card.querySelector(".date_posted").innerText = post.post_date;

@@ -167,7 +167,7 @@ app.get("/timeline", async (req, res) => {
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
     pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
-    pageDOM = await helpers.injectStylesheet(pageDOM, "/css/timelines.css");
+    helpers.injectStylesheet(pageDOM, "/css/timelines.css");
     let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
     helpers.injectScript(pageDOM, userScript, "defer");
     
