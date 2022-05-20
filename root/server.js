@@ -179,12 +179,15 @@ app.get("/timeline/overview/:timeline_Id", async (req, res) => {
 
     // Setup page
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
+    let pageDoc = pageDOM.window.document;
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
     pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
     helpers.injectStylesheet(pageDOM, "/css/timelines.css");
     helpers.injectScript(pageDOM, "/js/timeline.js", "defer");
     
     if (req.session.caretaker) {
+        let addPostEditor = pageDoc.getElementById("create_post_template").content.cloneNode(true);
+        pageDoc.querySelector("main").prepend(addPostEditor);
         helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");
         let fontAwesome = pageDOM.window.document.createElement("link");
         fontAwesome.setAttribute("rel", "stylesheet");
