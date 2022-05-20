@@ -48,7 +48,7 @@ async function createTimelineCard(timeline) {
   let petData = await fetch(`/getPetInfo/${timeline.pet_id}`).then(async res => {
     return JSON.parse(await res.text())[0];
   });
-  let status = petData.status == 2 ? "In Queue" : petData.status == 1 ? "Away" : "Home"
+  let status = petData.status == 2 ? "In Queue" : petData.status == 1 ? "Away" : "Home";
 
   card.querySelector(".pet_name").innerText = petData.name;
   card.querySelector(".status").innerText = status; 

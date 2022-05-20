@@ -88,7 +88,7 @@ function createPost(e) {
     "post_date": Date("18/05/2022"),    // Figure out date to SQL date conversion
     "photo_url": null,                  // Get uploaded photo url from page
     "contents": "Aha a new post!"
-  }
+  };
 
   fetch("/addPost", {
     method: "POST",
