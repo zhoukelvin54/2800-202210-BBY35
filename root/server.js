@@ -393,28 +393,6 @@ app.get("/home", async (req, res) => {
     }
 });
 
-app.get("/timeline", async (req, res) => {
-    // TODO: Move this route to main page once completed.
-    let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
-    let pageDoc = pageDOM.window.document;
-    pageDOM = await helpers.injectHeaderFooter(pageDOM);
-    pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
-
-    helpers.injectScript(pageDOM, "/js/pet_timelines.js", "defer");
-    
-    let fontAwesome = pageDoc.createElement("link");
-    fontAwesome.setAttribute("rel", "stylesheet");
-    fontAwesome.setAttribute("href", "https://use.fontawesome.com/releases/v5.3.1/css/all.css");
-    fontAwesome.setAttribute("integrity", "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU");
-    fontAwesome.setAttribute("crossorigin", "anonymous");
-    pageDoc.head.appendChild(fontAwesome);
-    
-    // Why do I need to do this injection instead of using the module???????
-    helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");    
-
-    return res.send(pageDOM.serialize()); 
-});
-
 async function getUserView(req) {
     if (req.session.admin) {
         let doc = fs.readFileSync("./root/user_management.html", "utf-8");
