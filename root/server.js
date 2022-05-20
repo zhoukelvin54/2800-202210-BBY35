@@ -467,13 +467,6 @@ async function getUserView(req) {
     }
 }
 
-app.get("/timelineData", async (req, res) => {
-    connection.query("select bby35_pet_timeline_posts.`timeline_id` from bby35_pet_timeline_posts " +
-    "INNER JOIN bby35_pet_timeline ON bby35_pet_timeline_posts.`timeline_id` = bby35_pet_timeline.`timeline_id`;",
-    (error, results, fields) => {
-        // TODO Update query to get timeline_id, and post details columns
-    });
-});
 
 app.post("/addPost", (req, res) => {
     if(req.body.timeline_id) {
