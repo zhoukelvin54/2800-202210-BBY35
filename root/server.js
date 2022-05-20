@@ -160,6 +160,16 @@ app.get("/API/timeline/posts/:timelineId", (req, res) => {
         });
 });
 
+app.get("/timeline", (req, res) => {
+    // Return page set up for that timeline
+});
+
+app.get("/timeline/caretaker", (req, res) => {
+    if (req.session.loggedIn && req.session.caretaker) {
+        res.redirect(`/API/timeline/caretaker/${req.session.userid}`);
+    }
+});
+
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     console.log(req.body);
