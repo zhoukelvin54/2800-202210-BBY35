@@ -2,8 +2,16 @@
 /* jshint esversion: 8 */
 /* jshint browser: true */
 "use strict";
-
-import sanitizeHtml from "sanitize-html";
+function escapeHTML(str) {
+  return str => str.replace(/[&<>'"]/g, 
+  tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag]));
+}
 
 const form = document.forms.user_creation_form;
 form.addEventListener("submit", handleForm);
@@ -32,8 +40,6 @@ function handleForm(e) {
 // ============================================================================
 async function updateProfile() {
   var pp_url; 
-  console.log(form.upload_profile_picture.files[0]);
-  console.log(sanitizeHtml(form.upload_profile_picture.files[0]));
   let profile_picture = form.upload_profile_picture.files[0];
   const formData = new FormData();
 
@@ -98,10 +104,10 @@ function updateCaretakerInfo(data) {
 // ============================================================================
 function getProfileData(pp_url) {
   return {
-    profile_photo_url: sanitizeHtml(pp_url),
-    telephone: sanitizeHtml(form.telephone.value.trim()),
-    address: sanitizeHtml(form.street_address.value.trim()) + " " + sanitizeHtml(form.region.value.trim()) 
-    + " " + sanitizeHtml(form.country.value.trim())
+    profile_photo_url: pp_url,
+    telephone: form.telephone.value.trim(),
+    address: form.street_address.value.trim() + " " + form.region.value.trim() 
+    + " " + form.country.value.trim()
     //street_address: form.street_address.value.trim(),
     //region: form.region.value.trim(),
     //country: form.country.value.trim()
@@ -113,17 +119,17 @@ function getProfileData(pp_url) {
 // ============================================================================
 function getCaretakerData() {
   let caretakerInfo = {
-    animal_affection: sanitizeHtml(form.animal_affection.value),
-    experience: sanitizeHtml(form.experience.value.trim()),
-    allergies: sanitizeHtml(form.allergies.value.trim()),
-    other_pets: sanitizeHtml(form.other_pets.value.trim()),
-    busy_hours: sawWelcome(form.busy_hours.value.trim()),
-    house_type: sawWelcome(form.house_type.value),
-    house_active_level: sanitizeHtml(form.house_active_level.value),
-    people_in_home: sanitizeHtml(form.people_in_home.value),
-    children_in_home: sanitizeHtml(form.children_in_home.value),
-    yard_type: sanitizeHtml(form.yard_type.value),
-    accomodation_picture: sanitizeHtml(form.accomodation_picture.files)
+    animal_affection: form.animal_affection.value,
+    experience: escapeHtml(form.experience.value.trim()),
+    allergies: escapeHtml(form.allergies.value.trim()),
+    other_pets: escapeHtml(form.other_pets.value.trim()),
+    busy_hours: escapeHtml(form.busy_hours.value.trim()),
+    house_type: form.house_type.value,
+    house_active_level: form.house_active_level.value,
+    people_in_home: form.people_in_home.value,
+    children_in_home: form.children_in_home.value,
+    yard_type: form.yard_type.value,
+    accomodation_picture: form.accomodation_picture.files
   };
   
   let requiresValidation = ["experience","allergies","other_pets","busy_hours"];

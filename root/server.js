@@ -31,6 +31,14 @@ import { readFile } from "fs/promises";
 import multer from "multer";
 import sanitizeHtml from "sanitize-html";
 
+// sanitize HTML document
+function clean(dirty) {
+    return sanitizeHtml(dirty, {
+        allowedTags: false,
+        allowedAttributes: false
+    });
+}
+
 // Unused, to be implemented requires constants
 // const http = require("http");
 // Used for Secure HTTP connection

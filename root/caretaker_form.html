@@ -32,17 +32,17 @@
 
             <div class="form_group">
                 <label for="street_address">Street Address:</label>
-                <input class="input" type="text" name="street_address" id="street_address" required />
+                <input class="input" type="text" name="street_address" id="street_address" pattern="[^()/><\x22']+" required />
             </div>
 
             <div class="form_group">
                 <label for="region">State / Province:</label>
-                <input class="input" type="text" name="region" id="region" required />
+                <input class="input" type="text" name="region" id="region" pattern="[^()/><\x22']+" required />
             </div>
 
             <div class="form_group">
                 <label for="country">Country:</label>
-                <input class="input" type="text" name="country" id="country" required />
+                <input class="input" type="text" name="country" id="country" pattern="[^()/><\x22']+" required />
             </div>
             
             <div class="form_group" id="profile_error_message"></div>
