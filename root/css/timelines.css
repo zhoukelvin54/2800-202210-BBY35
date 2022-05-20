@@ -1,0 +1,8 @@
+.card, img {
+  max-width: 100%;
+}
+
+.card {
+  box-sizing: border-box;
+  padding: 2rem;
+}

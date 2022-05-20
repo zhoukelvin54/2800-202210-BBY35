@@ -3,10 +3,11 @@ import { readFile } from 'node:fs/promises';
 
 /**
  * Redirects non-logged-in users to the `'/login'` route.
- * @param {Response} res - Response object, may get redirected
+ * @param { Request } req - Request object to verify session data
+ * @param { Response } res - Response object, may get redirected
  * @returns `true` if the user was redirected, `false` otherwise.
  */
- function redirectToLogin(req, res) {
+ function redirectIfNotLoggedIn(req, res) {
 	if (!req.session || !req.session.loggedIn) {
 		res.redirect("/login");
 		return true;
@@ -50,6 +51,39 @@ async function loadHTMLComponent(baseDOM, templateSelector, componentSelector, t
     placeholderElement.innerHTML = componentDoc.querySelector(componentSelector).innerHTML;
   }
   return baseDOM;
+}
+
+/**
+ * Injects a provided script into the given DOM's head.
+ * @param { JSDOM } baseDOM - DOM to inject script into
+ * @param { String } scriptLocation - Location of script resource
+ * @param { String } type - Sets whether the script should be deferred or loaded asynchronously
+ */
+function injectScript(baseDOM, scriptLocation, type) {
+  const doc = baseDOM.window.document;
+  let script = doc.createElement("script");
+  script.setAttribute("src", scriptLocation);
+  if (type) {
+    // Default to using async loading if type isn't defined properly.
+    type = type.toLowerCase() == "defer" ? "defer" : "async";
+    script.toggleAttribute(type);
+  }
+
+  doc.head.appendChild(script);
+}
+
+/**
+ * Injects a stylesheet into the provided DOM.
+ * @param { JSDOM } baseDOM - DOM to modify
+ * @param { String } stylesheetLocation - Location of stylesheet
+ */
+function injectStylesheet(baseDOM, stylesheetLocation) {
+  const doc = baseDOM.window.document;
+  let style = doc.createElement("link");
+  style.setAttribute("rel", "stylesheet");
+  style.setAttribute("href", stylesheetLocation);
+
+  doc.head.appendChild(style);
 }
 
 /**
@@ -114,7 +148,9 @@ function getFieldsFromRequest(req, expectedFields) {
 // Functions to export out
 export {
   injectHeaderFooter,
+  injectScript,
+  injectStylesheet,
   loadHTMLComponent,
   craftInsertUpdateQueryFromRequest,
-  redirectToLogin
+  redirectIfNotLoggedIn
 };

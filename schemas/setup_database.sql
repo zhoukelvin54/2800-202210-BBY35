@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS `BBY35_caretaker_info`;
 DROP TABLE IF EXISTS `BBY35_pets`;
 DROP TABLE IF EXISTS `BBY35_images`;
 DROP TABLE IF EXISTS `BBY35_pet_timeline`;
+DROP TABLE IF EXISTS `BBY35_pet_timeline_posts`;
 DROP TABLE IF EXISTS `BBY35_accounts`;
 
 SET FOREIGN_KEY_CHECKS=1; -- to re-enable them
@@ -78,20 +79,40 @@ CREATE TABLE `BBY35_caretaker_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Table structure for table BBY35_images
+-- Table structure for table BBY35_pet_timeline
 --
 
 CREATE TABLE `BBY35_pet_timeline` (
   `timeline_id` int NOT NULL AUTO_INCREMENT,
   `pet_id` int NOT NULL,
+  `caretaker_id_fk` int NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   `location` varchar(20) DEFAULT NULL,
   PRIMARY KEY (timeline_id),
   KEY `pet_id_idx` (`pet_id`),
-  CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`)
+  KEY `caretaker_id_idx` (`caretaker_id_fk`),
+  CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`),
+  CONSTRAINT `caretaker_id_fk` FOREIGN KEY (`caretaker_id_fk`) REFERENCES `BBY35_pets` (`caretaker_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Table structure for table BBY35_pet_timeline_posts
+--
+
+CREATE TABLE `BBY35_pet_timeline_posts` (
+  `post_id` int NOT NULL AUTO_INCREMENT,
+  `poster_id` int NOT NULL,
+  `timeline_id` int NOT NULL,
+  `post_date` date NOT NULL,
+  `photo_url` varchar(255) DEFAULT NULL,
+  `contents` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (post_id),
+  KEY `timeline_id_idx` (`timeline_id`),
+  KEY `poster_id_idx` (`poster_id`),
+  CONSTRAINT `timeline_id` FOREIGN KEY (`timeline_id`) REFERENCES `BBY35_pet_timeline` (`timeline_id`),
+  CONSTRAINT `poster_id` FOREIGN KEY (`poster_id`) REFERENCES `BBY35_pets` (`caretaker_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Add data to BBY35_accounts table (All passwords '12345')
@@ -221,3 +242,137 @@ INSERT INTO `BBY35_caretaker_info`
           '', NULL,
           NULL, NULL, 
           'other', 2, 5, 0, 'partially enclosed');
+
+--
+-- Add data to BBY35_pet_timeline table
+--
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (1, 1, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), STR_TO_DATE('18/05/2022', '%d/%m/%Y'), 'Vancouver');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (2, 1, STR_TO_DATE('13/04/2022', '%d/%m/%Y'), STR_TO_DATE('06/05/2022', '%d/%m/%Y'), 'Vancouver');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (1, 2, STR_TO_DATE('12/01/2022', '%d/%m/%Y'), STR_TO_DATE('20/02/2022', '%d/%m/%Y'), 'Abbotsford');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (3, 2, STR_TO_DATE('13/04/2022', '%d/%m/%Y'), STR_TO_DATE('06/05/2022', '%d/%m/%Y'), 'Abbotsford');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (3, 3, STR_TO_DATE('01/07/2022', '%d/%m/%Y'), STR_TO_DATE('15/08/2022', '%d/%m/%Y'), 'Seattle');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (4, 3, STR_TO_DATE('22/02/2022', '%d/%m/%Y'), STR_TO_DATE('06/03/2022', '%d/%m/%Y'), 'Seattle');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (5, 4, STR_TO_DATE('01/06/2022', '%d/%m/%Y'), STR_TO_DATE('01/08/2022', '%d/%m/%Y'), 'Prince George');
+
+INSERT INTO `BBY35_pet_timeline`
+  (`pet_id`,
+  `caretaker_id_fk`,
+  `start_date`,
+  `end_date`,
+  `location`)
+  VALUES (6, 4, STR_TO_DATE('22/06/2022', '%d/%m/%Y'), STR_TO_DATE('15/07/2022', '%d/%m/%Y'), 'Prince George');
+
+--
+-- Add data to BBY35_caretaker_info table
+--
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 1, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Your pet is fine!');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 1, STR_TO_DATE('22/04/2022', '%d/%m/%Y'), NULL, 'Rowdy times!');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 2, STR_TO_DATE('14/04/2022', '%d/%m/%Y'), NULL, 'Sleeping in vibes ahaha');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 2, STR_TO_DATE('03/05/2022', '%d/%m/%Y'), NULL, 'Almost ready to see their owner!');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 3, STR_TO_DATE('12/01/2022', '%d/%m/%Y'), NULL, 'Your pet has arrived!');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 4, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Not eating too much');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 5, STR_TO_DATE('02/07/2022', '%d/%m/%Y'), NULL, 'Where is your pet?');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 6, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
