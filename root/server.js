@@ -483,9 +483,11 @@ async function getUserView(req) {
 
 
 app.post("/addPost", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    console.log(req.body);
     if(req.body.timeline_id) {
-        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`timeline_id`, `post_date`, `photo_url`, `contents`) " +
-        "VALUES (?, ?, ?, ?);", [req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
+        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`poster_id`, `timeline_id`, `post_date`, `photo_url`, `contents`) " +
+        "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
         (error, results, fields) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
@@ -493,6 +495,8 @@ app.post("/addPost", (req, res) => {
                 res.status(201).send({ status: "success", msg: "Post created" });
             }
         });
+    } else {
+        return res.status(404).send({ status: "failure", msg: "No timeline provided!" });
     }
 });
 
@@ -757,7 +761,8 @@ app.get("/addPhoto", (req, res) => {
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     console.log(req.file);
     res.statusCode = 201;
-    let truncatedPath = req.file.path.replace("root/img/uploads/", "");
+    let path = req.file.path.replaceAll("\\", "/");
+    let truncatedPath = path.replace("root/img/uploads/", "");
     console.log(truncatedPath);
     res.send({ url: truncatedPath });
 });

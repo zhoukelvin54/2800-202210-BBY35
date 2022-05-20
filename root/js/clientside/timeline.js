@@ -34,7 +34,7 @@ async function createPostCard(post) {
   let card = newPost.firstElementChild;
   
   card.id = post.post_id;
-  let photo = post.photo_url ? post.poster_id + "/" + post.photo_url : "dog_1.jpg";
+  let photo = post.photo_url ? post.photo_url : "dog_1.jpg";
   card.querySelector(".photo_container").innerHTML = `<img src="/img/uploads/${photo}" alt="Pet photo"/>`;
   card.querySelector(".post_content").innerHTML = post.contents;
   card.querySelector(".date_posted").innerText = post.post_date;
@@ -51,18 +51,19 @@ function findCard(element) {
 }
 
 async function submitPost(e) {
-  let card = findCard(e.target);
   let editor = document.querySelector("[data-tiny-editor]");
   fetch("/addPost", {
     method: "POST",
-    "content-type": "application/json",
+    headers: {
+      "content-type": "application/json"
+    },
     body: JSON.stringify({
-      timeline_id: card.id,
+      timeline_id: window.location.href.split("/").pop(),
       post_date: Date.now(),
       photo_url: await uploadPhoto(),
       contents: editor.innerHTML
     })
-  })
+  }).then( () => { console.log("Posted") });
 }
 
 async function uploadPhoto() {
