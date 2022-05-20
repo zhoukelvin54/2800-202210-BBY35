@@ -20,7 +20,7 @@ function handleForm(e) {
     }
 }
 
-function getPetData() {
+async function getPetData() {
     let sexButtons = document.querySelectorAll('input[name="pet_sex"]');
     for (const sexButton of sexButtons) {
         if (sexButton.checked) {
@@ -30,20 +30,22 @@ function getPetData() {
     }
 
     var pet_url;
-    let profile_picture = form.upload_pet_picture.files[0]
+    let profile_picture = form.upload_pet_picture.files[0];
     const formData = new FormData();
 
-    formData.append("picture", profile_picture)
+    formData.append("picture", profile_picture);
 
-    fetch("/addPhoto", {
+    await fetch("/addPhoto", {
             method: "POST",
             body: formData
         }).then(res => res.json())
-        .then(res => (pet_url = res.url))
+        .then(res => {pet_url = res.url;
+             console.log(res.url);
+        })
         .catch(err => {
             console.error(err);
             throw err;
-        })
+        });
 
     console.log(pet_url);
 
@@ -57,8 +59,8 @@ function getPetData() {
 }
 
 async function updatePetInfo() {
-    let petData = getPetData();
-    fetch("/update-pet", {
+    let petData = await getPetData();
+    await fetch("/update-pet", {
         method: "PUT",
         headers: {
             "Content-type": "application/json"
