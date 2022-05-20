@@ -6,7 +6,8 @@ onReady(async () => {
   let cards = document.querySelectorAll(".timeline.card");
   for (let i = 0; i < cards.length; i++) {
     cards[i].addEventListener("click", e => {
-      window.location.assign(`/timeline/overview/${e.target.id}`);
+      let card = findCard(e.target);
+      window.location.assign(`/timeline/overview/${card.id}`);
     });
   }
 });
@@ -25,6 +26,13 @@ async function appendTimelines() {
   }
 }
 
+function findCard(element) {
+  if(element.classList.contains("card")) {
+    return element;
+  } else {
+    return findCard(element.parentElement);
+  }
+}
 
 /**
  * Creates a timeline card and inserts its information
