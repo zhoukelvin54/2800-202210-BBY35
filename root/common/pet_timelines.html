@@ -1,11 +1,27 @@
 <!-- This contains the display for timelines / stays -->
 <main>
   <template id="timeline_template">
-    <div class="timeline_card" id="PET_ID">
+    <div class="timeline card" id="PET_ID">
       <strong class="pet_name"></strong>
       <span class="status"></span>
       <div class="timeline_date"></div>
       <div class="timeline_date"></div>
+    </div>
+  </template>
+
+  <template id="post_template">
+    <div class="post card" id="TIMELINE_ID">
+      <div class="photo_container"></div>
+      <div class="post_content"></div>
+      <div class="date_posted"></div>
+    </div>
+  </template>
+
+  <template id="create_post_template">
+    <div class="create_post card">
+      <div data-tiny-editor data-forecolor="no" data-justifyleft="no" data-justifycenter="no" data-justifyright="no" data-insertunorderedlist="no"
+      data-insertorderedlist="no" data-outdent="no" data-indent="no" data-formatblock="no" data-fontname="no"></div>
+      <div class="date_posted"></div>
     </div>
   </template>
 </main>
