@@ -50,5 +50,12 @@ async function createTimelineCard(timeline) {
     dates[1].innerText = timeline.end_date;
   }
 
+  let pet_img = document.createElement("img");
+  pet_img.src = "/img/uploads/" +
+    (petData.photo_url ? timeline.caretaker_id_fk + "/" + petData.photo_url : "dog_1.jpg"); 
+  pet_img.alt = petData.name + " Photo";
+  
+  card.prepend(pet_img);
+
   return newTimeline;
 }
