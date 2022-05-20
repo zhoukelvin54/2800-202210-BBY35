@@ -111,6 +111,7 @@ app.use(session(sessionObj));
 app.use("/common", express.static("./root/common"));
 app.use("/css", express.static("./root/css"));
 app.use("/img", express.static("./root/img"));
+app.use("/audio", express.static("./root/audio"));
 app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
