@@ -393,6 +393,28 @@ app.get("/home", async (req, res) => {
     }
 });
 
+app.get("/timeline", async (req, res) => {
+    // TODO: Move this route to main page once completed.
+    let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
+    let pageDoc = pageDOM.window.document;
+    pageDOM = await helpers.injectHeaderFooter(pageDOM);
+    pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
+
+    helpers.injectScript(pageDOM, "/js/pet_timelines.js", "defer");
+    
+    let fontAwesome = pageDoc.createElement("link");
+    fontAwesome.setAttribute("rel", "stylesheet");
+    fontAwesome.setAttribute("href", "https://use.fontawesome.com/releases/v5.3.1/css/all.css");
+    fontAwesome.setAttribute("integrity", "sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU");
+    fontAwesome.setAttribute("crossorigin", "anonymous");
+    pageDoc.head.appendChild(fontAwesome);
+    
+    // Why do I need to do this injection instead of using the module???????
+    helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");    
+
+    return res.send(pageDOM.serialize()); 
+});
+
 async function getUserView(req) {
     if (req.session.admin) {
         let doc = fs.readFileSync("./root/user_management.html", "utf-8");
@@ -437,7 +459,58 @@ async function getUserView(req) {
     }
 }
 
-app.get("/login", async (req, res) => {
+app.get("/timelineData", async (req, res) => {
+    connection.query("select bby35_pet_timeline_posts.`timeline_id` from bby35_pet_timeline_posts " +
+    "INNER JOIN bby35_pet_timeline ON bby35_pet_timeline_posts.`timeline_id` = bby35_pet_timeline.`timeline_id`;",
+    (error, results, fields) => {
+        // TODO Update query to get timeline_id, and post details columns
+    });
+});
+
+app.post("/addPost", (req, res) => {
+    if(req.body.timeline_id) {
+        connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`timeline_id`, `post_date`, `photo_url`, `contents`) " +
+        "VALUES (?, ?, ?, ?);", [req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
+        (error, results, fields) => {
+            if (error) {
+                res.send({ status: "failure", msg: "Internal Server Error" });
+            } else {
+                res.status(201).send({ status: "success", msg: "Post created" });
+            }
+        });
+    }
+});
+
+app.delete("/deletePost", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    if (req.body.post_id) {
+        res.status(202);
+        connection.query("SELECT `BBY35_pet_timeline_posts`.`post_id`, `BBY35_pet_timeline_posts`.`timeline_id`, `BBY35_pet_timeline`.`caretaker_id_fk` " +
+        "FROM `BBY35_pet_timeline_posts` INNER JOIN `BBY35_pet_timeline` ON `BBY35_pet_timeline`.`timeline_id` = `BBY35_pet_timeline_posts`.`timeline_id` WHERE `post_id` = ?;", [req.body.post_id],
+            async (error, results, fields) => {
+                if (error) {
+                    return res.status(404).send({ status: "failure", msg: "Unable to find post!" });
+                } else if (results.length == 1 && (results[0].caretaker_id_fk == req.session.userid || req.session.admin)) {
+                    await connection.promise().query("DELETE FROM `BBY35_pet_timeline_posts` WHERE `post_id` = ?", [results[0].post_id],
+                        (error, results, fields) => {
+                            if (error) {
+                                console.error(error);
+                            }
+                            else {
+                                return res.send({ status: "success", msg: "Post deleted"});
+                            }
+                        });
+                } else {
+                    return res.status(401).send({ status: "failure", msg: "Unauthorized" });
+                }
+            });
+    } else {
+        return res.status(204);
+    }
+});
+
+
+app.get("/login", (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/home");
     } else {
@@ -613,6 +686,15 @@ app.get("/getUserInfo/:userid", (req, res) => {
     let userid = req.params.userid;
 
     connection.query(`SELECT username, firstname, lastname, email, is_caretaker FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
+        res.send(data);
+    });
+});
+
+app.get("/getPetInfo/:petid", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.params.petid;
+
+    connection.query(`SELECT * FROM BBY35_pets WHERE id = ?`, [petid], (err, data, fields) => {
         res.send(data);
     });
 });
