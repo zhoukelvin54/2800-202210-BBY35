@@ -552,11 +552,20 @@ app.get("/petsInCare", (req, res) => {
     }
 });
 
-app.post("/getUserInfo", (req, res) => {
+app.get("/getUserInfo/:userid", (req, res) => {
     res.setHeader("content-type", "application/json");
-    let userid = req.body.userid;
+    let userid = req.params.userid;
 
     connection.query(`SELECT username, firstname, lastname, email, is_caretaker FROM BBY35_accounts WHERE id = ?`, [userid], (err, data, fields) => {
+        res.send(data);
+    });
+});
+
+app.get("/getPetInfo/:petid", (req, res) => {
+    res.setHeader("content-type", "application/json");
+    let petid = req.params.petid;
+
+    connection.query(`SELECT * FROM BBY35_pets WHERE id = ?`, [petid], (err, data, fields) => {
         res.send(data);
     });
 });
