@@ -1,3 +1,5 @@
+/* jshint esversion: 8 */
+/* jshint browser: true */
 var pets;
 
 onReady(async () => {
