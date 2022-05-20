@@ -170,6 +170,18 @@ app.get("/timeline", async (req, res) => {
     let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
     helpers.injectScript(pageDOM, userScript, "defer");
     
+    return res.send(pageDOM.serialize());
+});
+
+app.get("/timeline/overview/:timeline_Id", async (req, res) => {
+    helpers.redirectIfNotLoggedIn(req, res);
+
+    // Setup page
+    let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
+    pageDOM = await helpers.injectHeaderFooter(pageDOM);
+    pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
+    helpers.injectScript(pageDOM, "/js/timeline.js", "defer");
+    
     if (req.session.caretaker) {
         helpers.injectScript(pageDOM, "https://unpkg.com/tiny-editor/dist/bundle.js", "defer");
         let fontAwesome = pageDOM.window.document.createElement("link");
