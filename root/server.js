@@ -198,8 +198,6 @@ app.put("/update-profile", (req, res) => {
 
                 actualFields.push(req.session.userid);
 
-                console.log(actualFields);
-
                 connection.query(query, actualFields, (error, results, fields) => {
                     if (error) {
                         res.send({ status: "failure", msg: "Internal Server Error" });
@@ -329,8 +327,7 @@ async function getUserView(req) {
         link.setAttribute("href", "css/main.css");
         pageDOM.window.document.head.appendChild(link);
         pageDOM = await helpers.injectHeaderFooter(pageDOM);
-
-        return sanitizeHtml(pageDOM.serialize());
+        return pageDOM.serialize();
     } else {
         // TODO Get individual account view
         let doc = fs.readFileSync("./root/index.html", "utf-8");
@@ -357,8 +354,7 @@ async function getUserView(req) {
         link.setAttribute("href", "css/main.css");
         pageDOM.window.document.head.appendChild(link);
         pageDOM = await helpers.injectHeaderFooter(pageDOM);
-
-        return sanitizeHtml(pageDOM.serialize());
+        return pageDOM.serialize();
     }
 }
 
@@ -367,7 +363,7 @@ app.get("/login", async (req, res) => {
         res.redirect("/home");
     } else {
         let doc = fs.readFileSync("./root/login.html", "utf-8");
-        res.send(sanitizeHtml(doc));
+        res.send(doc);
     }
 });
 
@@ -416,9 +412,9 @@ app.get("/sign-up", (req, res) => {
     // To be replaced later by injecting the forms as a modal and their scripts
     req.session.newAccount = false;
     if (req.session.caretaker) {
-        res.send(sanitizeHtml(fs.readFileSync("./root/caretaker_form.html", "utf-8")));
+        res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
     } else {
-        res.send(sanitizeHtml(fs.readFileSync("./root/pet_details_form.html", "utf-8")));
+        res.send(fs.readFileSync("./root/pet_details_form.html", "utf-8"));
     }
 });
 
@@ -458,7 +454,7 @@ app.get("/profile", async (req, res) => {
     pageDOM.window.document.head.appendChild(link);
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
    
-    res.send(sanitizeHtml(pageDOM.serialize()));
+    res.send(pageDOM.serialize());
    
 });
 

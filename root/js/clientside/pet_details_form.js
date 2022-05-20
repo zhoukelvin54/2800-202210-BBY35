@@ -2,12 +2,14 @@
 /* jshint esversion: 8 */
 /* jshint browser: true */
 'use strict'
+
+import sanitizeHtml from "sanitize-html";
+
 /*
 ready(function () {
     document.getElementById("pet-details-form").addEventListener("submit", handleForm);
 });
 */
-
 const form = document.forms['pet_details_form'];
 
 form.addEventListener("submit", handleForm);
@@ -26,14 +28,15 @@ function handleForm(e) {
     }
 }
 
+
 // ============================================================================
 // Gets data from forms
 // ============================================================================
     function getProfileData(pp_url) {
       return {
-        profile_photo_url: pp_url,
-        telephone: form.telephone.value.trim(),
-        address: form.street_address.value.trim() + " " + form.region.value.trim() + " " + form.country.value.trim()
+        profile_photo_url: sanitizeHtml(pp_url),
+        telephone: sanitizeHtml(form.telephone.value.trim()),
+        address: sanitizeHtml(form.street_address.value.trim() + " " + form.region.value.trim() + " " + form.country.value.trim())
         //street_address: form.street_address.value.trim(),
         //region: form.region.value.trim(),
         //country: form.country.value.trim()
@@ -44,16 +47,16 @@ function handleForm(e) {
         let sexButtons = document.querySelectorAll('input[name="pet_sex"]');
         for (const sexButton of sexButtons) {
             if (sexButton.checked) {
-                var selectedSex = sexButton.value;
+                var selectedSex = sanitizeHtml(sexButton.value);
                 break;
             }
         }
         return {
-            pet_name: form["pet_name"].value,
-            pet_sex: selectedSex,
-            pet_species: form["pet_species"].value,
-            pet_description: form["pet_description"].value,
-            pet_picture: form["upload_pet_picture"].files[0].name // TODO Replace with generated name from upload
+            pet_name: sanitizeHtml(form["pet_name"].value),
+            pet_sex: sanitizeHtml(selectedSex),
+            pet_species: sanitizeHtml(form["pet_species"].value),
+            pet_description: sanitizeHtml(form["pet_description"].value),
+            pet_picture: sanitizeHtml(form["upload_pet_picture"].files[0].name) // TODO Replace with generated name from upload
         }
     }
 

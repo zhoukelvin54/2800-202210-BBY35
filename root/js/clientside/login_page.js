@@ -3,6 +3,9 @@
 /* jshint browser: true */
 "use strict";
 
+import sanitizeHtml from "sanitize-html";
+
+
 const FORM = document.forms.login_form;
 // Used to keep track of the current state of the login / sign up form (0 for normal form, 1 for sign up)
 let formState = 0;
@@ -25,8 +28,8 @@ function handleForm(e) {
 // repsponds that we are logged in.
 // ============================================================================
 async function login() {
-    let username = document.getElementById("username").value.trim();
-    let password = document.getElementById("password").value.trim();
+    let username = sanitizeHtml(document.getElementById("username").value.trim());
+    let password = sanitizeHtml(document.getElementById("password").value.trim());
 
     if (username == "" || password == "") {
         document.getElementById("errorMsg").innerText = "Please fill out all fields.";
@@ -62,12 +65,12 @@ async function login() {
 function signup() {
     let requiredFields = ["username", "password", "email"];
     let formData = {
-        username: FORM.username.value.trim(),
-        password: FORM.password.value.trim(),
-        firstname: FORM.firstname.value.trim(),
-        lastname: FORM.lastname.value.trim(),
-        email: FORM.email.value.trim(),
-        account_type: FORM.account_type.value
+        username: sanitizeHtml(FORM.username.value.trim()),
+        password: sanitizeHtml(FORM.password.value.trim()),
+        firstname: sanitizeHtml(FORM.firstname.value.trim()),
+        lastname: sanitizeHtml(FORM.lastname.value.trim()),
+        email: sanitizeHtml(FORM.email.value.trim()),
+        account_type: sanitizeHtml(FORM.account_type.value)
     };
 
     for (let i = 0; i < requiredFields.length; i++) {

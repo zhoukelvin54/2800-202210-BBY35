@@ -1,4 +1,5 @@
 "use strict";
+
 let sawWelcome = getCookie("sawWelcome")
 
 function getCookie(name) {
