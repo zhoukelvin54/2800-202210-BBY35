@@ -208,7 +208,7 @@ app.get("/timeline/pet/:petId", (req, res) => {
     
     connection.query("SELECT `timeline_id`,`pet_id`,`caretaker_id_fk`,`start_date`,`end_date`,`location` FROM " +
         "`BBY35_pet_timeline` INNER JOIN `BBY35_pets` ON `BBY35_pets`.`owner_id` = ? WHERE `pet_id` = ?;",
-        [req.params.petId, req.session.userid], (error, results, fields) => {
+        [req.session.userid, req.params.petId], (error, results, fields) => {
             if (error) {
                 console.error(error);
                 res.status(500).send({ status: "failure", msg: "Internal server error" })
