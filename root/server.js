@@ -226,7 +226,6 @@ app.get("/timeline/pet/:petId", (req, res) => {
 
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    console.log(req.body);
 
     // TODO Figure out simplified SQL to insert if not exists.
     connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
@@ -271,7 +270,6 @@ app.get("/get-profile", (req, res) => {
 //KELVIN's BUGGY CODE BELOW
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    console.log(req.body);
 
     let username = (req.body.username) ? req.body.username : "";
     let email = (req.body.email) ? req.body.email : "";
@@ -307,7 +305,6 @@ app.put("/update-profile", (req, res) => {
 
                 actualFields.push(req.session.userid);
 
-                console.log(actualFields);
 
                 connection.query(query, actualFields, (error, results, fields) => {
                     if (error) {
@@ -327,7 +324,7 @@ app.put("/update-pet", (req, res) => {
     if (req.session.caretaker) {
         res.send({ status: "failure", msg: "Current user is a caretake!" });
     }
-    console.log(req.body);
+
     let expectedFields = ["name", "gender", "species", "description", "photo_url"];
     let recievedFields = [];
     let actualFields = [req.session.userid];
@@ -372,7 +369,7 @@ app.put("/update-caretaker-info", (req, res) => {
     if (!req.session.caretaker) {
         res.send({ status: "failure", msg: "Current user is not a caretaker!" });
     }
-    console.log(req.body);
+
     let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
     let recievedFields = [];
     let actualFields = [req.session.userid];
@@ -485,7 +482,6 @@ async function getUserView(req) {
 
 app.post("/addPost", (req, res) => {
     res.setHeader("content-type", "application/json");
-    console.log(req.body);
     if(req.body.timeline_id) {
         connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`poster_id`, `timeline_id`, `post_date`, `photo_url`, `contents`) " +
         "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
@@ -591,7 +587,6 @@ app.get("/sign-up", (req, res) => {
 });
 
 app.put("/sign-up", (req, res) => {
-    console.log(req.body);
 
     if (req.session.caretaker) {
         // Handle caretaker req.body
@@ -760,11 +755,10 @@ app.get("/addPhoto", (req, res) => {
 });
 
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
-    console.log(req.file);
     res.statusCode = 201;
     let path = req.file.path.replaceAll("\\", "/");
     let truncatedPath = path.replace("root/img/uploads/", "");
-    console.log(truncatedPath);
+    console.log("File created at: root/img/uploads/", truncatedPath);
     res.send({ url: truncatedPath });
 });
 
