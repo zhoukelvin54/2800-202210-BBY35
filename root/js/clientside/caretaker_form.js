@@ -54,7 +54,7 @@ async function updateProfile() {
   }).then(
     () => {
       // TODO UPDATE DATA
-      console.log("Uploaded?");
+      //console.log("Uploaded?");
     }
   ).catch(err => {
     throw err;
@@ -79,7 +79,7 @@ function updateCaretakerInfo(data) {
         if (parsed.status == "failure") {
           console.error("Could not update caretaker information.");
         } else {
-          console.log("Caretaker information updated");
+          //console.log("Caretaker information updated");
           window.location.assign("/home");
         }
       }

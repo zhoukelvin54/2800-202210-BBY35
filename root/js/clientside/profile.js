@@ -138,7 +138,7 @@ function getDatabaseData() {
         document.getElementById("round_img").style.backgroundImage = "url(\"img/uploads/" + neededProfileData.profile_photo_url + "\")";
       }
     } else {
-      console.log("failure");
+      //console.log("failure");
     }
   }).catch(err => {
     document.getElementById("response_message").innerText = err;
@@ -155,7 +155,7 @@ async function updateProfile() {
 
     formData.append("picture", photo)
 
-    console.log(getProfileData());
+    getProfileData();
 
     await fetch("/addPhoto", {
       method: "POST",
@@ -163,7 +163,7 @@ async function updateProfile() {
       }).then(res => res.json())
       .then(res => {
         server_url = res.url;
-        console.log(server_url);
+        //console.log(server_url);
       })
       .catch(err => {
         console.error(err);

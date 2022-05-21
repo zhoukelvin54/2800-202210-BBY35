@@ -40,14 +40,14 @@ async function getPetData() {
             body: formData
         }).then(res => res.json())
         .then(res => {pet_url = res.url;
-             console.log(res.url);
+             //console.log(res.url);
         })
         .catch(err => {
             console.error(err);
             throw err;
         });
 
-    console.log(pet_url);
+    //console.log(pet_url);
 
     return {
         pet_name: form["pet_name"].value,
@@ -75,13 +75,13 @@ async function updatePetInfo() {
     }).then(async res => {
         if (res.status == 200) {
             let data = await res.text();
-            console.log(data);
+            //console.log(data);
             if (data) {
                 let parsed = JSON.parse(data);
                 if (parsed.status == "failure") {
-                    console.log("error");
+                    //console.log("error");
                 } else {
-                    console.log("success");
+                    //("success");
                     window.location.assign("/home");
                 }
             }

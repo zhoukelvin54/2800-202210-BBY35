@@ -17,7 +17,7 @@ async function appendPosts() {
   });
 
   for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
+    //console.log(data[i]);
     document.querySelector("main").appendChild(await createPostCard(data[i]));
   }
 }
@@ -63,7 +63,9 @@ async function submitPost(e) {
       photo_url: await uploadPhoto(),
       contents: editor.innerHTML
     })
-  }).then( () => { console.log("Posted") });
+  }).then( () => { 
+    //console.log("Posted")
+   });
 }
 
 async function uploadPhoto() {

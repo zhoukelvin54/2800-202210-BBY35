@@ -23,7 +23,7 @@ async function appendTimelines() {
   });
 
   for (let i = 0; i < data.length; i++) {
-    console.log(data[i]);
+    //console.log(data[i]);
     document.querySelector("main").appendChild(await createTimelineCard(data[i]));
   }
 }
