@@ -1,0 +1,34 @@
+<!-- This contains the display for timelines / stays -->
+<main>
+  <template id="timeline_template">
+    <div class="timeline card" id="PET_ID">
+      <strong class="pet_name"></strong>
+      <span class="status"></span>
+      <div class="timeline_date"></div>
+      <div class="timeline_date"></div>
+    </div>
+  </template>
+
+  <template id="post_template">
+    <div class="post card" id="TIMELINE_ID">
+      <div class="photo_container"></div>
+      <div class="post_content"></div>
+      <div class="date_posted"></div>
+    </div>
+  </template>
+
+  <template id="create_post_template">
+    <div class="create_post card">
+      <div data-tiny-editor data-forecolor="no" data-justifyleft="no" data-justifycenter="no" data-justifyright="no" data-insertunorderedlist="no"
+      data-insertorderedlist="no" data-outdent="no" data-indent="no" data-formatblock="no" data-fontname="no"></div>
+      <div class="card_row input_group">
+        <div class="upload_image">
+          <input type="file" id="post_photo" name="post_photo"/>
+        </div>
+        <div class="submit_post">
+          <i class="fas fa-paper-plane"></i>
+        </div>
+      </div>
+    </div>
+  </template>
+</main>

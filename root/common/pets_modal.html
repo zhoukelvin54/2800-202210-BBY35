@@ -1,0 +1,42 @@
+<!--modal button-->
+<div id="add_pet_button">
+    <button onclick="showModal()" id="add_pet">Add Pet</button>
+</div>
+<div id="add_pet_modal" hidden>
+    
+    <!--modal content-->
+    <form id="pet_details_form">
+
+        <fieldset class="form_panel">
+            <legend>Pet Details <span class="cancel">&#10006;</span></legend>
+
+            <div class="inline_form_group">
+                <label for="pet_name">Name:</label>
+                <input type="text" id="pet_name" required>
+            </div>
+            <div class="inline_form_group">
+                <label>Sex:</label>
+                <div class="radio_button">
+                    <label class="radio_label" for="male">Male</label>
+                    <input type="radio" value="M" id="male" name="pet_sex" required>
+                    <label class="radio_label" for="female">Female</label>
+                    <input type="radio" value="F" id="female" name="pet_sex">
+                </div>
+            </div>
+            <div class="inline_form_group">
+                <label for="pet_species">Species:</label>
+                <input type="text" name="pet_species" id="pet_species" required>
+            </div>
+            <div class="form_group">
+                <label for="pet_description">Description:</label>
+                <textarea class="text_area" name="pet_description" id="pet_description" required></textarea>
+            </div>
+            <div class="form_group">
+                <label for="upload_pet_picture">Upload Pet Picture:</label>
+                <input type="file" name="upload_pet_picture" id="upload_pet_picture" required />
+            </div>
+
+            <input class="submit_button" type="submit" value="Submit" />
+        </fieldset>
+    </form>
+</div>

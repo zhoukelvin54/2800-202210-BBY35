@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
+
+#add_pet_modal, #edit_caretaker_modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+
+#pet_details_form, #caretaker_details_form {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: min(90vw, 475px);
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}
+
+#pet_details_form *, #caretaker_details_form * {
+    box-sizing: border-box;
+}
+
+.form_panel {
+    display: grid;
+    border: none;
+    border-radius: 1.25rem;
+    color: #DDD;
+    background-color: #555;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    padding: 0;
+    padding-bottom: 1rem;
+    font-family: "Bitter", sans-serif;
+}
+
+.form_panel legend {
+    /* Float trick to get legends to display differently */
+    float: left;
+    padding: 1.5rem;
+    border-radius: 1.25rem 1.25rem 0 0;
+    font-size: 175%;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    background-color: #222;
+    font-family: "Satisfy", sans-serif;
+}
+
+/*MODAL STUFF BELOW*/
+#add_pet, #edit_caretaker {
+    display: block;
+    padding: 0 0.55rem 0 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgb(122, 118, 118);
+    color: #DDD;
+    font-family: "Satisfy", sans-serif;
+}
+
+#add_pet:hover, #edit_caretaker:hover {
+    cursor: pointer;
+    background-color: rgb(91, 89, 89);
+}
+
+.cancel {
+    float: right;
+    color: rgba(199, 149, 79, 0.496)
+}
+
+.cancel:hover {
+    cursor: pointer;
+    color: rgba(152, 114, 62, 0.464)
+}
+
+/*MODAL STUFF ABOVE*/
+
+.form_group {
+    flex-direction: column;
+}
+
+.form_group label {
+    margin-bottom: 0.25rem;
+}
+
+.inline_form_group {
+    flex-direction: row;
+}
+
+.inline_form_group label {
+    max-width: 55%;
+    padding-right: 0.25rem;
+}
+
+.form_group, .inline_form_group {
+    display: flex;
+    align-items: stretch;
+    padding: 0.75rem 2rem;
+}
+
+.form_group textarea {
+    resize: none;
+    height: 10vh;
+}
+
+.inline_form_group input, .inline_form_group select, .inline_form_group div {
+    height: min-content;
+    max-width: 45%;
+    margin-left: auto;
+    text-align: right;
+}
+
+.form_group input,
+.form_group select,
+.inline_form_group input,
+.inline_form_group div input,
+.inline_form_group select {
+    flex-grow: 1;
+    min-height: 1.5rem;
+}
+
+.form_button {
+    width: 75%;
+    font-family: "Satisfy", sans-serif;
+    font-weight: bold;
+    font-size: 1.75rem;
+    padding: 0.5rem;
+    margin: 0 auto;
+    border: 2px #222;
+    color: #DDD;
+    border-radius: 2rem;
+    background-color: #222;
+}
+
+.submit_button {
+    width: 75%;
+    font-family: "Satisfy", sans-serif;
+    font-weight: bold;
+    font-size: 1.75rem;
+    padding: 0.5rem;
+    margin: 0 auto;
+    border: 2px #222;
+    border-radius: 2rem;
+}
+
+@media only screen and (min-width: 769px) {
+    .form_panel {
+        font-size: 125%;
+    }
+}

@@ -19,7 +19,7 @@ function uploadImages(e) {
 
     fetch("/addphoto", options)
     .then(res => res.json()) // this returns a promise which has to become a JSON object before we can get the returned URL
-    .then(res => console.log(res.url)) // this is the URL
+    .then(res => res.url) // this is the URL
     .catch(function(err) {("Error:", err)}
     );
 }

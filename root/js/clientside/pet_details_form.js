@@ -87,7 +87,7 @@ async function updateProfile() {
   }).then(
     () => {
       // TODO UPDATE DATA
-      console.log("Uploaded?");
+      //console.log("Uploaded?");
     }
   ).catch(err => {
     throw err;
@@ -116,13 +116,13 @@ async function updatePetInfo() {
   }).then(async res => {
     if (res.status == 200) {
       let data = await res.text();
-      console.log(data);
+      //console.log(data);
       if (data) {
         let parsed = JSON.parse(data);
         if (parsed.status == "failure") {
-          console.log("error");
+          //console.log("error");
         } else {
-          console.log("success");
+          //console.log("success");
           window.location.assign("/home");
         }
       }

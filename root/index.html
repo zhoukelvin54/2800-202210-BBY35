@@ -12,23 +12,8 @@
 </head>
 
 <body>
-    <!--nav bar-->
-    <nav class="navbar" id="navContents">
-
-        <img src="img/PetPals-logos_white.png" alt="" class="logo">
-        <a href="/home">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#experiences">Experiences</a>
-        <a href="#faqs">FAQs</a>
-        <a href="#search">Search</a>
-        <form action="/logout" method="get">
-            <input type="submit" value="Logout" id='logout'/>
-        </form>
-        <form action="/profile" method="">
-            <input type ="submit" value="Profile" id="profile"/>
-        </form>
-
-    </nav>
+    <!-- header -->
+    <header></header>
 
     <!--welcome-->
     <div id="welcome-img">
@@ -37,7 +22,9 @@
                 Welcome to PetPals.
             </h1>
             <p>
-                You are a (caretaker or pet owner), *details of role*
+                You are a <span id="role">role</span>.
+                <br/>
+                <span id="role-desc">Details</span>.
             </p>
             <button id="hiderhero" onclick="hidehero()">I understand</button>
         </div>
@@ -62,7 +49,46 @@
                                     <th>Species</th>
                                     <th>Gender</th>
                                     <th>Description</th>
+                                    <th>Status</th>
                                     <th>Caretaker</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel" id="caretaker-panel" hidden>
+                        <h2>Pets in need:</h2>
+                        <hr>
+                        <table id="pet-table2">
+                            <thead>
+                                <tr>
+                                    <th>Picture</th>
+                                    <th>Name</th>
+                                    <th>Species</th>
+                                    <th>Gender</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Owner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                        <h2>Pets in your care:</h2>
+                        <hr>
+                        <table id="pet-table3">
+                            <thead>
+                                <tr>
+                                    <th>Picture</th>
+                                    <th>Name</th>
+                                    <th>Species</th>
+                                    <th>Gender</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Owner</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,23 +98,18 @@
                     </div>
                 </main>
             </h1>
+            <div id="add_pet_button"></div>
+            <div id="add_pet_modal"></div>
         </div>
     </div>
 
     <!-- footer -->
     <footer>
-        <div class="d-sm-none">
-            <a href="#">FAQ</a>
-            <a href="#">Contact Us</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Refund Policy</a>
-        </div>
-        <a href="#">&copy; 2022 | BBY35 </a>
     </footer>
 
     <script src="js/index.js"></script>
     <script src="js/fetch_pets.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>
