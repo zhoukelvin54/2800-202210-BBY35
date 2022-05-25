@@ -19,7 +19,7 @@
 const SALT_ROUNDS = 10;
 
 // App import statements
-import * as helpers from "./js/serverside/helpers.js";
+import * as helpers from "./root/js/serverside/helpers.js";
 import * as mysql2 from "mysql2";
 import express from "express";
 import bcrypt from "bcrypt";
@@ -746,12 +746,6 @@ app.put("/requestHousing", (req, res) => {
             }
         }
     });
-});
-
-// this route is for testing and example purposes only and should be cleaned up once the forms requiring image upload are completed
-app.get("/addPhoto", (req, res) => {
-    let doc = fs.readFileSync("./root/addphoto.html", "utf-8");
-    res.send(doc);
 });
 
 app.post("/addPhoto", upload.single("picture"), (req, res) => {

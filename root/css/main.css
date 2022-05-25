@@ -70,6 +70,10 @@ footer {
   background-color: var(--primary);
 }
 
+#nav_logo {
+  float: left;
+}
+
 #bottom_navigation {
   position: sticky;
   display: grid;
