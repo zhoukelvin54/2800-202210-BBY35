@@ -1,24 +1,8 @@
 // used for validating the code with https://jshint.com/
 /* jshint esversion: 8 */
 /* jshint node: true */
-
 "use strict";
 
-// miscellanous code snippets that can be useful
-// function extractDateFromFileName(string) {
-//     let indexOfStart= (string.lastIndexOf("-")) + 1;
-//     let indexOfEnd = string.lastIndexOf(".");
-
-//     let out = parseInt(string.substring(indexOfStart, indexOfEnd));
-
-//     console.log(out);
-//     return new Date(out);
-// }
-
-// Constant Variables
-const SALT_ROUNDS = 10;
-
-// App import statements
 import * as helpers from "./root/js/serverside/helpers.js";
 import * as mysql2 from "mysql2";
 import express from "express";
@@ -31,18 +15,11 @@ import { readFile } from "fs/promises";
 import multer from "multer";
 import sanitizeHtml from "sanitize-html";
 
-// Unused, to be implemented requires constants
-// const http = require("http");
-// Used for Secure HTTP connection
-// const https = require("https");
-// tiny-editor requires that there be a document object from HTML; 
-// as there is no HTML element just yet, it is safe to comment out
-// const tinyeditor = require("tiny-editor");
-// HTTP2 used for faster client connections via multiplexing
-// const { connect } = require("http2");
-
+/** Amount of rounds to salt passwords in bcrypt. */
+const SALT_ROUNDS = 10;
+/** Stores if the app is currently running in Heroku from the process environment variables. */
 const is_Heroku = process.env.is_Heroku || false;
-
+/** Multer options for using disk storage under the sessions user's ID to the uploads directory. */
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let id = req.session.userid;
@@ -67,36 +44,34 @@ const storage = multer.diskStorage({
         cb(null, fileString);
     }
 });
+/** Multer object to upload to using configured storage options. */
 const upload = multer({ storage: storage });
 
 const app = express();
 
+/** Connection settings for the MySQL database */
 const dbConnection = {
     host: "localhost",
-    user: "nodeapp",
+    user: "root",
     password: "",
     database: "COMP2800",
     port: 3306
 };
 
+// Setup the connection pool based on which environment is running
 if (is_Heroku) {
     var connection = mysql2.createPool(process.env.JAWSDB_MARIA_URL);
 } else {
     var connection = mysql2.createPool(dbConnection);
 }
-var promiseConnection = connection.promise();
-
 
 connection.getConnection((err) => {
     if (err) {
         console.error("Error connecting to database: " + err.stack);
-        return;
     }
-
-    console.log("Database connected successfully.");
 });
 
-// initializing sessions
+/** Stores session configuration options. */
 let sessionObj = {
     secret: "Hey, another password that will be obscured eventually. Neat!",
     name: "petpalsID",
@@ -116,6 +91,12 @@ app.use("/font", express.static("./root/font"));
 app.use("/js", express.static("./root/js/clientside"));
 app.use("/scss", express.static("./root/scss"));
 
+
+// ============================================================================
+//                          Backend API routing
+// ============================================================================
+
+// Get timelines data for a given pet ID
 app.get("/API/timeline/pet/:petId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
@@ -131,6 +112,7 @@ app.get("/API/timeline/pet/:petId", (req, res) => {
         });
 });
 
+// Get timelines data for a given caretaker ID
 app.get("/API/timeline/caretaker/:caretakerId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
@@ -146,6 +128,7 @@ app.get("/API/timeline/caretaker/:caretakerId", (req, res) => {
         });
 });
 
+// Get timelines posts for a given timeline ID
 app.get("/API/timeline/posts/:timelineId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
@@ -161,24 +144,30 @@ app.get("/API/timeline/posts/:timelineId", (req, res) => {
         });
 });
 
+
+// ============================================================================
+//                            Timeline routes
+// ============================================================================
+
+// Constructs and sends a timelines document dependant on which type of account is logged in.
 app.get("/timeline", async (req, res) => {
     helpers.redirectIfNotLoggedIn(req, res);
 
-    // Setup page
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
+    let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
     pageDOM = await helpers.loadHTMLComponent(pageDOM, "main", "main", "./root/common/pet_timelines.html");
     helpers.injectStylesheet(pageDOM, "/css/timelines.css");
-    let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
     helpers.injectScript(pageDOM, userScript, "defer");
     
     return res.send(pageDOM.serialize());
 });
 
+// Constructs and creates an overview of posts for a specific timeline, appends 
+// tinyeditor if the account is a caretaker.
 app.get("/timeline/overview/:timeline_Id", async (req, res) => {
     helpers.redirectIfNotLoggedIn(req, res);
 
-    // Setup page
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
     let pageDoc = pageDOM.window.document;
     pageDOM = await helpers.injectHeaderFooter(pageDOM);
@@ -201,12 +190,14 @@ app.get("/timeline/overview/:timeline_Id", async (req, res) => {
     return res.send(pageDOM.serialize());
 });
 
+// Gets the currently logged in caretaker timeline info
 app.get("/timeline/caretaker", (req, res) => {
     if (req.session.loggedIn && req.session.caretaker) {
         res.redirect(`/API/timeline/caretaker/${req.session.userid}`);
     }
 });
 
+// Gets the currently logged in users' pet timelines info
 app.get("/timeline/pet/:petId", (req, res) => {
     res.setHeader("content-type", "application/json");
     
@@ -215,7 +206,7 @@ app.get("/timeline/pet/:petId", (req, res) => {
         [req.session.userid, req.params.petId], (error, results, fields) => {
             if (error) {
                 console.error(error);
-                res.status(500).send({ status: "failure", msg: "Internal server error" })
+                res.status(500).send({ status: "failure", msg: "Internal server error" });
             } else if (results.length > 0) {
                 res.status(200).send(results);
             } else {
@@ -224,10 +215,10 @@ app.get("/timeline/pet/:petId", (req, res) => {
         });
 });
 
+// Creates a new account from a sign up request
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
 
-    // TODO Figure out simplified SQL to insert if not exists.
     connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
         async (error, results, fields) => {
             if (error) {
@@ -251,6 +242,7 @@ app.post("/add-account", (req, res) => {
         });
 });
 
+// Gets currently logged in users profile information
 app.get("/get-profile", (req, res) => {
     res.setHeader("Content-type", "application/json");
     let actualFields = [req.session.userid];
@@ -267,7 +259,8 @@ app.get("/get-profile", (req, res) => {
     });
 });
 
-//KELVIN's BUGGY CODE BELOW
+// Updates the currently logged in accounts profile information after verifying there is
+// no email or username conflicts
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");
 
@@ -319,10 +312,11 @@ app.put("/update-profile", (req, res) => {
 
 });
 
+// Updates or creates a new pet from a request
 app.put("/update-pet", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     if (req.session.caretaker) {
-        res.send({ status: "failure", msg: "Current user is a caretake!" });
+        res.send({ status: "failure", msg: "Current user is a caretaker!" });
     }
 
     let expectedFields = ["name", "gender", "species", "description", "photo_url"];
@@ -364,6 +358,7 @@ app.put("/update-pet", (req, res) => {
     });
 });
 
+// Updates or creates a new caretaker information entry from a request
 app.put("/update-caretaker-info", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     if (!req.session.caretaker) {
@@ -409,10 +404,13 @@ app.put("/update-caretaker-info", (req, res) => {
     });
 });
 
+// Redirects base requests to the login screen.
 app.get("/", (req, res) => {
     res.redirect("/login");
 });
 
+// Redirects users not logged in, or if they need to fill out the new account information forms.
+// Otherwise gets the currently logged in users home view.
 app.get("/home", async (req, res) => {
     if (!(req.session.loggedIn)) {
         res.redirect("/login");
@@ -479,7 +477,7 @@ async function getUserView(req) {
     }
 }
 
-
+// Creates a new timeline post from a request
 app.post("/addPost", (req, res) => {
     res.setHeader("content-type", "application/json");
     if(req.body.timeline_id) {
@@ -497,6 +495,8 @@ app.post("/addPost", (req, res) => {
     }
 });
 
+// Deletes a specfic timeline post from a request. Ensures the user either owns the card
+// or is an admin before deletion.
 app.delete("/deletePost", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.body.post_id) {
@@ -525,7 +525,7 @@ app.delete("/deletePost", (req, res) => {
     }
 });
 
-
+// Gets the log in screen, otherwise redirects logged in users to the home screen.
 app.get("/login", (req, res) => {
     if (req.session.loggedIn) {
         res.redirect("/home");
@@ -535,6 +535,7 @@ app.get("/login", (req, res) => {
     }
 });
 
+// Authenticates and attempts to login to the app from a request 
 app.post("/login", (req, res) => {
     res.setHeader("content-type", "application/json");
 
@@ -574,10 +575,10 @@ app.post("/login", (req, res) => {
             }
         });
     }
-    });
+});
 
+// Temporarily redirect to the correct forms on sign up, to be phased out by modals in the future.
 app.get("/sign-up", (req, res) => {
-    // To be replaced later by injecting the forms as a modal and their scripts
     req.session.newAccount = false;
     if (req.session.caretaker) {
         res.send(fs.readFileSync("./root/caretaker_form.html", "utf-8"));
@@ -586,15 +587,7 @@ app.get("/sign-up", (req, res) => {
     }
 });
 
-app.put("/sign-up", (req, res) => {
-
-    if (req.session.caretaker) {
-        // Handle caretaker req.body
-    } else {
-        // Handle pet owner req.body
-    }
-});
-
+// Destroys the currently logged in session and logs the user out
 app.get("/logout", (req, res) => {
     if (req.session) {
         req.session.destroy((error) => {
@@ -608,6 +601,7 @@ app.get("/logout", (req, res) => {
     }
 });
 
+// Creates and returns the currently logged in users profile page
 app.get("/profile", async (req, res) => {
     if (!(req.session && req.session.loggedIn)) return res.redirect("/login");
 
@@ -637,6 +631,7 @@ app.get("/profile", async (req, res) => {
    
 });
 
+// Gets the users data from the database if you are an administrator
 app.get("/userData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.admin) {
@@ -648,6 +643,7 @@ app.get("/userData", (req, res) => {
     }
 });
 
+// Gets the currently logged in pet owners pets and their data
 app.get("/petData", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.loggedIn) {
@@ -659,6 +655,7 @@ app.get("/petData", (req, res) => {
     }
 });
 
+// Gets the currently logged in caretakers acceptable pet requests
 app.get("/petRequests", (req, res) =>{
     res.setHeader("content-type", "application/json");
     if (req.session.caretaker == 1) {
@@ -670,6 +667,7 @@ app.get("/petRequests", (req, res) =>{
     }
 });
 
+// Accepts a pets request and updates their status
 app.put("/acceptPet", (req, res) => {
     res.setHeader("content-type", "application/json");
     let petid = req.body.petid;
@@ -683,6 +681,7 @@ app.put("/acceptPet", (req, res) => {
     }
 });
 
+// Releases a pet back into the queue and updates their status
 app.put("/releasePet", (req, res) => {
     res.setHeader("content-type", "application/json");
     let petid = req.body.petid;
@@ -697,6 +696,7 @@ app.put("/releasePet", (req, res) => {
     }
 });
 
+// Gets the current pets in care for the currently logged in caretaker
 app.get("/petsInCare", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.session.caretaker == 1) {
@@ -708,6 +708,7 @@ app.get("/petsInCare", (req, res) => {
     }
 });
 
+// Gets the requested users information from the database
 app.get("/getUserInfo/:userid", (req, res) => {
     res.setHeader("content-type", "application/json");
     let userid = req.params.userid;
@@ -717,6 +718,7 @@ app.get("/getUserInfo/:userid", (req, res) => {
     });
 });
 
+// Gets the requests pets information from the database
 app.get("/getPetInfo/:petid", (req, res) => {
     res.setHeader("content-type", "application/json");
     let petid = req.params.petid;
@@ -726,6 +728,8 @@ app.get("/getPetInfo/:petid", (req, res) => {
     });
 });
 
+// Request that a provided pet be housing status be updated to reflect their needs
+// (at-home or pending a home)
 app.put("/requestHousing", (req, res) => {
     res.setHeader("content-type", "application/json");
     let petid = req.body.petid;
@@ -748,6 +752,7 @@ app.put("/requestHousing", (req, res) => {
     });
 });
 
+// Uploads a single photo to the uploads folder using multer
 app.post("/addPhoto", upload.single("picture"), (req, res) => {
     res.statusCode = 201;
     let path = req.file.path.replaceAll("\\", "/");
@@ -756,6 +761,8 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
     res.send({ url: truncatedPath });
 });
 
+// "Deletes" a user, effectively making them not able to log in. Many checks in place to 
+// verify the user is not the last user and is an admin
 app.delete("/delete", async (req, res) => {
     let requesterID = req.session.userid;
     let isRequesterAdmin = req.session.admin;
@@ -808,6 +815,7 @@ app.delete("/delete", async (req, res) => {
     }
 });
 
+// Grants a requested user admin priviledges. Checks if the requester and target is an admin.
 app.put("/grant", async (req, res) => {
     let isRequesterAdmin = req.session.admin;
     let accountID = req.body.id;
@@ -835,6 +843,8 @@ app.put("/grant", async (req, res) => {
     }
 });
 
+// Revokes a requested users admin priviledges. Checks if requester is an admin, how many
+// admins are left, and if the user is attempting to remove themselves.
 app.put("/revoke", async (req, res) => {
     let requesterID = req.session.userid;
     let isRequesterAdmin = req.session.admin;
@@ -878,6 +888,7 @@ app.put("/revoke", async (req, res) => {
     }
 });
 
+// Creates a new account, checks if the current user is an admin. 
 app.post("/add", (req, res) => {
     res.setHeader("Content-Type", "application/json");
 
@@ -897,14 +908,7 @@ app.post("/add", (req, res) => {
     }
 });
 
-console.log("Starting Server...");
-
-if (is_Heroku) {
-    var port = process.env.PORT;
-} else {
-    var port = 8000;
-}
-
+let port = is_Heroku ? process.env.PORT : 8000;
 function onBoot() {
     console.log("Started on port: " + port);
 }
