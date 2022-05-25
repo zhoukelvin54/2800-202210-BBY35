@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   for (let i = 0; i < swappableElements.length; i++) {
     swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
-  }
+  };
   
 });
 
@@ -153,9 +153,9 @@ async function updateProfile() {
   if (photo != null) {
     const formData = new FormData();
 
-    formData.append("picture", photo)
+    formData.append("picture", photo);
 
-    getProfileData();
+    await getProfileData();
 
     await fetch("/addPhoto", {
       method: "POST",
@@ -177,7 +177,7 @@ async function updateProfile() {
     headers: {
       "content-type": "application/json"
     },
-    body: JSON.stringify(getProfileData())
+    body: JSON.stringify(await getProfileData())
   }).then( async res => {
       if (res.status == 200) {
         document.querySelectorAll("input.editable").forEach(element => {
