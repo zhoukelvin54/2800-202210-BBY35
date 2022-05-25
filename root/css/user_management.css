@@ -57,7 +57,30 @@ th {
     color: white;
 }
 
+#add-user {
+    padding: 10px;
+}
+
+#add-user input {
+    width: 90%;
+    padding: 5px;
+    margin: 1%;
+}
+
+#add-submit:hover {
+    cursor: pointer;
+    color: white;
+    background-color: black;
+    margin-top: 2px;
+}
 
 @media only screen and (max-width: 768px) {
-    
+    #userTable {
+        width: 10%;
+    }
+    #add-user input {
+        width: 40%;
+        padding: 2px;
+        margin: 1%;
+    }
 }
