@@ -19,6 +19,11 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  background-image: url(../img/dogs.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-blend-mode: lighten;
 }
 
 header {
