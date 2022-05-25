@@ -47,11 +47,6 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let id = req.session.userid;
         let dir = `./root/img/uploads/${id}/`;
-        fs.mkdir(dir, (exists) => {
-            if (!exists) {
-                console.log("Path does not exist, creating: " + dir);
-            }
-        });
 
         cb(null, dir);
     },
@@ -92,8 +87,6 @@ connection.getConnection((err) => {
         console.error("Error connecting to database: " + err.stack);
         return;
     }
-
-    console.log("Database connected successfully.");
 });
 
 // initializing sessions
@@ -555,11 +548,7 @@ app.post("/login", (req, res) => {
                     req.session.admin = data[0].is_admin;
                     req.session.caretaker = data[0].is_caretaker;
                     req.session.profile_photo_url = data[0].profile_photo_url;
-                    req.session.save((e) => {
-                        if (e) {
-                            console.log("Error: " + e);
-                        }
-                    });
+                    req.session.save;
                     res.send({
                         status: "success",
                         msg: "Log In Successful"
@@ -752,7 +741,6 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
     res.statusCode = 201;
     let path = req.file.path.replaceAll("\\", "/");
     let truncatedPath = path.replace("root/img/uploads/", "");
-    console.log("File created at: root/img/uploads/", truncatedPath);
     res.send({ url: truncatedPath });
 });
 
@@ -897,16 +885,10 @@ app.post("/add", (req, res) => {
     }
 });
 
-console.log("Starting Server...");
-
 if (is_Heroku) {
     var port = process.env.PORT;
 } else {
     var port = 8000;
-}
+};
 
-function onBoot() {
-    console.log("Started on port: " + port);
-}
-
-app.listen(port, onBoot);
+app.listen(port);
