@@ -37,7 +37,8 @@ async function createPostCard(post) {
   let photo = post.photo_url ? post.photo_url : "dog_1.jpg";
   card.querySelector(".photo_container").innerHTML = `<img src="/img/uploads/${photo}" alt="Pet photo"/>`;
   card.querySelector(".post_content").innerHTML = post.contents;
-  card.querySelector(".date_posted").innerText = post.post_date;
+  card.querySelector(".date_posted").innerText = "Post Date: " + post.post_date.split("T")[0] + " "
+    + post.post_date.split("T")[1].split(".")[0];
 
   return newPost;
 }
