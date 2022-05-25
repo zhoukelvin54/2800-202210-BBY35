@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Bitter', serif;
+    font-family: 'Josefin Sans', sans-serif;
 }
 
 .panel {
@@ -40,6 +40,16 @@
 #welcome-text {
     text-align: center;
     padding-top: 50vh;
+    color: white;
+}
+
+#hiderhero {
+    width: 20%;
+    padding: 5px;
+}
+
+#hiderhero:hover {
+    background-color: black;
     color: white;
 }
 
