@@ -1,7 +1,6 @@
 
 "use strict";
 let swappableElements;
-let profile_picture;
 let photo;
 
 let server_url;
@@ -113,10 +112,9 @@ function swapButtonToInput(e) {
 // ============================================================================
 function getDatabaseData() {
   document.getElementById("upload_picture").addEventListener('change', (e) => {
-    profile_picture = e.target.files[0].name;
     photo = e.target.files[0];
   })
-   // document.getElementById("profile_picture").style = `background-image: url(/img/uploads/${});`
+
   fetch("/get-profile", {
     method: "GET",
     headers: {
@@ -163,7 +161,6 @@ async function updateProfile() {
       }).then(res => res.json())
       .then(res => {
         server_url = res.url;
-        //console.log(server_url);
       })
       .catch(err => {
         console.error(err);
@@ -183,8 +180,8 @@ async function updateProfile() {
         document.querySelectorAll("input.editable").forEach(element => {
           swapInputToSpan(element); 
         });
-        if (profile_picture != null) {
-          document.getElementById("round_img").style=`background-image: url(/img/uploads/${profile_picture});`;
+        if (server_url != null) {
+          document.getElementById("round_img").style=`background-image: url(/img/uploads/${server_url});`;
         }
       } else {
         let data = await res.text();
