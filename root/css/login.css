@@ -116,4 +116,7 @@ footer a {
     .login {
         width: 75%;
     }
+    footer a {
+        padding: 2%;
+    }
 }
