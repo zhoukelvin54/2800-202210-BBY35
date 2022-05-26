@@ -24,11 +24,7 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let id = req.session.userid;
         let dir = `./root/img/uploads/${id}/`;
-        fs.mkdir(dir, (exists) => {
-            if (!exists) {
-                console.log("Path does not exist, creating: " + dir);
-            }
-        });
+        fs.mkdir(dir);
 
         cb(null, dir);
     },
@@ -134,7 +130,7 @@ app.post("/login", (req, res) => {
                     req.session.profile_photo_url = data[0].profile_photo_url;
                     req.session.save((e) => {
                         if (e) {
-                            console.log("Error: " + e);
+                            console.error("Error: " + e);
                         }
                     });
                     res.send({
@@ -284,7 +280,6 @@ app.post("/addPhoto", upload.single("picture"), (req, res) => {
     res.statusCode = 201;
     let path = req.file.path.replaceAll("\\", "/");
     let truncatedPath = path.replace("root/img/uploads/", "");
-    console.log("File created at: root/img/uploads/", truncatedPath);
     res.send({ url: truncatedPath });
 });
 
