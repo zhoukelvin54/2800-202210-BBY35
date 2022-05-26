@@ -5,7 +5,9 @@ let photo;
 
 let server_url;
 
-document.addEventListener("DOMContentLoaded", () => {
+
+
+
   
   getDatabaseData();
   swappableElements = document.querySelectorAll(".editable");
@@ -15,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
   };
   
-});
+
 
 function swapEditableSpan(element) {
   if (!element) throw "Invalid param: " + element;

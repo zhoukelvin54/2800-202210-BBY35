@@ -101,6 +101,7 @@ let sessionObj = {
     saveUninitialized: true
 };
 
+
 app.use(bodyParser.json());
 app.use(session(sessionObj));
 
@@ -895,4 +896,10 @@ if (is_Heroku) {
     var port = 8000;
 };
 
+app.use((req, res, next) => {
+    ("/img", express.static("./root/img"));
+    res.status(404).send(fs.readFileSync("./root/404.html", "utf-8"));
+});
+
 app.listen(port);
+
