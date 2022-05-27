@@ -38,7 +38,7 @@ function updateCaretakerInfo(data) {
                 if (parsed.status == "failure") {
                     console.error("Could not update caretaker information.");
                 } else {
-                    window.location.assign("/home");
+                    location.reload();
                 }
             }
         }
