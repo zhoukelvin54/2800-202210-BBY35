@@ -52,6 +52,11 @@ function findCard(element) {
 
 async function submitPost(e) {
   let editor = document.querySelector("[data-tiny-editor]");
+  if(!editor.innerHTML.trim()) {
+    document.querySelector(".create_post > .error_message").innerText = "Post must contain something!";
+    return;
+  }
+  
   fetch("/addPost", {
     method: "POST",
     headers: {
