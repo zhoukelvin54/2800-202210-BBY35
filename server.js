@@ -429,7 +429,7 @@ app.post("/addPost", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.body.timeline_id) {
         connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`poster_id`, `timeline_id`, `post_date`, `photo_url`, `contents`) " +
-            "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, Date.now(), req.body.photo_url, req.body.contents],
+            "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, (new Date(Date.now())).toISOString(), req.body.photo_url, req.body.contents],
             (error, results, fields) => {
                 if (error) {
                     res.send({ status: "failure", msg: "Internal Server Error" });

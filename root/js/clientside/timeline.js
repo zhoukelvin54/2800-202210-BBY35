@@ -36,8 +36,7 @@ async function createPostCard(post) {
   let photo = post.photo_url ? post.photo_url : "dog_1.jpg";
   card.querySelector(".photo_container").innerHTML = `<img src="/img/uploads/${photo}" alt="Pet photo"/>`;
   card.querySelector(".post_content").innerHTML = post.contents;
-  card.querySelector(".date_posted").innerText = "Post Date: " + post.post_date.split("T")[0] + " " +
-    post.post_date.split("T")[1].split(".")[0];
+  card.querySelector(".date_posted").innerText = "Post Date: " + post.post_date.split("T")[0];
 
   return newPost;
 }
@@ -53,7 +52,7 @@ function findCard(element) {
 async function submitPost(e) {
   let editor = document.querySelector("[data-tiny-editor]");
   if(!editor.innerHTML.trim()) {
-    document.querySelector(".create_post > .error_message").innerText = "Post must contain something!";
+    document.querySelector(".create_post > .error_message").innerText = "Post must contain text!";
     return;
   }
   
