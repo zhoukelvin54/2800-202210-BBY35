@@ -929,8 +929,5 @@ app.post("/add", (req, res) => {
 });
 
 let port = is_Heroku ? process.env.PORT : 8000;
-function onBoot() {
-    console.log("Started on port: " + port);
-}
 
-app.listen(port, onBoot);
+app.listen(port);
