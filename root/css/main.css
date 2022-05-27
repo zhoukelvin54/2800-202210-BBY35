@@ -42,6 +42,13 @@ footer {
   bottom: 0;
 }
 
+#logo {
+  width: 0.5%;
+  height: 0.5%;  
+ 
+  float: left;
+}
+
 .navbar {
   box-sizing: border-box;
   display: flex;
