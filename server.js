@@ -24,7 +24,9 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let id = req.session.userid;
         let dir = `./root/img/uploads/${id}/`;
-        fs.mkdir(dir);
+        fs.mkdir(dir, (dir_created_info) => { 
+            
+        });
 
         cb(null, dir);
     },
@@ -478,7 +480,7 @@ app.delete("/deletePost", (req, res) => {
 // Creates a new account from a sign up request
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    sanitizedData = {
+    let sanitizedData = {
         username: helpers.stripHTMLTags(req.body.username),
         email: helpers.stripHTMLTags(req.body.email),
         firstname: helpers.stripHTMLTags(req.body.firstname),
@@ -937,5 +939,4 @@ app.put("/revoke", async (req, res) => {
 // });
 
 let port = is_Heroku ? process.env.PORT : 8000;
-
 app.listen(port);

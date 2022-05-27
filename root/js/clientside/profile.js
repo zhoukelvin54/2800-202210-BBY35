@@ -1,22 +1,19 @@
-
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 "use strict";
 let swappableElements;
-let profile_picture;
 let photo;
 
 let server_url;
 
-document.addEventListener("DOMContentLoaded", () => {
-  
-  getDatabaseData();
-  swappableElements = document.querySelectorAll(".editable");
-  document.getElementById("save_profile").addEventListener("click", updateProfile);
+getDatabaseData();
+swappableElements = document.querySelectorAll(".editable");
+document.getElementById("save_profile").addEventListener("click", updateProfile);
 
-  for (let i = 0; i < swappableElements.length; i++) {
-    swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
-  }
-  
-});
+for (let i = 0; i < swappableElements.length; i++) {
+  swappableElements[i].addEventListener("click", e => { swapSpanToInput(e.target); });
+}
 
 function swapEditableSpan(element) {
   if (!element) throw "Invalid param: " + element;
@@ -29,7 +26,7 @@ function swapEditableSpan(element) {
 
 function swapSpanToInput(element) {
   if (!element) throw "Invalid param: " + element;
-  if(element.tagName != "SPAN") return;
+  if (element.tagName != "SPAN") return;
 
   let input = document.createElement("input");
   input.value = element.textContent;
@@ -38,7 +35,7 @@ function swapSpanToInput(element) {
 
   element.parentNode.replaceChild(input, element);
   document.getElementById(element.id).focus();
-  swappableElements = document.querySelectorAll(".editable")
+  swappableElements = document.querySelectorAll(".editable");
 }
 
 function swapInputToSpan(element) {
@@ -49,9 +46,9 @@ function swapInputToSpan(element) {
   span.textContent = element.value;
   span.classList = element.classList;
   span.id = element.id;
-  
+
   element.parentNode.replaceChild(span, element);
-  document.getElementById(element.id).addEventListener("click", e => {swapSpanToInput(e.target)});
+  document.getElementById(element.id).addEventListener("click", e => { swapSpanToInput(e.target); });
   swappableElements = document.querySelectorAll(".editable");
 }
 
@@ -103,9 +100,9 @@ function swapButtonToInput(e) {
         }
       }).catch(err => {
         console.error(err);
-      })
+      });
     }
-  })
+  });
 }
 
 // ============================================================================
@@ -113,32 +110,31 @@ function swapButtonToInput(e) {
 // ============================================================================
 function getDatabaseData() {
   document.getElementById("upload_picture").addEventListener('change', (e) => {
-    profile_picture = e.target.files[0].name;
     photo = e.target.files[0];
-  })
-   // document.getElementById("profile_picture").style = `background-image: url(/img/uploads/${});`
+  });
+
   fetch("/get-profile", {
     method: "GET",
     headers: {
       "Content-type": "application/json"
     }
   }).then(async res => {
-    
+
     let data = await res.text();
     if (data) {
       let parsedData = JSON.parse(data);
       var neededProfileData = parsedData.information[0];
-      document.getElementById("username").innerText=neededProfileData.username
-      document.getElementById("first_name").innerText=neededProfileData.firstname
-      document.getElementById("last_name").innerText=neededProfileData.lastname
-      document.getElementById("email").innerText=neededProfileData.email
-      if(!neededProfileData.profile_photo_url) {
+      document.getElementById("username").innerText = neededProfileData.username;
+      document.getElementById("first_name").innerText = neededProfileData.firstname;
+      document.getElementById("last_name").innerText = neededProfileData.lastname;
+      document.getElementById("email").innerText = neededProfileData.email;
+      if (!neededProfileData.profile_photo_url) {
         document.getElementById("round_img").style.backgroundImage = "url(\"img/body.png\")";
       } else {
         document.getElementById("round_img").style.backgroundImage = "url(\"img/uploads/" + neededProfileData.profile_photo_url + "\")";
       }
     } else {
-      //console.log("failure");
+      console.error("No profile data!");
     }
   }).catch(err => {
     document.getElementById("response_message").innerText = err;
@@ -153,56 +149,55 @@ async function updateProfile() {
   if (photo != null) {
     const formData = new FormData();
 
-    formData.append("picture", photo)
+    formData.append("picture", photo);
 
-    getProfileData();
+    await getProfileData();
 
     await fetch("/addPhoto", {
       method: "POST",
       body: formData
-      }).then(res => res.json())
+    }).then(res => res.json())
       .then(res => {
         server_url = res.url;
-        //console.log(server_url);
       })
       .catch(err => {
         console.error(err);
         throw err;
-      })
+      });
   }
-  
-  
-  await fetch("/update-profile", { 
+
+
+  await fetch("/update-profile", {
     method: "PUT",
     headers: {
       "content-type": "application/json"
     },
-    body: JSON.stringify(getProfileData())
-  }).then( async res => {
-      if (res.status == 200) {
-        document.querySelectorAll("input.editable").forEach(element => {
-          swapInputToSpan(element); 
-        });
-        if (profile_picture != null) {
-          document.getElementById("round_img").style=`background-image: url(/img/uploads/${profile_picture});`;
-        }
-      } else {
-        let data = await res.text();
-        if (data) {
-          let parsed = JSON.parse(data);
-          
-          if (parsed.status == "failure") {
-            document.querySelectorAll("input.editable").forEach(element => {
-              swapInputToSpan(element); 
-            });
-            document.getElementById("response_message").innerText = parsed.msg;
-          } else {
-            document.getElementById("response_message").innerText = "Profile Updated.";
-          }
+    body: JSON.stringify(await getProfileData())
+  }).then(async res => {
+    if (res.status == 200) {
+      document.querySelectorAll("input.editable").forEach(element => {
+        swapInputToSpan(element);
+      });
+      if (server_url != null) {
+        document.getElementById("round_img").style = `background-image: url(/img/uploads/${server_url});`;
+      }
+    } else {
+      let data = await res.text();
+      if (data) {
+        let parsed = JSON.parse(data);
+
+        if (parsed.status == "failure") {
+          document.querySelectorAll("input.editable").forEach(element => {
+            swapInputToSpan(element);
+          });
+          document.getElementById("response_message").innerText = parsed.msg;
+        } else {
+          document.getElementById("response_message").innerText = "Profile Updated.";
         }
       }
-      
     }
+
+  }
   ).catch(err => {
     document.getElementById("response_message").innerText = err;
   });
@@ -221,5 +216,5 @@ function getProfileData() {
     lastname: data.last_name,
     email: data.email,
     profile_photo_url: server_url
-  }
+  };
 }

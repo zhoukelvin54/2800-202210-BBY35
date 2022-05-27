@@ -9,11 +9,15 @@ body {
     min-height: 100vh;
 }
 
+p {
+    color: rgba(213, 199, 125, 0.91);
+}
+
 .container {
     margin-top: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 135px;
     padding: 2rem;
-    width: 70vw;
+    width: 60vw;
     margin-left: auto;
     margin-right: auto;
 }
@@ -70,9 +74,6 @@ body {
     width: 100%;
 }
 
-#username {
-    grid-column: span 2;
-}
 
 #content-img {
     background-image: url(../img/body.jpg);

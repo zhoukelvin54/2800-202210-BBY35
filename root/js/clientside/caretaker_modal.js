@@ -1,9 +1,12 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 function showModal() {
     document.getElementById('edit_caretaker_modal').style.display = 'block';
 }
 document.querySelector('.cancel').onclick = function hideModal() {
     document.getElementById('edit_caretaker_modal').style.display = 'none';
-}
+};
 
 const form = document.forms.caretaker_details_form;
 form.addEventListener("submit", handleForm);
@@ -35,7 +38,6 @@ function updateCaretakerInfo(data) {
                 if (parsed.status == "failure") {
                     console.error("Could not update caretaker information.");
                 } else {
-                    //console.log("Caretaker information updated");
                     window.location.assign("/home");
                 }
             }

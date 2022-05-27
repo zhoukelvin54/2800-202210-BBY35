@@ -17,7 +17,6 @@ async function appendPosts() {
   });
 
   for (let i = 0; i < data.length; i++) {
-    //console.log(data[i]);
     document.querySelector("main").appendChild(await createPostCard(data[i]));
   }
 }
@@ -32,18 +31,19 @@ async function createPostCard(post) {
   let template = document.getElementById("post_template");
   let newPost = template.content.cloneNode(true);
   let card = newPost.firstElementChild;
-  
+
   card.id = post.post_id;
   let photo = post.photo_url ? post.photo_url : "dog_1.jpg";
   card.querySelector(".photo_container").innerHTML = `<img src="/img/uploads/${photo}" alt="Pet photo"/>`;
   card.querySelector(".post_content").innerHTML = post.contents;
-  card.querySelector(".date_posted").innerText = post.post_date;
+  card.querySelector(".date_posted").innerText = "Post Date: " + post.post_date.split("T")[0] + " " +
+    post.post_date.split("T")[1].split(".")[0];
 
   return newPost;
 }
 
 function findCard(element) {
-  if(element.classList.contains("card")) {
+  if (element.classList.contains("card")) {
     return element;
   } else {
     return findCard(element.parentElement);
@@ -63,9 +63,10 @@ async function submitPost(e) {
       photo_url: await uploadPhoto(),
       contents: editor.innerHTML
     })
-  }).then( () => { 
-    //console.log("Posted")
-   });
+  }).catch(error => {
+    console.error(error);
+    throw error;
+  });
 }
 
 async function uploadPhoto() {
@@ -74,19 +75,19 @@ async function uploadPhoto() {
   if (photo != null) {
     const formData = new FormData();
 
-    formData.append("picture", photo)
+    formData.append("picture", photo);
 
     await fetch("/addPhoto", {
       method: "POST",
       body: formData
-      }).then(res => res.json())
+    }).then(res => res.json())
       .then(res => {
         photoURL = res.url;
       })
       .catch(err => {
         console.error(err);
         throw err;
-      })
+      });
   }
-  return photoURL
+  return photoURL;
 }
