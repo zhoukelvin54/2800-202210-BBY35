@@ -111,17 +111,17 @@ body {
     background-color: #222;
 }
 
-.submit_button {
+.form_button {
     width: 75%;
     font-weight: bold;
     font-size: 1.75rem;
     padding: 0.5rem;
-    margin: 0 auto;
+    margin: 0.25rem auto;
     border: 2px #222;
     border-radius: 2rem;
 }
 
-.submit_button:hover {
+.form_button:hover {
     cursor: pointer;
     color: white;
     background-color: black;
