@@ -73,8 +73,12 @@ async function getUserData() {
     });
 
     if (response.status == 200) {
-      let data = await response.text();
-      return JSON.parse(data);
+      let data = JSON.parse(await response.text());
+      if (data.status == "failure") {
+        document.getElementById("errorMsg").innerText = data.msg;
+      } else {
+        return data;
+      }
     } else {
       console.error(response.status, response.statusText);
     }
@@ -97,8 +101,12 @@ async function callDelete(userid) {
     });
 
     if (response.status == 200) {
-      response.json().then(response => { window.confirm(response.msg); });
-      location.reload();
+      let data = JSON.parse(await response.text());
+      if (data.status == "failure") {
+        document.getElementById("errorMsg").innerText = data.msg;
+      } else {
+        location.reload();
+      }
     } else {
       console.error(response.status, response.statusText);
     }
@@ -121,8 +129,12 @@ async function callGrant(userid) {
     });
 
     if (response.status == 200) {
-      response.json().then(response => { window.confirm(response.msg); });
-      location.reload();
+      let data = JSON.parse(await response.text());
+      if (data.status == "failure") {
+        document.getElementById("errorMsg").innerText = data.msg;
+      } else {
+        location.reload();
+      }
     } else {
       console.error(response.status, response.statusText);
     }
@@ -145,7 +157,6 @@ async function callRevoke(userid) {
     });
 
     if (response.status == 200) {
-      response.json().then(response => { window.confirm(response.msg); });
       location.reload();
     } else {
       console.error(response.status, response.statusText);
@@ -174,7 +185,7 @@ function add() {
     }
   }
 
-  fetch("/add", {
+  fetch("/add-account", {
     method: "POST",
     headers: {
       "Content-type": "application/json"
@@ -193,7 +204,6 @@ function add() {
       if (data) {
         let parsedData = JSON.parse(data);
         if (parsedData.status == "success") {
-          window.confirm(parsedData.msg);
           location.reload();
         } else {
           document.getElementById("errorMsg").innerText = parsedData.msg;

@@ -3,6 +3,7 @@
 
 import { JSDOM } from 'jsdom';
 import { readFile } from 'node:fs/promises';
+import sanitizeHtml from 'sanitize-html';
 
 /**
  * Redirects non-logged-in users to the `'/login'` route.
@@ -164,6 +165,18 @@ function extractDateFromFileName(string) {
   return new Date(out);
 }
 
+/**
+ * Strips the HTML tags and attributes out of an input before storing it.
+ * @param {String} dirtyText 
+ * @returns clean, sanitized text
+ */
+function stripHTMLTags(dirtyText) {
+  return sanitizeHtml(dirtyText, {
+    allowedTags: [],
+    allowedAttributes: [],
+    allowedClasses: []
+  });
+}
 
 // Functions to export out
 export {
@@ -171,6 +184,7 @@ export {
   injectScript,
   injectStylesheet,
   loadHTMLComponent,
+  stripHTMLTags,
   craftInsertUpdateQueryFromRequest,
   extractDateFromFileName,
   redirectIfNotLoggedIn

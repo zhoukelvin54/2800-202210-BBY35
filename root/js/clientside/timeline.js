@@ -52,6 +52,11 @@ function findCard(element) {
 
 async function submitPost(e) {
   let editor = document.querySelector("[data-tiny-editor]");
+  if(!editor.innerHTML.trim()) {
+    document.querySelector(".create_post > .error_message").innerText = "Post must contain something!";
+    return;
+  }
+  
   fetch("/addPost", {
     method: "POST",
     headers: {
@@ -63,6 +68,11 @@ async function submitPost(e) {
       photo_url: await uploadPhoto(),
       contents: editor.innerHTML
     })
+  }).then(async res => {
+    let data = JSON.parse(await res.text());
+    if(data.status == "success") {
+      location.reload();
+    }
   }).catch(error => {
     console.error(error);
     throw error;

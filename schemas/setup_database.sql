@@ -93,7 +93,7 @@ CREATE TABLE `BBY35_pet_timeline` (
   KEY `pet_id_idx` (`pet_id`),
   KEY `caretaker_id_idx` (`caretaker_id_fk`),
   CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`),
-  CONSTRAINT `caretaker_id_fk` FOREIGN KEY (`caretaker_id_fk`) REFERENCES `BBY35_pets` (`caretaker_id`)
+  CONSTRAINT `caretaker_id_fk` FOREIGN KEY (`caretaker_id_fk`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `BBY35_pet_timeline_posts` (
   KEY `timeline_id_idx` (`timeline_id`),
   KEY `poster_id_idx` (`poster_id`),
   CONSTRAINT `timeline_id` FOREIGN KEY (`timeline_id`) REFERENCES `BBY35_pet_timeline` (`timeline_id`),
-  CONSTRAINT `poster_id` FOREIGN KEY (`poster_id`) REFERENCES `BBY35_pets` (`caretaker_id`)
+  CONSTRAINT `poster_id` FOREIGN KEY (`poster_id`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -359,7 +359,23 @@ INSERT INTO `BBY35_pet_timeline_posts`
   `post_date`,
   `photo_url`,
   `contents`)
+  VALUES (1, 3, STR_TO_DATE('15/01/2022', '%d/%m/%Y'), NULL, 'Hangin out :)');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
   VALUES (1, 4, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Not eating too much');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 4, STR_TO_DATE('19/04/2022', '%d/%m/%Y'), NULL, 'He was just picky :)');
 
 INSERT INTO `BBY35_pet_timeline_posts`
   (`poster_id`,
@@ -375,4 +391,52 @@ INSERT INTO `BBY35_pet_timeline_posts`
   `post_date`,
   `photo_url`,
   `contents`)
+  VALUES (1, 5, STR_TO_DATE('03/07/2022', '%d/%m/%Y'), NULL, 'Your pet still hasnt arrived?');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
   VALUES (1, 6, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 6, STR_TO_DATE('04/03/2022', '%d/%m/%Y'), NULL, 'Poolside chilaxin');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 7, STR_TO_DATE('02/06/2022', '%d/%m/%Y'), NULL, 'Grumpy pants wants to go home already.');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 7, STR_TO_DATE('03/07/2022', '%d/%m/%Y'), NULL, 'What a change in attitude huh?');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 8, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 8, STR_TO_DATE('04/03/2022', '%d/%m/%Y'), NULL, 'Poolside chilaxin');
