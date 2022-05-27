@@ -42,12 +42,6 @@ footer {
   bottom: 0;
 }
 
-#logo {
-  width: 0.5%;
-  height: 0.5%;  
- 
-  float: left;
-}
 
 .navbar {
   box-sizing: border-box;
@@ -57,7 +51,8 @@ footer {
   background-color: var(--primary);
 }
 
-.navbar a.menu_item {
+.navbar a.menu_item,
+.navbar div a.menu_item  {
   text-decoration: none;
   color: var(--black);
 }
@@ -80,6 +75,13 @@ footer {
 
 .nav_link:hover {
   background-color: var(--primary);
+}
+
+#logo {
+  position: sticky;
+  margin-right: 86vw;
+  width: 5vw;
+  height: 9vh;  
 }
 
 #bottom_navigation {
