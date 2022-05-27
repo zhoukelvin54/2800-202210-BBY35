@@ -63,6 +63,11 @@ footer {
   display: none;
 }
 
+.mx_auto {
+  margin: 0 auto;
+}
+
+
 .nav_link {
   display: block;
   text-decoration: none;
