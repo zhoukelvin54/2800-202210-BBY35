@@ -97,7 +97,6 @@ async function callDelete(userid) {
     });
 
     if (response.status == 200) {
-      response.json().then(response => { window.confirm(response.msg); });
       location.reload();
     } else {
       console.error(response.status, response.statusText);
@@ -145,7 +144,6 @@ async function callRevoke(userid) {
     });
 
     if (response.status == 200) {
-      response.json().then(response => { window.confirm(response.msg); });
       location.reload();
     } else {
       console.error(response.status, response.statusText);
