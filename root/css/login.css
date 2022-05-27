@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Josefin+Sans:wght@200&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Bitter', serif;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bolder;
 }
 
 body {
@@ -18,7 +19,7 @@ body {
 }
 
 .login {
-    width: 400px;
+    width: 25%;
     background-color: #343a40;
     box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.3);
     margin: 0 auto;
@@ -56,7 +57,7 @@ body {
 .login form input[type="text"],
 .login form input[type="email"],
 .login select {
-    width: 310px;
+    width: 75%;
     height: 50px;
     border: 1px solid #dee0e4;
     margin-bottom: 20px;
@@ -66,8 +67,6 @@ body {
 .hidden {
     display: none !important;
 }
-
-
 
 .login form input[type="submit"],
 .login form input[type="button"] {
@@ -86,7 +85,6 @@ body {
     background-color: #3f4041;
     transition: background-color 0.2s;
 }
-
 
 footer {
     background-color: #343a40;
@@ -115,4 +113,10 @@ footer a {
 }
 
 @media only screen and (max-width: 768px) {
+    .login {
+        width: 75%;
+    }
+    footer a {
+        padding: 2%;
+    }
 }

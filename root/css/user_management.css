@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Josefin+Sans:wght@200&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Bitter', serif;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bolder;
 }
 
 body {
@@ -57,7 +58,30 @@ th {
     color: white;
 }
 
+#add-user {
+    padding: 10px;
+}
+
+#add-user input {
+    width: 90%;
+    padding: 5px;
+    margin: 1%;
+}
+
+#add-submit:hover {
+    cursor: pointer;
+    color: white;
+    background-color: black;
+    margin-top: 2px;
+}
 
 @media only screen and (max-width: 768px) {
-    
+    #userTable {
+        width: 10%;
+    }
+    #add-user input {
+        width: 40%;
+        padding: 2px;
+        margin: 1%;
+    }
 }
