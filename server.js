@@ -24,7 +24,9 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         let id = req.session.userid;
         let dir = `./root/img/uploads/${id}/`;
-        fs.mkdir(dir);
+        fs.mkdir(dir, (dir_created_info) => { 
+            
+        });
 
         cb(null, dir);
     },
