@@ -364,7 +364,6 @@ async function changePetState(id) {
         let response = await fetch("/requestHousing", request);
 
         if (response.status == 200) {
-            response.json().then(response => { window.confirm(response.msg); });
             location.reload();
         } else {
             console.error(response.status, response.statusText);
@@ -385,7 +384,6 @@ async function acceptPet(id) {
         let response = await fetch("/acceptPet", request);
 
         if (response.status == 200) {
-            response.json().then(response => { window.confirm(response.msg); });
             location.reload();
         } else {
             console.error(response.status, response.statusText);
@@ -407,7 +405,6 @@ async function returnPet(id) {
         let response = await fetch("/releasePet", request);
 
         if (response.status == 200) {
-            response.json().then(response => { window.confirm(response.msg); });
             location.reload();
         } else {
             console.error(response.status, response.statusText);
@@ -429,7 +426,6 @@ async function rejectPet(id) {
         let response = await fetch("/releasePet", request);
 
         if (response.status == 200) {
-            response.json().then(response => { window.confirm(response.msg); });
             location.reload();
         } else {
             console.error(response.status, response.statusText);
