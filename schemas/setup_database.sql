@@ -93,7 +93,7 @@ CREATE TABLE `BBY35_pet_timeline` (
   KEY `pet_id_idx` (`pet_id`),
   KEY `caretaker_id_idx` (`caretaker_id_fk`),
   CONSTRAINT `pet_id` FOREIGN KEY (`pet_id`) REFERENCES `BBY35_pets` (`id`),
-  CONSTRAINT `caretaker_id_fk` FOREIGN KEY (`caretaker_id_fk`) REFERENCES `BBY35_pets` (`caretaker_id`)
+  CONSTRAINT `caretaker_id_fk` FOREIGN KEY (`caretaker_id_fk`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -111,7 +111,7 @@ CREATE TABLE `BBY35_pet_timeline_posts` (
   KEY `timeline_id_idx` (`timeline_id`),
   KEY `poster_id_idx` (`poster_id`),
   CONSTRAINT `timeline_id` FOREIGN KEY (`timeline_id`) REFERENCES `BBY35_pet_timeline` (`timeline_id`),
-  CONSTRAINT `poster_id` FOREIGN KEY (`poster_id`) REFERENCES `BBY35_pets` (`caretaker_id`)
+  CONSTRAINT `poster_id` FOREIGN KEY (`poster_id`) REFERENCES `BBY35_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -170,21 +170,21 @@ email, password, is_admin, is_caretaker) VALUES (
 13, 'user3', 'End', 'User', 'user@email.com', '$2b$10$vAtaahOy4/IHyER30cSC.uqpHHawpIf1kbMNQJTAM73ABVjUr3iMS', 0, 0);
 
 -- Add data to BBY35_pets table
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,4,NULL,'Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,4,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,NULL,NULL,'King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,3,NULL,'Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,3,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,NULL,NULL,'King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,2,NULL,'Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,2,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,NULL,NULL,'King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,1,NULL,'Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,1,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,NULL,NULL,'King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
 
 
 -- Add data to BBY35_caretaker_info table
