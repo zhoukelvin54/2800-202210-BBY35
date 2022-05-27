@@ -20,6 +20,9 @@
             <legend>Create User Profile</legend>
             <hr class="legend_hr" />
 
+            <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
             <div class="form_group">
                 <label for="upload_profile_picture">Upload Profile Picture:</label>
                 <input class="file_input" type="file" name="upload_profile_picture" id="upload_profile_picture" required />
@@ -55,6 +58,9 @@
             <hr class="legend_hr" />
 
             <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
+            <div class="inline_form_group">
                 <label for="animal_affection">How much do you like animals? (1-10)</label>
                 <input class="input" type="number" name="animal_affection" id="animal_affection" min="1" max="10"
                     value="5" />
@@ -62,22 +68,22 @@
 
             <div class="form_group">
                 <label for="experience">Any past experience with animals?</label>
-                <textarea class="input" name="experience" id="experience" rows="3"></textarea>
+                <textarea class="input" name="experience" id="experience" rows="3" required></textarea>
             </div>
 
             <div class="form_group">
                 <label for="allergies">Any allergies to specific animals?</label>
-                <textarea class="input" name="allergies" id="allergies" rows="3"></textarea>
+                <textarea class="input" name="allergies" id="allergies" rows="3" required></textarea>
             </div>
 
             <div class="form_group">
                 <label for="other_pets">List any other animals at your house:</label>
-                <textarea class="input" name="other_pets" id="other_pets" rows="3"></textarea>
+                <textarea class="input" name="other_pets" id="other_pets" rows="3" required></textarea>
             </div>
 
             <div class="form_group">
                 <label for="busy_hours">What are your working / busy hours?</label>
-                <textarea class="input" name="busy_hours" id="busy_hours" rows="3"></textarea>
+                <textarea class="input" name="busy_hours" id="busy_hours" rows="3" required></textarea>
             </div>
 
             <div class="inline_form_group">
@@ -125,8 +131,8 @@
             </div>
 
             <div class="form_group">
-                <label for="accomodation_picture">Upload Accomodation Photos:</label>
-                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" required multiple />
+                <label for="accomodation_picture">Upload Accomodation Photos*:</label>
+                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" multiple/>
             </div>
             
             <div class="form_group" id="info_error_message"></div>
