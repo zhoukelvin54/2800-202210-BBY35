@@ -751,7 +751,10 @@ app.put("/acceptPet", (req, res) => {
     let caretakerid = req.session.userid;
     if (req.session.caretaker == 1) {
         connection.query("UPDATE BBY35_pets SET status = 1, caretaker_id = ? WHERE id = ?", [caretakerid, petid], () => {
-            res.send({ status: "success", msg: "Pet is now in your care" });
+            let timeStamp = Date.now().toISOString().split('T')[0];
+            connection.query("INSERT INTO BBY35_pet_timeline (`pet_id`, `caretaker_id_fk`, `start_date`, `location`) VALUES (?, ?, ?, ?)", [petid, caretakerid, timeStamp, "Vancouver"], () => {
+                res.send({ status: "success", msg: "Pet is now in your care" });
+            });
         });
     } else {
         res.send({ status: "failue", msg: "You are not a caretaker!" });
@@ -766,10 +769,17 @@ app.put("/releasePet", (req, res) => {
     let isOKStatus = (status != 1);
     if (isOKStatus && req.session.caretaker == 1) {
         connection.query("UPDATE BBY35_pets SET status = ?, caretaker_id = NULL WHERE id = ?", [status, petid], () => {
-            res.send({ status: "success", msg: "Pet is now no longer in your care" });
+            let timeStamp = Date.now().toISOString().split('T')[0];
+            connection.query("UPDATE BBY35_pet_timeline `end_date` SET `end_date` = ? WHERE `pet_id` = ? AND `caretaker_id_fk` = ?", [timeStamp, petid, req.session.userid], (error) => {
+                if (error) {
+                    return res.send({ status: "failure", msg: error });
+                } else {
+                    return res.send({ status: "success", msg: "Pet is now no longer in your care" });
+                }
+            });
         });
     } else {
-        res.send({ status: "failue", msg: "You are not a caretaker or status is invalid!" });
+        res.send({ status: "failure", msg: "You are not a caretaker or status is invalid!" });
     }
 });
 
