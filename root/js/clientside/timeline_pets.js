@@ -3,6 +3,11 @@
 "use strict";
 
 onReady(async () => {
+  let title = document.createElement("h1");
+  title.innerText = "Pet Timelines";
+  title.classList.add("title");
+  document.querySelector("main").prepend(title);
+  
   // Gets the list of pets
   let pets = await fetch("/petData").then(async res => {
     return JSON.parse(await res.text());

@@ -3,6 +3,10 @@
 "use strict";
 
 onReady(async () => {
+  let title = document.createElement("h1");
+  title.innerText = "Pet Timelines";
+  title.classList.add("title");
+  document.querySelector("main").prepend(title);
   await appendTimelines();
 
   let cards = document.querySelectorAll(".timeline.card");
