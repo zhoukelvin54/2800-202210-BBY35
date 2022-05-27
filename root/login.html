@@ -27,21 +27,21 @@
                 <label for="password">
                     <i class="material-icons">key</i>
                 </label>
-                <input type="password" name="password" placeholder="Password" id="password" pattern="[`&^()/><\x22']+" required/>
+                <input type="password" name="password" placeholder="Password" id="password" pattern="^[a-zA-Z0-9_.-]*$" required/>
     
                 <!-- Sign-up details -->
                 <label for="firstname" class="signup hidden">
                     <i class="material-icons">drive_file_rename_outline</i>
                 </label>
-                <input type="text" name="firstname" placeholder="First Name" id="firstname" pattern="[A-Za-z0-9]" class="signup hidden" />
+                <input type="text" name="firstname" placeholder="First Name" id="firstname" pattern="^[a-zA-Z0-9_.-]*$" class="signup hidden" />
                 <label for="lastname" class="signup hidden">
                     <i class="material-icons">drive_file_rename_outline</i>
                 </label>
-                <input type="text" name="lastname" placeholder="Last Name" id="lastname" pattern="[A-Za-z0-9]" class="signup hidden" />
+                <input type="text" name="lastname" placeholder="Last Name" id="lastname" pattern="^[a-zA-Z0-9_.-]*$" class="signup hidden" />
                 <label for="email" class="signup hidden">
                     <i class="material-icons">mail</i>
                 </label>
-                <input type="email" placeholder="Email" id="email" class="signup hidden" pattern="[^()/><\x22']+"/>
+                <input type="email" placeholder="Email" id="email" class="signup hidden"/>
                 <label for="account_type" class="signup hidden">
                     <i class="material-icons">pets</i>
                 </label>

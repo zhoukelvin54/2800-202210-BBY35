@@ -31,17 +31,17 @@
     
                 <div class="form_group">
                     <label for="street_address">Street Address:</label>
-                    <input type="text" name="street_address" id="street_address" pattern="[A-Za-z0-9]" required/>
+                    <input type="text" name="street_address" id="street_address" pattern="^[a-zA-Z0-9_.-]*$" required/>
                 </div>
     
                 <div class="form_group">
                     <label for="region">State / Province:</label>
-                    <input type="text" name="region" id="region" pattern="[A-Za-z0-9]" required/>
+                    <input type="text" name="region" id="region" pattern="^[a-zA-Z0-9_.-]*$" required/>
                 </div>
     
                 <div class="form_group">
                     <label for="country">Country:</label>
-                    <input type="text" name="country" id="country" pattern="[A-Za-z0-9]" required/>
+                    <input type="text" name="country" id="country" pattern="^[a-zA-Z0-9_.-]*$" required/>
                 </div>
             </fieldset>
 
@@ -50,7 +50,7 @@
     
                 <div class="inline_form_group">
                     <label for="pet_name">Name:</label>
-                    <input type="text" id="pet_name" pattern="[A-Za-z0-9]" required>
+                    <input type="text" id="pet_name" pattern="^[a-zA-Z0-9_.-]*$" required>
                 </div>
                 <div class="inline_form_group">
                     <label>Sex:</label>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="inline_form_group">
                     <label for="pet_species">Species:</label>
-                    <input type="text" name="pet_species" id="pet_species" pattern="[A-Za-z0-9]" required>
+                    <input type="text" name="pet_species" id="pet_species" pattern="^[a-zA-Z0-9_.-]*$" required>
                 </div>
                 <div class="form_group">
                     <label for="pet_description">Description:</label>
