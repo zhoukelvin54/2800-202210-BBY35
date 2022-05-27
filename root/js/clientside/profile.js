@@ -84,7 +84,7 @@ function swapButtonToInput(e) {
           "Content-type": "application/json"
         },
         body: JSON.stringify({
-          "password": password
+          "password": password.trim()
         })
       }).then(async res => {
         if (res.status == 200) {
@@ -211,10 +211,10 @@ function getProfileData() {
   });
 
   return {
-    username: data.username,
-    firstname: data.first_name,
-    lastname: data.last_name,
-    email: data.email,
+    username: data.username.trim(),
+    firstname: data.first_name.trim(),
+    lastname: data.last_name.trim(),
+    email: data.email.trim(),
     profile_photo_url: server_url
   };
 }
