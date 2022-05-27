@@ -13,7 +13,7 @@ function getCookie(name) {
 function hidehero() {
     document.getElementById("welcome-img").style.display="none";
     document.getElementById("content-img").style.display="flex";
-    if (getCookie("sawWelcome")) {
+    if (!getCookie("sawWelcome")) {
         document.cookie = "sawWelcome=true";
     }
 }
