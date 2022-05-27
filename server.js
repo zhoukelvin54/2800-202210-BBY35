@@ -25,7 +25,6 @@ const storage = multer.diskStorage({
         let id = req.session.userid;
         let dir = `./root/img/uploads/${id}/`;
         fs.mkdir(dir);
-
         cb(null, dir);
     },
     filename: (req, file, cb) => {
@@ -74,6 +73,7 @@ let sessionObj = {
     resave: false,
     saveUninitialized: true
 };
+
 
 app.use(bodyParser.json());
 app.use(session(sessionObj));

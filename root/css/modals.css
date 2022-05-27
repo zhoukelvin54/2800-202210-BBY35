@@ -51,7 +51,17 @@
 }
 
 /*MODAL STUFF BELOW*/
-#add_pet, #edit_caretaker {
+#add_pet  {
+    display: block;
+    padding: 0 0.55rem 0 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgb(122, 118, 118);
+    margin: 0.5rem 0 0 0.5rem;
+    color: #DDD;
+    font-family: "Satisfy", sans-serif;
+}
+
+#edit_caretaker {
     display: block;
     padding: 0 0.55rem 0 0.5rem;
     border-radius: 0.5rem;

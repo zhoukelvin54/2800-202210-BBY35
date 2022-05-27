@@ -1,12 +1,13 @@
 
 "use strict";
 let swappableElements;
-let profile_picture;
 let photo;
 
 let server_url;
 
-document.addEventListener("DOMContentLoaded", () => {
+
+
+
   
   getDatabaseData();
   swappableElements = document.querySelectorAll(".editable");
@@ -14,9 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   for (let i = 0; i < swappableElements.length; i++) {
     swappableElements[i].addEventListener("click", e => {swapSpanToInput(e.target)});
-  }
+  };
   
-});
+
 
 function swapEditableSpan(element) {
   if (!element) throw "Invalid param: " + element;
@@ -113,10 +114,9 @@ function swapButtonToInput(e) {
 // ============================================================================
 function getDatabaseData() {
   document.getElementById("upload_picture").addEventListener('change', (e) => {
-    profile_picture = e.target.files[0].name;
     photo = e.target.files[0];
   })
-   // document.getElementById("profile_picture").style = `background-image: url(/img/uploads/${});`
+
   fetch("/get-profile", {
     method: "GET",
     headers: {
@@ -153,9 +153,9 @@ async function updateProfile() {
   if (photo != null) {
     const formData = new FormData();
 
-    formData.append("picture", photo)
+    formData.append("picture", photo);
 
-    getProfileData();
+    await getProfileData();
 
     await fetch("/addPhoto", {
       method: "POST",
@@ -163,7 +163,6 @@ async function updateProfile() {
       }).then(res => res.json())
       .then(res => {
         server_url = res.url;
-        //console.log(server_url);
       })
       .catch(err => {
         console.error(err);
@@ -177,14 +176,14 @@ async function updateProfile() {
     headers: {
       "content-type": "application/json"
     },
-    body: JSON.stringify(getProfileData())
+    body: JSON.stringify(await getProfileData())
   }).then( async res => {
       if (res.status == 200) {
         document.querySelectorAll("input.editable").forEach(element => {
           swapInputToSpan(element); 
         });
-        if (profile_picture != null) {
-          document.getElementById("round_img").style=`background-image: url(/img/uploads/${profile_picture});`;
+        if (server_url != null) {
+          document.getElementById("round_img").style=`background-image: url(/img/uploads/${server_url});`;
         }
       } else {
         let data = await res.text();
