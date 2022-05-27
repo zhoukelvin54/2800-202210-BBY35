@@ -1,9 +1,12 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 function showModal() {
     document.getElementById('add_pet_modal').style.display = 'block';
 }
 document.querySelector('.cancel').onclick = function hideModal() {
     document.getElementById('add_pet_modal').style.display = 'none';
-}
+};
 
 const form = document.forms['pet_details_form'];
 
@@ -22,9 +25,10 @@ function handleForm(e) {
 
 async function getPetData() {
     let sexButtons = document.querySelectorAll('input[name="pet_sex"]');
+    var selectedSex;
     for (const sexButton of sexButtons) {
         if (sexButton.checked) {
-            var selectedSex = sexButton.value;
+            selectedSex = sexButton.value;
             break;
         }
     }
@@ -36,18 +40,16 @@ async function getPetData() {
     formData.append("picture", profile_picture);
 
     await fetch("/addPhoto", {
-            method: "POST",
-            body: formData
-        }).then(res => res.json())
-        .then(res => {pet_url = res.url;
-             //console.log(res.url);
+        method: "POST",
+        body: formData
+    }).then(res => res.json())
+        .then(res => {
+            pet_url = res.url;
         })
         .catch(err => {
             console.error(err);
             throw err;
         });
-
-    //console.log(pet_url);
 
     return {
         pet_name: form["pet_name"].value,
@@ -55,7 +57,7 @@ async function getPetData() {
         pet_species: form["pet_species"].value,
         pet_description: form["pet_description"].value,
         pet_picture: pet_url
-    }
+    };
 }
 
 async function updatePetInfo() {
@@ -75,13 +77,11 @@ async function updatePetInfo() {
     }).then(async res => {
         if (res.status == 200) {
             let data = await res.text();
-            //console.log(data);
             if (data) {
                 let parsed = JSON.parse(data);
                 if (parsed.status == "failure") {
-                    //console.log("error");
+                    console.error(parsed.status, parsed.msg);
                 } else {
-                    //("success");
                     window.location.assign("/home");
                 }
             }

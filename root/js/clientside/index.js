@@ -1,5 +1,8 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 "use strict";
-let sawWelcome = getCookie("sawWelcome")
+let sawWelcome = getCookie("sawWelcome");
 
 function getCookie(name) {
     const value = `; ${document.cookie}`;
@@ -11,9 +14,10 @@ function hidehero() {
     document.getElementById("welcome-img").style.display="none";
     document.getElementById("content-img").style.display="flex";
     if (getCookie("sawWelcome")) {
-        document.cookie = "sawWelcome=true"
+        document.cookie = "sawWelcome=true";
     }
-};
-if(sawWelcome = "true") {
+}
+
+if(sawWelcome == "true") {
     hidehero();
 }
