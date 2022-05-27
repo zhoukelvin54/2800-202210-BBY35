@@ -193,7 +193,6 @@ function add() {
       if (data) {
         let parsedData = JSON.parse(data);
         if (parsedData.status == "success") {
-          window.confirm(parsedData.msg);
           location.reload();
         } else {
           document.getElementById("errorMsg").innerText = parsedData.msg;
