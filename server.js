@@ -833,20 +833,18 @@ app.delete("/delete", async (req, res) => {
     await getTargetInfo(accountID);
     await getAdminCount();
 
-    let userSelfDelete = (!isRequesterAdmin && (accountID == requesterID));
+    let userSelfDelete = (accountID != requesterID);
     let areRequesterAndTargetAdmins = (isTargetAdmin && isRequesterAdmin);
     let adminOnAdminDelete = (areRequesterAndTargetAdmins && (adminCount >= 2));
     let adminOnUserDelete = (!isTargetAdmin && isRequesterAdmin);
     let adminDelete = (adminOnAdminDelete || adminOnUserDelete);
-    let allowDelete = (userSelfDelete || adminDelete);
+    let allowDelete = (userSelfDelete && adminDelete);
 
     if (allowDelete) {
         connection.query('UPDATE BBY35_accounts SET username = NULL, password = NULL, firstname = "DELETED", lastname = "USER", is_admin = 0  WHERE id = ?', [accountID], async () => {
             await getAdminCount();
             if (adminOnAdminDelete) {
                 res.send({ status: "success", msg: `Removed user: ${targetName}; Remaining admins: ${adminCount}` });
-            } else if (userSelfDelete) {
-                res.send({ status: "success", msg: `Your account has been removed.` });
             } else {
                 res.send({ status: "success", msg: `Removed user: ${targetName}` });
             }

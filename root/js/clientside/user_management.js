@@ -73,8 +73,12 @@ async function getUserData() {
     });
 
     if (response.status == 200) {
-      let data = await response.text();
-      return JSON.parse(data);
+      let data = JSON.parse(await response.text());
+      if (data.status == "failure") {
+        document.getElementById("errorMsg").innerText = data.msg;
+      } else {
+        return data;
+      }
     } else {
       console.error(response.status, response.statusText);
     }
@@ -97,7 +101,12 @@ async function callDelete(userid) {
     });
 
     if (response.status == 200) {
-      location.reload();
+      let data = JSON.parse(await response.text());
+      if (data.status == "failure") {
+        document.getElementById("errorMsg").innerText = data.msg;
+      } else {
+        location.reload();
+      }
     } else {
       console.error(response.status, response.statusText);
     }
@@ -120,7 +129,12 @@ async function callGrant(userid) {
     });
 
     if (response.status == 200) {
-      location.reload();
+      let data = JSON.parse(await response.text());
+      if (data.status == "failure") {
+        document.getElementById("errorMsg").innerText = data.msg;
+      } else {
+        location.reload();
+      }
     } else {
       console.error(response.status, response.statusText);
     }
