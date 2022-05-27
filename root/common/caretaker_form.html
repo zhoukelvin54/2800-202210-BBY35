@@ -9,7 +9,7 @@
 
     <div class="inline_form_group">
         <label for="animal_affection">How much do you like animals? (1-10)</label>
-        <input class="input" type="number" name="animal_affection" id="animal_affection" min="1" max="10" value="5" />
+        <input class="input" type="number" name="animal_affection" id="animal_affection" min="1" max="10" placeholder="#" required/>
     </div>
 
     <div class="form_group">
@@ -34,7 +34,8 @@
 
     <div class="inline_form_group">
         <label for="house_type">What type of home do you live in?</label>
-        <select class="input" name="house_type" id="house_type">
+        <select class="input" name="house_type" id="house_type" required>
+            <option value="">Select</option>
             <option value="house">House</option>
             <option value="barn">Barn</option>
             <option value="trailer">Trailer</option>
@@ -46,8 +47,9 @@
 
     <div class="inline_form_group">
         <label for="house_active_level">How active is your household?</label>
-        <select class="input" name="house_active_level" id="house_active_level">
-            <option value="low" selected>Low</option>
+        <select class="input" name="house_active_level" id="house_active_level" required>
+            <option value="">Select</option>
+            <option value="low">Low</option>
             <option value="med">Medium</option>
             <option value="high">High</option>
         </select>
@@ -55,21 +57,23 @@
 
     <div class="inline_form_group">
         <label for="people_in_home">How many people live in your house?</label>
-        <input class="input" type="number" name="people_in_home" id="people_in_home" min="1" max="20" value="1" />
+        <input class="input" type="number" name="people_in_home" id="people_in_home" min="1" max="20" placeholder="#" required />
     </div>
 
     <div class="inline_form_group">
         <label for="children_in_home">Are there children in your house?</label>
-        <select class="input" name="children_in_home" id="children_in_home">
-            <option value="no" selected>No</option>
+        <select class="input" name="children_in_home" id="children_in_home" required>
+            <option value="">Select</option>
+            <option value="no">No</option>
             <option value="yes">Yes</option>
         </select>
     </div>
 
     <div class="inline_form_group">
         <label for="yard_type">Is your yard enclosed?</label>
-        <select class="input" name="yard_type" id="yard_type">
-            <option value="enclosed" selected>Enclosed</option>
+        <select class="input" name="yard_type" id="yard_type" required>
+            <option value="">Select</option>
+            <option value="enclosed">Enclosed</option>
             <option value="partial">Partially Enclosed</option>
             <option value="none">Not Enclosed</option>
         </select>
@@ -77,7 +81,7 @@
 
     <div class="form_group">
         <label for="accomodation_picture">Upload Accomodation Photos:</label>
-        <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" />
+        <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" required multiple/>
     </div>
 
     <input class="form_button" type="submit" value="Submit" />
