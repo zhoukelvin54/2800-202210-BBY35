@@ -120,7 +120,6 @@ async function callGrant(userid) {
     });
 
     if (response.status == 200) {
-      response.json().then(response => { window.confirm(response.msg); });
       location.reload();
     } else {
       console.error(response.status, response.statusText);
@@ -172,7 +171,7 @@ function add() {
     }
   }
 
-  fetch("/add", {
+  fetch("/add-account", {
     method: "POST",
     headers: {
       "Content-type": "application/json"

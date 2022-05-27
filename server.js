@@ -504,7 +504,9 @@ app.post("/add-account", (req, res) => {
                         if (error) {
                             res.send({ status: "failure", msg: "Internal Server Error" });
                         } else {
-                            req.session.newAccount = true;
+                            if (!req.session.admin) {
+                                req.session.newAccount = true;
+                            }
                             res.send({ status: "success", msg: "Record added." });
                         }
                     });
@@ -926,27 +928,6 @@ app.put("/revoke", async (req, res) => {
         res.send({ status: "failure", msg: `Could not revoke admin ${targetName}` });
     }
 });
-
-// Creates a new account, checks if the current user is an admin.
-// TODO !!! DUPLICATED CODE !!! UPDATE WHERE USED AND REMOVE ASAP
-// app.post("/add", (req, res) => {
-//     res.setHeader("Content-Type", "application/json");
-
-//     let isRequesterAdmin = req.session.admin;
-
-//     if (isRequesterAdmin) {
-//         connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker) VALUES (?, ?, ?, ?, ?, ?)",
-//             [req.body.username, req.body.firstname, req.body.lastname, req.body.email, req.body.password, req.body.account_type], (error, data, fields) => {
-//                 if (error) {
-//                     res.send({ status: "failure", msg: "Internal Server Error" });
-//                 } else {
-//                     res.send({ status: "success", msg: "Record added." });
-//                 }
-//             });
-//     } else {
-//         res.send({ status: "failure", msg: "Forbidden." });
-//     }
-// });
 
 let port = is_Heroku ? process.env.PORT : 8000;
 app.listen(port);
