@@ -55,8 +55,12 @@ async function createTimelineCard(timeline) {
   card.querySelector(".status").innerText = status;
   let dates = card.querySelectorAll(".timeline_date");
   if (dates.length > 0) {
-    dates[0].innerText = timeline.start_date.split("T")[0];
-    dates[1].innerText = timeline.end_date.split("T")[0];
+    if (timeline.start_date) {
+      dates[0].innerText = timeline.start_date.split("T")[0];
+    }
+    if (timeline.end_date) {
+      dates[1].innerText = timeline.end_date.split("T")[0];
+    }
   }
 
   let pet_img = document.createElement("img");
