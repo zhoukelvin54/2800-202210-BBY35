@@ -45,8 +45,7 @@ function getPetData() {
     pet_name: form["pet_name"].value,
     pet_sex: selectedSex,
     pet_species: form["pet_species"].value,
-    pet_description: form["pet_description"].value,
-    pet_picture: form["upload_pet_picture"].files[0].name // TODO Replace with generated name from upload
+    pet_description: form["pet_description"].value
   };
 }
 
@@ -88,6 +87,7 @@ async function updateProfile() {
 // ============================================================================
 
 async function updatePetInfo() {
+  let picLocation = await uploadPetPhoto();
   let petData = getPetData();
   fetch("/update-pet", {
     method: "PUT",
@@ -99,7 +99,7 @@ async function updatePetInfo() {
       "gender": petData.pet_sex,
       "species": petData.pet_species,
       "description": petData.pet_description,
-      "photo_url": petData.pet_picture
+      "photo_url": picLocation
     })
   }).then(async res => {
     if (res.status == 200) {
@@ -117,3 +117,27 @@ async function updatePetInfo() {
     console.err(err);
   });
 }
+
+/**
+ * Uploads the pet's photo to the database and returns its server location
+ * @returns server file location under /img/uploads/
+ */
+async function uploadPetPhoto() {
+  var pet_picture_location;
+  let pet_picture = form["upload_pet_picture"].files[0];
+  const formData = new FormData();
+
+  formData.append("picture", pet_picture);
+
+  await fetch("/addPhoto", {
+    method: "POST",
+    body: formData
+  }).then(res => res.json())
+    .then(res => (pet_picture_location = res.url))
+    .catch(err => {
+      console.error(err);
+      throw err;
+    });
+
+  return pet_picture_location;
+} 
