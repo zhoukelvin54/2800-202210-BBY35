@@ -3,9 +3,17 @@
 "use strict";
 
 onReady(() => {
+  let heading = document.createElement("h1");
+  heading.innerText = "Timeline Posts";
+  heading.classList.add("title");
+  document.querySelector("main").prepend(heading);
+  
   appendPosts();
   // Add events for uploading photo and post
-  document.querySelector(".create_post .submit_post").addEventListener("click", submitPost);
+  let postBox = document.querySelector(".create_post .submit_post");
+  if (postBox) {
+    postBox.addEventListener("click", submitPost);
+  } 
 });
 
 /**
