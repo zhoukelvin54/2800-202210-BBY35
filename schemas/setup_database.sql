@@ -170,21 +170,21 @@ email, password, is_admin, is_caretaker) VALUES (
 13, 'user3', 'End', 'User', 'user@email.com', '$2b$10$vAtaahOy4/IHyER30cSC.uqpHHawpIf1kbMNQJTAM73ABVjUr3iMS', 0, 0);
 
 -- Add data to BBY35_pets table
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,4,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,4,NULL,'Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (1,NULL,NULL,'King','Dog','M','Bark bark bark',0);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,3,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,3,NULL,'Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (2,NULL,NULL,'King','Dog','M','Bark bark bark',0);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,2,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,2,NULL,'Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (3,NULL,NULL,'King','Dog','M','Bark bark bark',0);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,1,'cedric-vt-IuJc2qh2TcA-unsplash.jpeg','Whisker','Cat','F','Meow meow meow',1);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,1,NULL,'Whisker','Cat','F','Meow meow meow',1);
 
-INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,NULL,'dog_1.jpg','King','Dog','M','Bark bark bark',0);
+INSERT INTO BBY35_pets (`owner_id`,`caretaker_id`,`photo_url`,`name`,`species`,`gender`,`description`, `status`) VALUES (4,NULL,NULL,'King','Dog','M','Bark bark bark',0);
 
 
 -- Add data to BBY35_caretaker_info table
@@ -359,7 +359,23 @@ INSERT INTO `BBY35_pet_timeline_posts`
   `post_date`,
   `photo_url`,
   `contents`)
+  VALUES (1, 3, STR_TO_DATE('15/01/2022', '%d/%m/%Y'), NULL, 'Hangin out :)');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
   VALUES (1, 4, STR_TO_DATE('18/04/2022', '%d/%m/%Y'), NULL, 'Not eating too much');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 4, STR_TO_DATE('19/04/2022', '%d/%m/%Y'), NULL, 'He was just picky :)');
 
 INSERT INTO `BBY35_pet_timeline_posts`
   (`poster_id`,
@@ -375,4 +391,52 @@ INSERT INTO `BBY35_pet_timeline_posts`
   `post_date`,
   `photo_url`,
   `contents`)
+  VALUES (1, 5, STR_TO_DATE('03/07/2022', '%d/%m/%Y'), NULL, 'Your pet still hasnt arrived?');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
   VALUES (1, 6, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 6, STR_TO_DATE('04/03/2022', '%d/%m/%Y'), NULL, 'Poolside chilaxin');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 7, STR_TO_DATE('02/06/2022', '%d/%m/%Y'), NULL, 'Grumpy pants wants to go home already.');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 7, STR_TO_DATE('03/07/2022', '%d/%m/%Y'), NULL, 'What a change in attitude huh?');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 8, STR_TO_DATE('01/03/2022', '%d/%m/%Y'), NULL, 'Hangin around :)');
+
+INSERT INTO `BBY35_pet_timeline_posts`
+  (`poster_id`,
+  `timeline_id`,
+  `post_date`,
+  `photo_url`,
+  `contents`)
+  VALUES (1, 8, STR_TO_DATE('04/03/2022', '%d/%m/%Y'), NULL, 'Poolside chilaxin');
