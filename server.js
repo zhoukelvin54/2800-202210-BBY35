@@ -358,7 +358,7 @@ app.get("/getPetInfo/:petid", (req, res) => {
 
 // Constructs and sends a timelines document dependant on which type of account is logged in.
 app.get("/timeline", async (req, res) => {
-    helpers.redirectIfNotLoggedIn(req, res);
+    if(helpers.redirectIfNotLoggedIn(req, res)) return;
 
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
     let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
@@ -373,7 +373,7 @@ app.get("/timeline", async (req, res) => {
 // Constructs and creates an overview of posts for a specific timeline, appends 
 // tinyeditor if the account is a caretaker.
 app.get("/timeline/overview/:timeline_Id", async (req, res) => {
-    helpers.redirectIfNotLoggedIn(req, res);
+    if(helpers.redirectIfNotLoggedIn(req, res)) return;
 
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
     let pageDoc = pageDOM.window.document;
