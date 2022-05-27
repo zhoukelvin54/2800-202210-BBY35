@@ -111,8 +111,8 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
     res.setHeader("content-type", "application/json");
 
-    let username = req.body.username;
-    let password = req.body.password;
+    let username = helpers.stripHTMLTags(req.body.username);
+    let password = helpers.stripHTMLTags(req.body.password);
     if (username) {
         connection.query("SELECT * FROM BBY35_accounts WHERE username = ?", [username], async (err, data, fields) => {
             if (err) throw err;
@@ -358,7 +358,7 @@ app.get("/getPetInfo/:petid", (req, res) => {
 
 // Constructs and sends a timelines document dependant on which type of account is logged in.
 app.get("/timeline", async (req, res) => {
-    if(helpers.redirectIfNotLoggedIn(req, res)) return;
+    if (helpers.redirectIfNotLoggedIn(req, res)) return;
 
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
     let userScript = req.session.caretaker ? "/js/timeline_caretaker.js" : "/js/timeline_pets.js";
@@ -373,7 +373,7 @@ app.get("/timeline", async (req, res) => {
 // Constructs and creates an overview of posts for a specific timeline, appends 
 // tinyeditor if the account is a caretaker.
 app.get("/timeline/overview/:timeline_Id", async (req, res) => {
-    if(helpers.redirectIfNotLoggedIn(req, res)) return;
+    if (helpers.redirectIfNotLoggedIn(req, res)) return;
 
     let pageDOM = new JSDOM(await readFile("./root/common/page_template.html"));
     let pageDoc = pageDOM.window.document;
@@ -427,7 +427,7 @@ app.post("/addPost", (req, res) => {
     res.setHeader("content-type", "application/json");
     if (req.body.timeline_id) {
         connection.query("INSERT INTO `BBY35_pet_timeline_posts` (`poster_id`, `timeline_id`, `post_date`, `photo_url`, `contents`) " +
-            "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, req.body.post_date, req.body.photo_url, req.body.contents],
+            "VALUES (?, ?, ?, ?, ?);", [req.session.userid, req.body.timeline_id, Date.now(), req.body.photo_url, req.body.contents],
             (error, results, fields) => {
                 if (error) {
                     res.send({ status: "failure", msg: "Internal Server Error" });
@@ -478,8 +478,16 @@ app.delete("/deletePost", (req, res) => {
 // Creates a new account from a sign up request
 app.post("/add-account", (req, res) => {
     res.setHeader("Content-Type", "application/json");
+    sanitizedData = {
+        username: helpers.stripHTMLTags(req.body.username),
+        email: helpers.stripHTMLTags(req.body.email),
+        firstname: helpers.stripHTMLTags(req.body.firstname),
+        lastname: helpers.stripHTMLTags(req.body.lastname),
+        password: helpers.stripHTMLTags(req.body.password),
+        account_type: req.body.account_type
+    };
 
-    connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [req.body.username, req.body.email],
+    connection.query("SELECT username FROM BBY35_accounts WHERE username = ? UNION ALL SELECT username FROM BBY35_accounts WHERE email = ?", [sanitizedData.username, sanitizedData.email],
         async (error, results, fields) => {
             if (error) {
                 res.send({ status: "failure", msg: "Internal Server Error" });
@@ -488,8 +496,8 @@ app.post("/add-account", (req, res) => {
             } else {
                 connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker)" +
                     "values (?, ?, ?, ?, ?, ?)",
-                    [req.body.username, req.body.firstname, req.body.lastname,
-                    req.body.email, await bcrypt.hash(req.body.password, SALT_ROUNDS), req.body.account_type],
+                    [sanitizedData.username, sanitizedData.firstname, sanitizedData.lastname,
+                    sanitizedData.email, await bcrypt.hash(sanitizedData.password, SALT_ROUNDS), sanitizedData.account_type],
                     (error, results, fields) => {
                         if (error) {
                             res.send({ status: "failure", msg: "Internal Server Error" });
@@ -524,8 +532,8 @@ app.get("/get-profile", (req, res) => {
 app.put("/update-profile", (req, res) => {
     res.setHeader("Content-Type", "application/json");
 
-    let username = (req.body.username) ? req.body.username : "";
-    let email = (req.body.email) ? req.body.email : "";
+    let username = (req.body.username) ? helpers.stripHTMLTags(req.body.username) : "";
+    let email = (req.body.email) ? helpers.stripHTMLTags(req.body.email) : "";
     connection.query("SELECT BBY35_accounts.`username` FROM BBY35_accounts WHERE BBY35_accounts.`username` = ? UNION " +
         "SELECT BBY35_accounts.`email` FROM BBY35_accounts WHERE BBY35_accounts.`email` = ?;",
         [username, email],
@@ -668,7 +676,7 @@ app.put("/requestHousing", (req, res) => {
 app.put("/update-caretaker-info", (req, res) => {
     res.setHeader("Content-Type", "application/json");
     if (!req.session.caretaker) {
-        res.send({ status: "failure", msg: "Current user is not a caretaker!" });
+        return res.send({ status: "failure", msg: "Current user is not a caretaker!" });
     }
 
     let expectedFields = ["animal_affection", "experience", "allergies", "other_pets", "busy_hours", "house_type", "house_active_level", "people_in_home", "children_in_home", "yard_type"];
@@ -909,24 +917,24 @@ app.put("/revoke", async (req, res) => {
 
 // Creates a new account, checks if the current user is an admin.
 // TODO !!! DUPLICATED CODE !!! UPDATE WHERE USED AND REMOVE ASAP
-app.post("/add", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
+// app.post("/add", (req, res) => {
+//     res.setHeader("Content-Type", "application/json");
 
-    let isRequesterAdmin = req.session.admin;
+//     let isRequesterAdmin = req.session.admin;
 
-    if (isRequesterAdmin) {
-        connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker) VALUES (?, ?, ?, ?, ?, ?)",
-            [req.body.username, req.body.firstname, req.body.lastname, req.body.email, req.body.password, req.body.account_type], (error, data, fields) => {
-                if (error) {
-                    res.send({ status: "failure", msg: "Internal Server Error" });
-                } else {
-                    res.send({ status: "success", msg: "Record added." });
-                }
-            });
-    } else {
-        res.send({ status: "failure", msg: "Forbidden." });
-    }
-});
+//     if (isRequesterAdmin) {
+//         connection.query("INSERT INTO BBY35_accounts (username, firstname, lastname, email, password, is_caretaker) VALUES (?, ?, ?, ?, ?, ?)",
+//             [req.body.username, req.body.firstname, req.body.lastname, req.body.email, req.body.password, req.body.account_type], (error, data, fields) => {
+//                 if (error) {
+//                     res.send({ status: "failure", msg: "Internal Server Error" });
+//                 } else {
+//                     res.send({ status: "success", msg: "Record added." });
+//                 }
+//             });
+//     } else {
+//         res.send({ status: "failure", msg: "Forbidden." });
+//     }
+// });
 
 let port = is_Heroku ? process.env.PORT : 8000;
 
