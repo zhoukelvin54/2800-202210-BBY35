@@ -9,6 +9,7 @@
     <title>Caretaker Sign-up</title>
     <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/caretaker_form.css" />
 </head>
 
@@ -19,6 +20,9 @@
             <legend>Create User Profile</legend>
             <hr class="legend_hr" />
 
+            <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
             <div class="form_group">
                 <label for="upload_profile_picture">Upload Profile Picture:</label>
                 <input class="file_input" type="file" name="upload_profile_picture" id="upload_profile_picture" required />
@@ -27,22 +31,22 @@
             <div class="form_group">
                 <label for="telephone">Telephone Number:</label>
                 <input class="input" type="tel" name="telephone" id="telephone"
-                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required />
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required/>
             </div>
 
             <div class="form_group">
                 <label for="street_address">Street Address:</label>
-                <input class="input" type="text" name="street_address" id="street_address" required />
+                <input class="input" type="text" name="street_address" id="street_address" required pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$"/>
             </div>
 
             <div class="form_group">
                 <label for="region">State / Province:</label>
-                <input class="input" type="text" name="region" id="region" required />
+                <input class="input" type="text" name="region" id="region" required pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$"/>
             </div>
 
             <div class="form_group">
                 <label for="country">Country:</label>
-                <input class="input" type="text" name="country" id="country" required />
+                <input class="input" type="text" name="country" id="country" required pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$"/>
             </div>
             
             <div class="form_group" id="profile_error_message"></div>
@@ -54,34 +58,38 @@
             <hr class="legend_hr" />
 
             <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
+            <div class="inline_form_group">
                 <label for="animal_affection">How much do you like animals? (1-10)</label>
                 <input class="input" type="number" name="animal_affection" id="animal_affection" min="1" max="10"
-                    value="5" />
+                    placeholder="#" required/>
             </div>
 
             <div class="form_group">
                 <label for="experience">Any past experience with animals?</label>
-                <textarea class="input" name="experience" id="experience" rows="3"></textarea>
+                <textarea class="input" name="experience" id="experience" rows="3" required></textarea>
             </div>
 
             <div class="form_group">
                 <label for="allergies">Any allergies to specific animals?</label>
-                <textarea class="input" name="allergies" id="allergies" rows="3"></textarea>
+                <textarea class="input" name="allergies" id="allergies" rows="3" required></textarea>
             </div>
 
             <div class="form_group">
                 <label for="other_pets">List any other animals at your house:</label>
-                <textarea class="input" name="other_pets" id="other_pets" rows="3"></textarea>
+                <textarea class="input" name="other_pets" id="other_pets" rows="3" required></textarea>
             </div>
 
             <div class="form_group">
                 <label for="busy_hours">What are your working / busy hours?</label>
-                <textarea class="input" name="busy_hours" id="busy_hours" rows="3"></textarea>
+                <textarea class="input" name="busy_hours" id="busy_hours" rows="3" required></textarea>
             </div>
 
             <div class="inline_form_group">
                 <label for="house_type">What type of home do you live in?</label>
-                <select class="input" name="house_type" id="house_type">
+                <select class="input" name="house_type" id="house_type" required>
+                    <option value="">Select</option>
                     <option value="house">House</option>
                     <option value="barn">Barn</option>
                     <option value="trailer">Trailer</option>
@@ -93,8 +101,9 @@
 
             <div class="inline_form_group">
                 <label for="house_active_level">How active is your household?</label>
-                <select class="input" name="house_active_level" id="house_active_level">
-                    <option value="low" selected>Low</option>
+                <select class="input" name="house_active_level" id="house_active_level" required>
+                    <option value="">Select</option>
+                    <option value="low">Low</option>
                     <option value="med">Medium</option>
                     <option value="high">High</option>
                 </select>
@@ -103,21 +112,23 @@
             <div class="inline_form_group">
                 <label for="people_in_home">How many people live in your house?</label>
                 <input class="input" type="number" name="people_in_home" id="people_in_home" min="1" max="20"
-                    value="1" />
+                    placeholder="#" required />
             </div>
 
             <div class="inline_form_group">
                 <label for="children_in_home">Are there children in your house?</label>
-                <select class="input" name="children_in_home" id="children_in_home">
-                    <option value="no" selected>No</option>
+                <select class="input" name="children_in_home" id="children_in_home" required>
+                    <option value="">Select</option>
+                    <option value="no">No</option>
                     <option value="yes">Yes</option>
                 </select>
             </div>
 
             <div class="inline_form_group">
                 <label for="yard_type">Is your yard enclosed?</label>
-                <select class="input" name="yard_type" id="yard_type">
-                    <option value="enclosed" selected>Enclosed</option>
+                <select class="input" name="yard_type" id="yard_type" required>
+                    <option value="">Select</option>
+                    <option value="enclosed">Enclosed</option>
                     <option value="partial">Partially Enclosed</option>
                     <option value="none">Not Enclosed</option>
                 </select>
@@ -125,16 +136,16 @@
 
             <div class="form_group">
                 <label for="accomodation_picture">Upload Accomodation Photos:</label>
-                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" required multiple />
+                <input class="file_input" type="file" name="accomodation_picture" id="accomodation_picture" required multiple/>
             </div>
             
             <div class="form_group" id="info_error_message"></div>
+            <input class="form_button" type="reset">
+            <input class="form_button" type="submit" value="Submit" />
         </fieldset>
-
-        <input class="form_button" type="submit" value="Submit" />
     </form>
 
-    <script src="js/caretaker_form.js"></script>
+    <script src="/js/caretaker_form.js"></script>
 </body>
 
 </html>

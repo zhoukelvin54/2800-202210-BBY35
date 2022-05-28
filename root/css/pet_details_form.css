@@ -1,5 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Lato&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Josefin+Sans:wght@200&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
+* {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bolder;
+}
 
 body {
     width: 100vw;
@@ -20,9 +23,9 @@ body {
     padding-top: 5vh;
     padding-bottom: 5vh;
 }
-  
+
 #pet_details_form * {
-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .form_panel {
@@ -35,12 +38,11 @@ box-sizing: border-box;
     margin-bottom: 1rem;
     padding: 0;
     padding-bottom: 1rem;
-    font-family: "Bitter", sans-serif;
 }
-  
+
 .form_panel legend {
-/* Float trick to get legends to display differently */
-    float:left;
+    /* Float trick to get legends to display differently */
+    float: left;
     padding: 1.5rem;
     border-radius: 1.25rem 1.25rem 0 0;
     font-size: 175%;
@@ -48,7 +50,6 @@ box-sizing: border-box;
     text-align: center;
     font-weight: bold;
     background-color: #222;
-    font-family: "Satisfy", sans-serif;
 }
 
 .form_group {
@@ -68,7 +69,8 @@ box-sizing: border-box;
     padding-right: 0.25rem;
 }
 
-.form_group, .inline_form_group {
+.form_group,
+.inline_form_group {
     display: flex;
     align-items: stretch;
     padding: 0.75rem 2rem;
@@ -79,7 +81,9 @@ box-sizing: border-box;
     height: 10vh;
 }
 
-.inline_form_group input, .inline_form_group select, .inline_form_group div{
+.inline_form_group input,
+.inline_form_group select,
+.inline_form_group div {
     height: min-content;
     max-width: 45%;
     margin-left: auto;
@@ -97,7 +101,6 @@ box-sizing: border-box;
 
 .form_button {
     width: 75%;
-    font-family: "Satisfy", sans-serif;
     font-weight: bold;
     font-size: 1.75rem;
     padding: 0.5rem;
@@ -108,19 +111,24 @@ box-sizing: border-box;
     background-color: #222;
 }
 
-.submit_button {
+.form_button {
     width: 75%;
-    font-family: "Satisfy", sans-serif;
     font-weight: bold;
     font-size: 1.75rem;
     padding: 0.5rem;
-    margin: 0 auto;
+    margin: 0.25rem auto;
     border: 2px #222;
     border-radius: 2rem;
-  }
+}
+
+.form_button:hover {
+    cursor: pointer;
+    color: white;
+    background-color: black;
+}
 
 @media only screen and (min-width: 769px) {
-.form_panel {
-    font-size: 125%;
-}
+    .form_panel {
+        font-size: 125%;
+    }
 }

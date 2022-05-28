@@ -12,8 +12,6 @@ form.addEventListener("submit", handleForm);
 function handleForm(e) {
   e.preventDefault();
   try {
-
-    
     let caretakerData = getCaretakerData();
 
     updateProfile();
@@ -29,34 +27,29 @@ function handleForm(e) {
 // Sends profile information update request from the form.
 // ============================================================================
 async function updateProfile() {
-  var pp_url; 
-  let profile_picture = form.upload_profile_picture.files[0]
+  var pp_url;
+  let profile_picture = form.upload_profile_picture.files[0];
   const formData = new FormData();
 
-  formData.append("picture", profile_picture)
+  formData.append("picture", profile_picture);
 
   await fetch("/addPhoto", {
     method: "POST",
     body: formData
-    }).then(res => res.json())
+  }).then(res => res.json())
     .then(res => (pp_url = res.url))
     .catch(err => {
       console.error(err);
       throw err;
-    })
+    });
 
-  await fetch("/update-profile", { 
+  await fetch("/update-profile", {
     method: "PUT",
     headers: {
       "content-type": "application/json"
     },
     body: JSON.stringify(getProfileData(pp_url))
-  }).then(
-    () => {
-      // TODO UPDATE DATA
-      //console.log("Uploaded?");
-    }
-  ).catch(err => {
+  }).catch(err => {
     throw err;
   });
 }
@@ -65,7 +58,7 @@ async function updateProfile() {
 // Sends caretaker information update request from the form.
 // ============================================================================
 function updateCaretakerInfo(data) {
-  fetch("/update-caretaker-info", { 
+  fetch("/update-caretaker-info", {
     method: "PUT",
     headers: {
       "content-type": "application/json"
@@ -79,7 +72,6 @@ function updateCaretakerInfo(data) {
         if (parsed.status == "failure") {
           console.error("Could not update caretaker information.");
         } else {
-          //console.log("Caretaker information updated");
           window.location.assign("/home");
         }
       }
@@ -97,9 +89,6 @@ function getProfileData(pp_url) {
     profile_photo_url: pp_url,
     telephone: form.telephone.value.trim(),
     address: form.street_address.value.trim() + " " + form.region.value.trim() + " " + form.country.value.trim()
-    //street_address: form.street_address.value.trim(),
-    //region: form.region.value.trim(),
-    //country: form.country.value.trim()
   };
 }
 
@@ -120,9 +109,9 @@ function getCaretakerData() {
     yard_type: form.yard_type.value,
     accomodation_picture: form.accomodation_picture.files
   };
-  
-  let requiresValidation = ["experience","allergies","other_pets","busy_hours"];
-  for(let i; i < requiresValidation.length; i++) {
+
+  let requiresValidation = ["experience", "allergies", "other_pets", "busy_hours"];
+  for (let i; i < requiresValidation.length; i++) {
     if (caretakerInfo[requiresValidation[i]] == "") {
       throw "Please fill out all form fields.";
     }

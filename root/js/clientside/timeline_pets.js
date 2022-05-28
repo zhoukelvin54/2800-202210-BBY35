@@ -3,6 +3,11 @@
 "use strict";
 
 onReady(async () => {
+  let title = document.createElement("h1");
+  title.innerText = "Pet Timelines";
+  title.classList.add("title");
+  document.querySelector("main").prepend(title);
+  
   // Gets the list of pets
   let pets = await fetch("/petData").then(async res => {
     return JSON.parse(await res.text());
@@ -22,7 +27,7 @@ onReady(async () => {
 });
 
 function findCard(element) {
-  if(element.classList.contains("card")) {
+  if (element.classList.contains("card")) {
     return element;
   } else {
     return findCard(element.parentElement);
@@ -38,7 +43,6 @@ async function appendTimelines(petID) {
   });
 
   for (let i = 0; i < data.length; i++) {
-    //console.log(data[i]);
     document.querySelector("main").appendChild(await createTimelineCard(data[i]));
   }
 }
@@ -53,7 +57,7 @@ async function createTimelineCard(timeline) {
   let template = document.getElementById("timeline_template");
   let newTimeline = template.content.cloneNode(true);
   let card = newTimeline.firstElementChild;
-  
+
   card.id = timeline.timeline_id;
   let petData = await fetch(`/getPetInfo/${timeline.pet_id}`).then(async res => {
     return JSON.parse(await res.text())[0];
@@ -61,18 +65,21 @@ async function createTimelineCard(timeline) {
   let status = petData.status == 2 ? "In Queue" : petData.status == 1 ? "Away" : "Home";
 
   card.querySelector(".pet_name").innerText = petData.name;
-  card.querySelector(".status").innerText = status; 
+  card.querySelector(".status").innerText = status;
   let dates = card.querySelectorAll(".timeline_date");
   if (dates.length > 0) {
-    dates[0].innerText = timeline.start_date;
-    dates[1].innerText = timeline.end_date;
+    if (timeline.start_date) {
+      dates[0].innerText = timeline.start_date.split("T")[0];
+    }
+    if (timeline.end_date) {
+      dates[1].innerText = timeline.end_date.split("T")[0];
+    }
   }
 
   let pet_img = document.createElement("img");
-  pet_img.src = "/img/uploads/" +
-    (petData.photo_url ? timeline.caretaker_id_fk + "/" + petData.photo_url : "dog_1.jpg"); 
+  pet_img.src = "/img/uploads/" + (petData.photo_url ? petData.photo_url : "dog_1.jpg");
   pet_img.alt = petData.name + " Photo";
-  
+
   card.prepend(pet_img);
 
   return newTimeline;

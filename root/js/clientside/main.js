@@ -1,3 +1,6 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 // Contains JS relavent to ALL pages!
 onReady(hookNavToggler);
 
@@ -8,7 +11,7 @@ onReady(hookNavToggler);
 function hookNavToggler() {
   let toggler = document.getElementById("nav_toggler");
   if (!toggler) return;
-  
+
   document.getElementById("nav_toggler").addEventListener("click", () => {
     document.getElementById("nav_links_group").classList.toggle("hidden");
   });

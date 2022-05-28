@@ -1,5 +1,9 @@
+/* jshint esversion: 8 */
+/* jshint node: true */
+
 import { JSDOM } from 'jsdom';
 import { readFile } from 'node:fs/promises';
+import sanitizeHtml from 'sanitize-html';
 
 /**
  * Redirects non-logged-in users to the `'/login'` route.
@@ -7,12 +11,12 @@ import { readFile } from 'node:fs/promises';
  * @param { Response } res - Response object, may get redirected
  * @returns `true` if the user was redirected, `false` otherwise.
  */
- function redirectIfNotLoggedIn(req, res) {
-	if (!req.session || !req.session.loggedIn) {
-		res.redirect("/login");
-		return true;
-	}
-	return false;
+function redirectIfNotLoggedIn(req, res) {
+  if (!req.session || !req.session.loggedIn) {
+    res.redirect("/login");
+    return true;
+  }
+  return false;
 }
 
 
@@ -22,7 +26,7 @@ import { readFile } from 'node:fs/promises';
  * @returns { JSDOM } The original DOM object, modified.
  */
 async function injectHeaderFooter(baseDOM) {
-  const headerSelector  = "header";
+  const headerSelector = "header";
   const footerSelector = "footer";
 
   // Inject the header navigation
@@ -42,7 +46,7 @@ async function injectHeaderFooter(baseDOM) {
  */
 async function loadHTMLComponent(baseDOM, templateSelector, componentSelector, templateLocation) {
   // Get the placeholder element to replace.
-  const placeholderElement = baseDOM.window.document.querySelector(templateSelector) ;
+  const placeholderElement = baseDOM.window.document.querySelector(templateSelector);
   // Load and parse the requested component.
   const componentFile = await readFile(templateLocation, "utf-8");
 
@@ -99,12 +103,12 @@ function injectStylesheet(baseDOM, stylesheetLocation) {
  * @param {*} key_value Value of key column to insert into or update.
  * @throws Exception if any parameter is "truthy" false.
  */
- function craftInsertUpdateQueryFromRequest(req, expectedFields, table, key_column, key_value) {
+function craftInsertUpdateQueryFromRequest(req, expectedFields, table, key_column, key_value) {
   if (!req || !expectedFields || !table || !key_column || !key_value) throw "Null or empty parameter!";
   console.log(req.body);
-  
+
   let query = `INSERT INTO \`${table}\` (\`${key_column}\`, \``;
-  
+
   let fields = getFieldsFromRequest(req, expectedFields);
   let fieldValues = fields.fieldValues;
   let recievedFields = fields.recievedFields;
@@ -116,8 +120,8 @@ function injectStylesheet(baseDOM, stylesheetLocation) {
 
   // Append actually recieved fields to update as {field_name}=VALUES({field_name})
   for (let i = 0; i < recievedFields.length; i++) {
-      query += recievedFields[i] +"=VALUES(" + recievedFields[i] + ")";
-      query += (i == recievedFields.length - 1) ? ";" : ",";
+    query += recievedFields[i] + "=VALUES(" + recievedFields[i] + ")";
+    query += (i == recievedFields.length - 1) ? ";" : ",";
   }
 
   console.log(query);
@@ -142,7 +146,36 @@ function getFieldsFromRequest(req, expectedFields) {
       fieldValues.push(req.body[prop]);
     }
   }
-  return { "recievedFields": recievedFields, "fieldValues": fieldValues }
+  return { "recievedFields": recievedFields, "fieldValues": fieldValues };
+}
+
+/**
+ * Extracts the date from a given filename
+ * @author Angus Grewal
+ * @param {String} - String to parse
+ * @returns Date object from parsed string
+ */
+function extractDateFromFileName(string) {
+  let indexOfStart = (string.lastIndexOf("-")) + 1;
+  let indexOfEnd = string.lastIndexOf(".");
+
+  let out = parseInt(string.substring(indexOfStart, indexOfEnd));
+
+  console.log(out);
+  return new Date(out);
+}
+
+/**
+ * Strips the HTML tags and attributes out of an input before storing it.
+ * @param {String} dirtyText 
+ * @returns clean, sanitized text
+ */
+function stripHTMLTags(dirtyText) {
+  return sanitizeHtml(dirtyText, {
+    allowedTags: [],
+    allowedAttributes: [],
+    allowedClasses: []
+  });
 }
 
 // Functions to export out
@@ -151,6 +184,8 @@ export {
   injectScript,
   injectStylesheet,
   loadHTMLComponent,
+  stripHTMLTags,
   craftInsertUpdateQueryFromRequest,
+  extractDateFromFileName,
   redirectIfNotLoggedIn
 };

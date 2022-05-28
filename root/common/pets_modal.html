@@ -1,6 +1,6 @@
 <!--modal button-->
 <div id="add_pet_button">
-    <button onclick="showModal()" id="add_pet">Add Pet</button>
+    <button onclick="showModal()" id="add_pet">Add A Pet</button>
 </div>
 <div id="add_pet_modal" hidden>
     
@@ -11,8 +11,11 @@
             <legend>Pet Details <span class="cancel">&#10006;</span></legend>
 
             <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
+            <div class="inline_form_group">
                 <label for="pet_name">Name:</label>
-                <input type="text" id="pet_name" required>
+                <input type="text" id="pet_name" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" required>
             </div>
             <div class="inline_form_group">
                 <label>Sex:</label>
@@ -25,7 +28,7 @@
             </div>
             <div class="inline_form_group">
                 <label for="pet_species">Species:</label>
-                <input type="text" name="pet_species" id="pet_species" required>
+                <input type="text" name="pet_species" id="pet_species" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" required>
             </div>
             <div class="form_group">
                 <label for="pet_description">Description:</label>
@@ -36,6 +39,7 @@
                 <input type="file" name="upload_pet_picture" id="upload_pet_picture" required />
             </div>
 
+            <input class="form_button" type="reset">
             <input class="submit_button" type="submit" value="Submit" />
         </fieldset>
     </form>

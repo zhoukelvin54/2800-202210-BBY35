@@ -1,139 +1,186 @@
+// used for validating the code with https://jshint.com/
+/* jshint esversion: 8 */
+/* jshint browser: true */
 "use strict";
 
 document.addEventListener("DOMContentLoaded", async () => {
     let table = document.getElementById("pet-table").querySelector("tbody");
     let petData = await getPets();
     if (petData.length >= 1) {
-        petData.forEach( (pet) => {
+        petData.forEach((pet) => {
             let row = document.createElement("tr");
             let tableFields = ["photo_url", "name", "species", "gender", "description", "status", "caretaker_id"];
-    
-            tableFields.forEach( async (field) => {
+
+            tableFields.forEach(async (field) => {
                 let currentEntry = document.createElement("td");
-                let innerText = "";
                 if (field == "photo_url") {
-                    innerText = `<img src="/img/uploads/${pet[field]}" alt="${pet["name"]}" width="160" height="160">`;
+                    const imgSize = 160;
+                    let img = document.createElement("img");
+                    img.setAttribute("src", `/img/uploads/${pet[field]}`);
+                    img.setAttribute("alt", pet["name"]);
+                    img.setAttribute("width", imgSize);
+                    img.setAttribute("height", imgSize);
+
+                    currentEntry.appendChild(img);
                 } else if (field == "status") {
-                    let state = ""
+                    let state = "";
                     let allowChange = false;
                     let status = pet['status'];
                     if (status == 0) {
-                        state = "Home"
+                        state = "Home";
                         allowChange = true;
                     } else if (status == 1) {
-                        state = "Away"
+                        state = "Away";
                     } else {
-                        state = "Pending"
+                        state = "Pending";
                         allowChange = true;
                     }
-                    
-                    let button = allowChange ? `<button onclick="changePetState(${pet["id"]})">Change</button>` : `<button disabled>Disabled</button>`
-                    
-                    innerText = 
-                    `
-                        ${state}
-                        <br>
-                        ${button}
-                    `
+
+                    let petStateButton = document.createElement("button");
+                    petStateButton.setAttribute("onclick", `changePetState(${pet["id"]})`);
+                    petStateButton.innerText = "Change";
+
+                    let disabledButton = document.createElement("button");
+                    disabledButton.toggleAttribute("disabled", true);
+                    disabledButton.innerText = "Disabled";
+
+                    let button = allowChange ? petStateButton : disabledButton;
+
+                    let p = document.createElement("p");
+                    p.innerText = state;
+                    currentEntry.appendChild(p);
+                    currentEntry.appendChild(document.createElement("br"));
+                    currentEntry.appendChild(button);
+
                 } else if (field == "caretaker_id") {
                     if (pet[field] == null) {
-                        innerText = "None";
+                        currentEntry.innerText = "None";
                     } else {
                         let data = await getAccountInfo(pet[field]);
-                        innerText = 
-                        `
-                            ${data[0]["lastname"]}, ${data[0]["firstname"]}
-                            <br>
-                            ${data[0]["username"]} 
-                            <br> 
-                            (${data[0]["email"]})
-                        `;
+                        
+                        let p = document.createElement("p");
+                        let br = document.createElement("br");
+                        let name = `${data[0]["lastname"]}, ${data[0]["firstname"]}`;
+                        let user = data[0]["username"];
+                        let email = data[0]["email"];
+
+                        p.innerText = name;
+                        currentEntry.appendChild(p);
+                        currentEntry.appendChild(br);
+                        p.innerText = user;
+                        currentEntry.appendChild(p);
+                        currentEntry.appendChild(br);
+                        p.innerText = email;
+                        currentEntry.appendChild(p);
                     }
                 } else {
-                    innerText = pet[field];
+                    let p = document.createElement("p");
+                    p.innerText = pet[field];
+                    currentEntry.appendChild(p);
                 }
-                currentEntry.innerHTML = innerText;
                 row.appendChild(currentEntry);
             });
-    
+
             table.appendChild(row);
-        })
+        });
     } else {
         let row = document.createElement("tr");
         for (let i = 0; i < 7; i++) {
             let currentEntry = document.createElement("td");
             let innerText = "N/A";
-            currentEntry.innerHTML = innerText;
-            
+            currentEntry.innerText = innerText;
+
             row.appendChild(currentEntry);
         }
         table.appendChild(row);
     }
-    
+
     let table2 = document.getElementById("pet-table2").querySelector("tbody");
     let requestData = await getRequests();
     if (requestData.length >= 1) {
-        requestData.forEach( (pet) => {
+        requestData.forEach((pet) => {
             let row = document.createElement("tr");
             let tableFields = ["photo_url", "name", "species", "gender", "description", "status", "owner_id"];
-    
-            tableFields.forEach( async (field) => {
+
+            tableFields.forEach(async (field) => {
                 let currentEntry = document.createElement("td");
                 let innerText = "";
                 if (field == "photo_url") {
-                    innerText = `<img src="/img/uploads/${pet[field]}" alt="${pet["name"]}" width="160" height="160">`;
+                    const imgSize = 160;
+                    let img = document.createElement("img");
+                    img.setAttribute("src", `/img/uploads/${pet[field]}`);
+                    img.setAttribute("alt", pet["name"]);
+                    img.setAttribute("width", imgSize);
+                    img.setAttribute("height", imgSize);
+
+                    currentEntry.appendChild(img);
                 } else if (field == "status") {
-                    let state = ""
+                    let state = "";
                     let allowChange = false;
                     let status = pet['status'];
                     if (status == 0) {
-                        state = "Home"
+                        state = "Home";
                         allowChange = true;
                     } else if (status == 1) {
-                        state = "Away"
+                        state = "Away";
                     } else {
-                        state = "Pending"
+                        state = "Pending";
                         allowChange = true;
                     }
-                    
-                    let button = allowChange ? `<button onclick="acceptPet(${pet["id"]})">Accept Pet</button>` : `<button disabled>Disabled</button>`
-                    
-                    innerText = 
-                    `
-                        ${state}
-                        <br>
-                        ${button}
-                    `
+
+                    let petStateButton = document.createElement("button");
+                    petStateButton.setAttribute("onclick", `acceptPet(${pet["id"]})`);
+                    petStateButton.innerText = "Accept Pet";
+
+                    let disabledButton = document.createElement("button");
+                    disabledButton.toggleAttribute("disabled", true);
+                    disabledButton.innerText = "Disabled";
+
+                    let button = allowChange ? petStateButton : disabledButton;
+
+                    let p = document.createElement("p");
+                    p.innerText = state;
+                    currentEntry.appendChild(p);
+                    currentEntry.appendChild(document.createElement("br"));
+                    currentEntry.appendChild(button);
                 } else if (field == "owner_id") {
                     if (pet[field] == null) {
-                        innerText = "None";
+                        currentEntry.innerText = "None";
                     } else {
                         let data = await getAccountInfo(pet[field]);
-                        innerText = 
-                        `
-                            ${data[0]["lastname"]}, ${data[0]["firstname"]}
-                            <br>
-                            ${data[0]["username"]} 
-                            <br> 
-                            (${data[0]["email"]})
-                        `;
+                        
+                        let p = document.createElement("p");
+                        let br = document.createElement("br");
+                        let name = `${data[0]["lastname"]}, ${data[0]["firstname"]}`;
+                        let user = data[0]["username"];
+                        let email = data[0]["email"];
+
+                        p.innerText = name;
+                        currentEntry.appendChild(p);
+                        currentEntry.appendChild(br);
+                        p.innerText = user;
+                        currentEntry.appendChild(p);
+                        currentEntry.appendChild(br);
+                        p.innerText = email;
+                        currentEntry.appendChild(p);
                     }
                 } else {
-                    innerText = pet[field];
+                    let p = document.createElement("p");
+                    p.innerText = pet[field];
+                    currentEntry.appendChild(p);
                 }
-                currentEntry.innerHTML = innerText;
                 row.appendChild(currentEntry);
             });
-    
+
             table2.appendChild(row);
-        })
+        });
     } else {
         let row = document.createElement("tr");
         for (let i = 0; i < 7; i++) {
             let currentEntry = document.createElement("td");
             let innerText = "N/A";
-            currentEntry.innerHTML = innerText;
-            
+            currentEntry.innerText = innerText;
+
             row.appendChild(currentEntry);
         }
         table2.appendChild(row);
@@ -142,67 +189,94 @@ document.addEventListener("DOMContentLoaded", async () => {
     let table3 = document.getElementById("pet-table3").querySelector("tbody");
     let careData = await getInCare();
     if (careData.length >= 1) {
-        careData.forEach( (pet) => {
+        careData.forEach((pet) => {
             let row = document.createElement("tr");
             let tableFields = ["photo_url", "name", "species", "gender", "description", "status", "owner_id"];
-    
-            tableFields.forEach( async (field) => {
+
+            tableFields.forEach(async (field) => {
                 let currentEntry = document.createElement("td");
                 let innerText = "";
                 if (field == "photo_url") {
-                    innerText = `<img src="/img/uploads/${pet[field]}" alt="${pet["name"]}" width="160" height="160">`;
+                    const imgSize = 160;
+                    let img = document.createElement("img");
+                    img.setAttribute("src", `/img/uploads/${pet[field]}`);
+                    img.setAttribute("alt", pet["name"]);
+                    img.setAttribute("width", imgSize);
+                    img.setAttribute("height", imgSize);
+
+                    currentEntry.appendChild(img);
                 } else if (field == "status") {
-                    let state = ""
+                    let state = "";
                     let allowChange = false;
                     let status = pet['status'];
                     if (status == 0) {
-                        state = "Home"
+                        state = "Home";
                     } else if (status == 1) {
-                        state = "In your care"
+                        state = "In your care";
                         allowChange = true;
                     } else {
-                        state = "Pending"
+                        state = "Pending";
                     }
-                    
-                    let buttonHome = allowChange ? `<button onclick="returnPet(${pet["id"]})">Return Pet to Owner</button>` : `<button disabled>Disabled</button>`
-                    let buttonPending = allowChange ? `<button onclick="rejectPet(${pet["id"]})">Return Pet to Pending</button>` : `<button disabled>Disabled</button>`
-                    
-                    innerText = 
-                    `
-                        ${state}
-                        <br>
-                        ${buttonHome}${buttonPending}
-                    `
+
+                    let returnPetButton = document.createElement("button");
+                    returnPetButton.setAttribute("onclick", `returnPet(${pet["id"]})`);
+                    returnPetButton.innerText = "Return Pet to Owner";
+
+                    let rejectPetButton = document.createElement("button");
+                    rejectPetButton.setAttribute("onclick", `rejectPet(${pet["id"]})`);
+                    rejectPetButton.innerText = "Return Pet to Pending";
+
+                    let disabledButton = document.createElement("button");
+                    disabledButton.toggleAttribute("disabled", true);
+                    disabledButton.innerText = "Disabled";
+
+                    let buttonHome = allowChange ? returnPetButton : disabledButton;
+                    let buttonPending = allowChange ? rejectPetButton : disabledButton;
+
+                    let p = document.createElement("p");
+                    p.innerText = state;
+                    currentEntry.appendChild(p);
+                    currentEntry.appendChild(document.createElement("br"));
+                    currentEntry.appendChild(buttonHome);
+                    currentEntry.appendChild(buttonPending);
                 } else if (field == "owner_id") {
                     if (pet[field] == null) {
-                        innerText = "None";
+                        currentEntry.innerText = "None";
                     } else {
                         let data = await getAccountInfo(pet[field]);
-                        innerText = 
-                        `
-                            ${data[0]["lastname"]}, ${data[0]["firstname"]}
-                            <br>
-                            ${data[0]["username"]} 
-                            <br> 
-                            (${data[0]["email"]})
-                        `;
+                        
+                        let p = document.createElement("p");
+                        let br = document.createElement("br");
+                        let name = `${data[0]["lastname"]}, ${data[0]["firstname"]}`;
+                        let user = data[0]["username"];
+                        let email = data[0]["email"];
+
+                        p.innerText = name;
+                        currentEntry.appendChild(p);
+                        currentEntry.appendChild(br);
+                        p.innerText = user;
+                        currentEntry.appendChild(p);
+                        currentEntry.appendChild(br);
+                        p.innerText = email;
+                        currentEntry.appendChild(p);
                     }
                 } else {
-                    innerText = pet[field];
+                    let p = document.createElement("p");
+                    p.innerText = pet[field];
+                    currentEntry.appendChild(p);
                 }
-                currentEntry.innerHTML = innerText;
                 row.appendChild(currentEntry);
             });
-    
+
             table3.appendChild(row);
-        })
+        });
     } else {
         let row = document.createElement("tr");
         for (let i = 0; i < 7; i++) {
             let currentEntry = document.createElement("td");
             let innerText = "N/A";
-            currentEntry.innerHTML = innerText;
-            
+            currentEntry.innerText = innerText;
+
             row.appendChild(currentEntry);
         }
         table3.appendChild(row);
@@ -219,7 +293,7 @@ async function getPets() {
             let data = await response.text();
             return JSON.parse(data);
         } else {
-            console.error(response.status, response.statusText)
+            console.error(response.status, response.statusText);
         }
     } catch (error) {
         console.error(error);
@@ -236,7 +310,7 @@ async function getRequests() {
             let data = await response.text();
             return JSON.parse(data);
         } else {
-            console.error(response.status, response.statusText)
+            console.error(response.status, response.statusText);
         }
     } catch (error) {
         console.error(error);
@@ -253,7 +327,7 @@ async function getInCare() {
             let data = await response.text();
             return JSON.parse(data);
         } else {
-            console.error(response.status, response.statusText)
+            console.error(response.status, response.statusText);
         }
     } catch (error) {
         console.error(error);
@@ -261,9 +335,9 @@ async function getInCare() {
 }
 
 async function getAccountInfo(id) {
-    let request = { 
+    let request = {
         method: "GET",
-        headers: {"content-type": "application/json"},
+        headers: { "content-type": "application/json" },
     };
     try {
         let response = await fetch(`/getUserInfo/${id}`, request);
@@ -280,9 +354,9 @@ async function getAccountInfo(id) {
 }
 
 async function changePetState(id) {
-    let request = { 
+    let request = {
         method: "PUT",
-        headers: {"content-type": "application/json"},
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
             petid: id
         })
@@ -290,7 +364,6 @@ async function changePetState(id) {
         let response = await fetch("/requestHousing", request);
 
         if (response.status == 200) {
-            response.json().then(response => {window.confirm(response.msg)});
             location.reload();
         } else {
             console.error(response.status, response.statusText);
@@ -301,9 +374,9 @@ async function changePetState(id) {
 }
 
 async function acceptPet(id) {
-    let request = { 
+    let request = {
         method: "PUT",
-        headers: {"content-type": "application/json"},
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
             petid: id
         })
@@ -311,7 +384,6 @@ async function acceptPet(id) {
         let response = await fetch("/acceptPet", request);
 
         if (response.status == 200) {
-            response.json().then(response => {window.confirm(response.msg)});
             location.reload();
         } else {
             console.error(response.status, response.statusText);
@@ -322,9 +394,9 @@ async function acceptPet(id) {
 }
 
 async function returnPet(id) {
-    let request = { 
+    let request = {
         method: "PUT",
-        headers: {"content-type": "application/json"},
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
             petid: id,
             status: 0
@@ -333,7 +405,6 @@ async function returnPet(id) {
         let response = await fetch("/releasePet", request);
 
         if (response.status == 200) {
-            response.json().then(response => {window.confirm(response.msg)});
             location.reload();
         } else {
             console.error(response.status, response.statusText);
@@ -344,9 +415,9 @@ async function returnPet(id) {
 }
 
 async function rejectPet(id) {
-    let request = { 
+    let request = {
         method: "PUT",
-        headers: {"content-type": "application/json"},
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
             petid: id,
             status: 2
@@ -355,7 +426,6 @@ async function rejectPet(id) {
         let response = await fetch("/releasePet", request);
 
         if (response.status == 200) {
-            response.json().then(response => {window.confirm(response.msg)});
             location.reload();
         } else {
             console.error(response.status, response.statusText);

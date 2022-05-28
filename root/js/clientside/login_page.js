@@ -51,7 +51,7 @@ async function login() {
             }
         }
     }).catch(err => {
-        console.err(err);
+        console.error(err);
     });
 }
 
@@ -60,7 +60,7 @@ async function login() {
 // logged in.
 // ============================================================================
 function signup() {
-    let requiredFields = ["username", "password", "email"];
+    let requiredFields = ["username", "password", "email", "firstname"];
     let formData = {
         username: FORM.username.value.trim(),
         password: FORM.password.value.trim(),
@@ -124,6 +124,7 @@ function swapForm() {
         document.getElementById("signup").removeAttribute("hidden");
         document.getElementById("login").setAttribute("hidden", true);
         document.getElementById("email").setAttribute("required", true);
+        document.getElementById("firstname").setAttribute("required", true);
 
         for (let i = 0; i < signUpElements.length; i++) {
             signUpElements[i].classList.remove("hidden");
@@ -136,6 +137,7 @@ function swapForm() {
         document.getElementById("signup").setAttribute("hidden", true);
         document.getElementById("login").removeAttribute("hidden");
         document.getElementById("email").removeAttribute("required");
+        document.getElementById("firstname").removeAttribute("required");
 
         for (let i = 0; i < signUpElements.length; i++) {
             signUpElements[i].classList.add("hidden");

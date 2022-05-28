@@ -15,32 +15,34 @@
     <!--nav bar-->
     <header></header>
 
-    <main class="container" id="profile_panel">
-      <div class="panel_header">
-        <div class="profile_picture" >
-          <div id="round_img"></div>
-          <input type="file" id="upload_picture">
+    <main>
+      <div class="container" id="profile_panel">
+        <div class="panel_header">
+          <div class="profile_picture" >
+            <div id="round_img"></div>
+            <input type="file" id="upload_picture">
+          </div>
+          <div id="name_fields">
+            <p>Username:</p><span id="username" class="name_field editable">Username</span>
+            <p>First name:</p><span id="first_name" class="name_field editable">User's</span>
+            <p>Last name:</p><span id="last_name" class="name_field editable">Name</span>
+          </div>
         </div>
-        <div id="name_fields">
-          <span id="username" class="name_field editable">Username</span>
-          <span id="first_name" class="name_field editable">User's</span>
-          <span id="last_name" class="name_field editable">Name</span>
-        </div>
-      </div>
-      <span id="email" class="input_field editable">User@emailservice.com</span>
+        <p>Email:</p><span id="email" class="input_field editable">User@emailservice.com</span>
 
-      <button onclick="swapButtonToInput(event)">Change Password?</button>
-      <!-- <input type="password" name="new_password" id="new_password" placeholder="New Password"/> -->
-      <div id="response_message" class="error"></div>
-      <input id="save_profile" type="button" value="Save Profile"/>
-      <div id="edit_caretaker_button"></div>
-      <div id="edit_caretaker_modal"></div>
+        <button onclick="swapButtonToInput(event)">Change Password</button>
+        <!-- <input type="password" name="new_password" id="new_password" placeholder="New Password"/> -->
+        <div id="response_message" class="error"></div>
+        <input id="save_profile" type="button" value="Save Profile"/>
+        <div id="edit_caretaker_button"></div>
+        <div id="edit_caretaker_modal"></div>
+      </div>
     </main>
     
     <!-- footer -->
     <footer></footer>
 
-    <script src="js/profile.js"></script>
+    <script src="/js/profile.js"></script>
     <script src="/js/main.js"></script>
 </body>
 

@@ -1,4 +1,5 @@
 /* This contains code that should be relevant to ALL pages! */
+@import url('https://fonts.googleapis.com/css2?family=Bitter&family=Hind:wght@300&family=Lato:wght@300&family=Playfair+Display:ital@1&family=Satisfy&display=swap');
 :root {
   --primary: #CCC;
   --secondary: #777;
@@ -6,11 +7,24 @@
   --white: #EEE;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Bitter', serif;
+}
+
 body {
   min-height: 100vh;
+  max-width: 100vw;
   margin: 0;
   display: flex;
   flex-direction: column;
+  background-image: url(../img/dogs.jpg);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-blend-mode: lighten;
 }
 
 header {
@@ -49,6 +63,11 @@ footer {
 .hidden {
   display: none;
 }
+
+.mx_auto {
+  margin: 0 auto;
+}
+
 
 .nav_link {
   display: block;
