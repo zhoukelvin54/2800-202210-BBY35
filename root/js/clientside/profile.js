@@ -32,6 +32,7 @@ function swapSpanToInput(element) {
   input.value = element.textContent;
   input.classList = element.classList;
   input.id = element.id;
+  input.setAttribute("pattern", "^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$");
 
   element.parentNode.replaceChild(input, element);
   document.getElementById(element.id).focus();
@@ -75,7 +76,7 @@ function swapButtonToInput(e) {
       let pwButton = document.createElement("button");
       pwButton.setAttribute("onclick", "swapButtonToInput()");
       pwButton.innerHTML = "Change Password?";
-      let password = pwInput.value;
+      let password = pwInput.value.trim();
       e.target.replaceWith(pwButton);
 
       fetch("/update-profile", {

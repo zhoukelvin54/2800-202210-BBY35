@@ -68,10 +68,10 @@ async function updatePetInfo() {
             "Content-type": "application/json"
         },
         body: JSON.stringify({
-            "name": petData.pet_name,
+            "name": petData.pet_name.trim(),
             "gender": petData.pet_sex,
-            "species": petData.pet_species,
-            "description": petData.pet_description,
+            "species": petData.pet_species.trim(),
+            "description": petData.pet_description.trim(),
             "photo_url": petData.pet_picture
         })
     }).then(async res => {

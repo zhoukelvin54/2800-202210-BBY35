@@ -23,25 +23,25 @@
                 <label for="username">
                     <i class="material-icons" title="Username">account_circle</i>
                 </label>
-                <input type="text" name="username" placeholder="Username (required)" id="username" required/>
+                <input type="text" name="username" placeholder="Username (required)" id="username" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" required/>
                 <label for="password">
                     <i class="material-icons" title="Password">key</i>
                 </label>
-                <input type="password" name="password" placeholder="Password (required)" id="password" required/>
+                <input type="password" name="password" placeholder="Password (required)" id="password" pattern="^[a-zA-Z0-9_.-]*$" required/>
     
                 <!-- Sign-up details -->
                 <label for="firstname" class="signup hidden">
                     <i class="material-icons" title="First Name">drive_file_rename_outline</i>
                 </label>
-                <input type="text" name="firstname" placeholder="First Name (required)" id="firstname" class="signup hidden" />
+                <input type="text" name="firstname" placeholder="First Name (required)" id="firstname" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" class="signup hidden" />
                 <label for="lastname" class="signup hidden">
                     <i class="material-icons" title="Last Name">drive_file_rename_outline</i>
                 </label>
-                <input type="text" name="lastname" placeholder="Last Name" id="lastname" class="signup hidden" />
+                <input type="text" name="lastname" placeholder="Last Name" id="lastname" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" class="signup hidden" />
                 <label for="email" class="signup hidden">
                     <i class="material-icons" title="Email">mail</i>
                 </label>
-                <input type="email" placeholder="Email (required)" id="email" class="signup hidden" />
+                <input type="email" placeholder="Email (required)" id="email" class="signup hidden"/>
                 <label for="account_type" class="signup hidden">
                     <i class="material-icons" title="Account Type">pets</i>
                 </label>

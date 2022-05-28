@@ -15,7 +15,7 @@
             </div>
             <div class="inline_form_group">
                 <label for="pet_name">Name:</label>
-                <input type="text" id="pet_name" required>
+                <input type="text" id="pet_name" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" required>
             </div>
             <div class="inline_form_group">
                 <label>Sex:</label>
@@ -28,7 +28,7 @@
             </div>
             <div class="inline_form_group">
                 <label for="pet_species">Species:</label>
-                <input type="text" name="pet_species" id="pet_species" required>
+                <input type="text" name="pet_species" id="pet_species" pattern="^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$" required>
             </div>
             <div class="form_group">
                 <label for="pet_description">Description:</label>

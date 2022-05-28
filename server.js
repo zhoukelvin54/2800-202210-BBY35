@@ -541,7 +541,7 @@ app.put("/update-profile", (req, res) => {
     connection.query("SELECT BBY35_accounts.`username` FROM BBY35_accounts WHERE BBY35_accounts.`username` = ? UNION " +
         "SELECT BBY35_accounts.`email` FROM BBY35_accounts WHERE BBY35_accounts.`email` = ?;",
         [username, email],
-        (error, results, fields) => {
+        async (error, results, fields) => {
             if (results.length > 0) {
                 res.status(409).send({ status: "failure", msg: "Username or email already taken!" });
             } else {
@@ -556,20 +556,26 @@ app.put("/update-profile", (req, res) => {
                     if (expectedFields.includes(prop)) {
                         if (Object.keys(req.body).length == loops) {
                             query += prop + " = ? ";
-                            actualFields.push(req.body[prop]);
-                            recievedFields.push(prop);
+                            
                         } else {
                             query += prop + " = ?, ";
+                        }
+                        if (prop == "password") {
+                            actualFields.push(await bcrypt.hash(req.body[prop], SALT_ROUNDS));
+                        } else {
                             actualFields.push(req.body[prop]);
                             recievedFields.push(prop);
                         }
+                        
                     }
                 }
 
                 query += "WHERE id = ?";
 
                 actualFields.push(req.session.userid);
+                if (actualFields) {
 
+                }
 
                 connection.query(query, actualFields, (error, results, fields) => {
                     if (error) {
@@ -926,6 +932,11 @@ app.put("/revoke", async (req, res) => {
         res.send({ status: "failure", msg: `Could not revoke admin ${targetName}` });
     }
 });
+
+app.use(function(req, res, next) {
+    res.status(404);
+    res.send(fs.readFileSync("./root/404.html", "utf-8"));
+  });
 
 let port = is_Heroku ? process.env.PORT : 8000;
 app.listen(port);
