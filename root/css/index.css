@@ -41,8 +41,8 @@ table tbody tr td {
     font-family: "Poppins", sans-serif;
     display: none;
     flex-direction: column;
-    min-height: 100vh;
-    min-width: 100vh;
+    flex-grow: 1;
+    width: 100%;
 }
 
 #content-text {

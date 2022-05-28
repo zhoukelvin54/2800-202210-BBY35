@@ -1,3 +1,9 @@
+.title {
+  text-align: center;
+  font-size: 3.5rem;
+  padding: 1rem;
+}
+
 .card, img {
   max-width: 100%;
 }

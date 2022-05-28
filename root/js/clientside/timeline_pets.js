@@ -3,6 +3,11 @@
 "use strict";
 
 onReady(async () => {
+  let title = document.createElement("h1");
+  title.innerText = "Pet Timelines";
+  title.classList.add("title");
+  document.querySelector("main").prepend(title);
+  
   // Gets the list of pets
   let pets = await fetch("/petData").then(async res => {
     return JSON.parse(await res.text());
@@ -63,8 +68,12 @@ async function createTimelineCard(timeline) {
   card.querySelector(".status").innerText = status;
   let dates = card.querySelectorAll(".timeline_date");
   if (dates.length > 0) {
-    dates[0].innerText = "Start Date: " + timeline.start_date.split("T")[0];
-    dates[1].innerText = "End Date: " + timeline.end_date.split("T")[0];
+    if (timeline.start_date) {
+      dates[0].innerText = timeline.start_date.split("T")[0];
+    }
+    if (timeline.end_date) {
+      dates[1].innerText = timeline.end_date.split("T")[0];
+    }
   }
 
   let pet_img = document.createElement("img");

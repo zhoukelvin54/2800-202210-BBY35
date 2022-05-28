@@ -1,82 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pet Owner Sign-Up</title>
-        <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/pet_details_form.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Owner Sign-Up</title>
+    <link rel="shortcut icon" href="img/PetPals-logos_transparent.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/pet_details_form.css">
+</head>
 
-    <body>
+<body>
 
 
-<!--Pet Details Form-->
-        <form  id="pet_details_form">
-            <fieldset class="form_panel">
+    <!--Pet Details Form-->
+    <form id="pet_details_form">
+        <fieldset class="form_panel">
             <legend>Create User Profile</legend>
-                <div class="form_group">
-                    <label for="upload_profile_picture">Upload Profile Picture:</label>
-                    <input type="file" name="upload_profile_picture" id="upload_profile_picture" required/>
-                </div>
-                <div class="form_group">
-                    <label for="telephone">Telephone Number:</label>
-                    <input type="tel" name="telephone" id="telephone" 
-                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890" required/>
-                </div>
-    
-                <div class="form_group">
-                    <label for="street_address">Street Address:</label>
-                    <input type="text" name="street_address" id="street_address" required/>
-                </div>
-    
-                <div class="form_group">
-                    <label for="region">State / Province:</label>
-                    <input type="text" name="region" id="region" required/>
-                </div>
-    
-                <div class="form_group">
-                    <label for="country">Country:</label>
-                    <input type="text" name="country" id="country" required/>
-                </div>
-            </fieldset>
+            <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
+            <div class="form_group">
+                <label for="upload_profile_picture">Upload Profile Picture:</label>
+                <input type="file" name="upload_profile_picture" id="upload_profile_picture" required />
+            </div>
+            <div class="form_group">
+                <label for="telephone">Telephone Number:</label>
+                <input type="tel" name="telephone" id="telephone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    placeholder="123-456-7890" required />
+            </div>
 
-            <fieldset class="form_panel">
-                <legend>Pet Details</legend>
-    
-                <div class="inline_form_group">
-                    <label for="pet_name">Name:</label>
-                    <input type="text" id="pet_name" required>
+            <div class="form_group">
+                <label for="street_address">Street Address:</label>
+                <input type="text" name="street_address" id="street_address" required />
+            </div>
+
+            <div class="form_group">
+                <label for="region">State / Province:</label>
+                <input type="text" name="region" id="region" required />
+            </div>
+
+            <div class="form_group">
+                <label for="country">Country:</label>
+                <input type="text" name="country" id="country" required />
+            </div>
+        </fieldset>
+
+        <fieldset class="form_panel">
+            <legend>Pet Details</legend>
+
+            <div class="inline_form_group">
+                <u class="mx_auto">Please fill out all fields</u>
+            </div>
+            <div class="inline_form_group">
+                <label for="pet_name">Name:</label>
+                <input type="text" id="pet_name" required>
+            </div>
+            <div class="inline_form_group">
+                <label>Sex:</label>
+                <div class="radio_button">
+                    <label class="radio_label" for="male">Male</label>
+                    <input type="radio" value="M" id="male" name="pet_sex" required>
+                    <label class="radio_label" for="female">Female</label>
+                    <input type="radio" value="F" id="female" name="pet_sex">
                 </div>
-                <div class="inline_form_group">
-                    <label>Sex:</label>
-                    <div class="radio_button">
-                        <label class="radio_label" for="male">Male</label>
-                        <input type="radio" value="M" id="male" name="pet_sex" required>
-                        <label class="radio_label" for="female">Female</label>
-                        <input type="radio" value="F" id="female" name="pet_sex">
-                    </div>
-                </div>
-                <div class="inline_form_group">
-                    <label for="pet_species">Species:</label>
-                    <input type="text" name="pet_species" id="pet_species" required>
-                </div>
-                <div class="form_group">
-                    <label for="pet_description">Description:</label>
-                    <textarea class="text_area" name="pet_description" id="pet_description" required></textarea>
-                </div>
-                <div class="form_group">
-                    <label for="upload_pet_picture">Upload Pet Picture:</label>
-                    <input type="file" name="upload_pet_picture" id="upload_pet_picture" required/>
-                </div>
-                
-                <input class="submit_button" type="submit" value="Submit"/>
-            </fieldset>
-        </form>
-        <script src="/js/pet_details_form.js"></script>
-    </body>
+            </div>
+            <div class="inline_form_group">
+                <label for="pet_species">Species:</label>
+                <input type="text" name="pet_species" id="pet_species" required>
+            </div>
+            <div class="form_group">
+                <label for="pet_description">Description:</label>
+                <textarea class="text_area" name="pet_description" id="pet_description" required></textarea>
+            </div>
+            <div class="form_group">
+                <label for="upload_pet_picture">Upload Pet Picture:</label>
+                <input type="file" name="upload_pet_picture" id="upload_pet_picture" required />
+            </div>
+
+            <input class="form_button" type="reset">
+            <input class="form_button" type="submit" value="Submit" />
+        </fieldset>
+    </form>
+    <script src="/js/pet_details_form.js"></script>
+</body>
+
 </html>
