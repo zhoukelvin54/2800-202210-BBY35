@@ -36,6 +36,39 @@
                     
                 </tbody>
             </table>
+            <h2>Add User</h2>
+            <hr>
+            <form id="add-user">
+                <label for="username">
+                    <i class="material-icons">account_circle</i>
+                </label>
+                <input type="text" name="username" placeholder="Username" id="username" required/>
+                <label for="password">
+                    <i class="material-icons">key</i>
+                </label>
+                <input type="password" name="password" placeholder="Password" id="password" required/>
+                <label for="firstname">
+                    <i class="material-icons">drive_file_rename_outline</i>
+                </label>
+                <input type="text" name="firstname" placeholder="First Name" id="firstname" />
+                <label for="lastname">
+                    <i class="material-icons">drive_file_rename_outline</i>
+                </label>
+                <input type="text" name="lastname" placeholder="Last Name" id="lastname" />
+                <label for="email">
+                    <i class="material-icons">mail</i>
+                </label>
+                <input type="email" placeholder="Email" id="email" required />
+                <label for="account_type">
+                    <i class="material-icons">pets</i>
+                </label>
+                <select name="account_type" id="account_type">
+                    <option value="0">Pet Owner</option>
+                    <option value="1">Caretaker</option>
+                </select>
+                <input type="submit" value="Add New User" id="add-submit"/>
+                <div id="errorMsg"></div>
+            </form>
         </div>
     </main>
 

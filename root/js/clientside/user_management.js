@@ -3,6 +3,7 @@
 /* jshint browser: true */
 "use strict";
 
+const FORM = document.forms["add-user"];
 // ============================================================================
 // On page load, create the table for the admin panel.
 // TODO:  -Move serverside
